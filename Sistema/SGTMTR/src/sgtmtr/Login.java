@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -298,7 +299,15 @@ public class Login extends javax.swing.JDialog {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
             //Crear consulta
             Statement st = con.createStatement();
-            String sql = "SELECT u.IDTB, u.ID, u.Nombres, u.Apellidos, tu.TipoUser, u.TipoUsuario, u.Usuario, u.Password FROM usuarios u, tipousuario tu WHERE u.TipoUsuario=tu.IDTU && Usuario='" + txtuser.getText() + "' and Password='" + txtpass.getText() + "'";
+            
+            /*Para encriptar password*/
+            /*Orden MD5-SHA256-SHA512*/
+            String enc1, enc2, enc3;
+            enc1=DigestUtils.md5Hex(txtpass.getText());
+            enc2=DigestUtils.sha256Hex(enc1);
+            enc3=DigestUtils.sha512Hex(enc2);
+            
+            String sql = "SELECT u.IDTB, u.ID, u.Nombres, u.Apellidos, tu.TipoUser, u.TipoUsuario, u.Usuario, u.Password FROM usuarios u, tipousuario tu WHERE u.TipoUsuario=tu.IDTU && Usuario='" + txtuser.getText() + "' and Password='" + enc3 + "'";
             //Ejecutar la consulta
             ResultSet rs = st.executeQuery(sql);
             if (rs.next()) {
