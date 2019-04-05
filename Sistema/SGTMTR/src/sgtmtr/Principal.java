@@ -24,41 +24,7 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author ZuluCorp
  */
 
-public class Principal extends javax.swing.JFrame implements Runnable{
-    String hora, minutos, segundos, ampm;
-    Calendar calendario;
-    Thread h1;
-
-    public void run() {
-        Thread ct = Thread.currentThread();
-        while (ct == h1) {
-            calcula();
-            lbhora.setText(hora + ":" + minutos + ":" + segundos);
-            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-        }
-}
-   
-    //Metodo calcular hora     
-    public void calcula() {
-        Calendar calendario = new GregorianCalendar();
-        Date fechaHoraActual = new Date();
-        calendario.setTime(fechaHoraActual);
-        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-
-        if (ampm.equals("PM")) {
-            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
-            hora = h > 9 ? "" + h : "0" + h;
-        } else {
-            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
-        }
-        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
-        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
-    }
-
+public class Principal extends javax.swing.JFrame{
     //calcular fecha
     public static String fechaActual() {
         Date fecha = new Date();
@@ -71,20 +37,26 @@ public class Principal extends javax.swing.JFrame implements Runnable{
      */
     javax.swing.ImageIcon iconoConectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"));
     javax.swing.ImageIcon iconoDesconectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_offline.png"));
+    /*javax.swing.ImageIcon fondo1= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"));
+    javax.swing.ImageIcon fondo2= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"));
+    javax.swing.ImageIcon fondo3= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/status_offline.png"));
+    javax.swing.ImageIcon fondo4= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"));*/
     
     public Principal() {
         super("Sistema de Gestión de Taller Mecánico");
         //Abrir ventana de validacion de usuarios
         new Login(this, true).setVisible(true);
         initComponents();
-        h1 = new Thread(this);
-        h1.start();
+        clockDigital1.show();
         lbfecha.setText(fechaActual());
         //centrar la pantalla
         //setLocationRelativeTo(null);
         //fondos
-        fondo1.setVisible(true);
-        this.setSize(1000, 768);
+        panelImagen.setVisible(true);
+        //fondo1.setVisible(false);
+        //this.setSize(1000, 768);
+        //maximizar pantalla por defecto al abrir el form
+        this.setExtendedState(MAXIMIZED_BOTH);
         //this.setLocation(600,150);
          this.addWindowListener(new WindowListener() {
             @Override
@@ -159,16 +131,14 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jdpescritorio = new javax.swing.JDesktopPane();
+        panelImagen = new elaprendiz.gui.panel.PanelImage();
+        panelCurves1 = new elaprendiz.gui.panel.PanelCurves();
         lblimg = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
-        lblhora = new javax.swing.JLabel();
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
-        lbhora = new javax.swing.JLabel();
-        fondo1 = new javax.swing.JLabel();
-        fondo2 = new javax.swing.JLabel();
-        fondo3 = new javax.swing.JLabel();
-        fondo4 = new javax.swing.JLabel();
+        lblhora = new javax.swing.JLabel();
+        clockDigital1 = new elaprendiz.gui.varios.ClockDigital();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
@@ -181,6 +151,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         mnif1 = new javax.swing.JMenuItem();
         mnif2 = new javax.swing.JMenuItem();
         mnif3 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         mniproceso = new javax.swing.JMenu();
         mnidatos = new javax.swing.JMenu();
         mniclientes = new javax.swing.JMenuItem();
@@ -222,60 +193,90 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
         jdpescritorio.setBackground(new java.awt.Color(25, 153, 153));
 
+        panelImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"))); // NOI18N
+
         lblimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"))); // NOI18N
-        jdpescritorio.add(lblimg);
-        lblimg.setBounds(10, 10, 40, 30);
 
         lblusuario.setBackground(new java.awt.Color(0, 153, 153));
         lblusuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblusuario.setForeground(new java.awt.Color(0, 102, 102));
         lblusuario.setText("Usuario Conectado: ");
-        jdpescritorio.add(lblusuario);
-        lblusuario.setBounds(60, 10, 260, 17);
-
-        lblhora.setBackground(new java.awt.Color(0, 153, 153));
-        lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblhora.setForeground(new java.awt.Color(0, 102, 102));
-        lblhora.setText("Hora:");
-        jdpescritorio.add(lblhora);
-        lblhora.setBounds(580, 10, 50, 17);
 
         lblfecha.setBackground(new java.awt.Color(0, 153, 153));
         lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblfecha.setForeground(new java.awt.Color(0, 102, 102));
         lblfecha.setText("Fecha:");
-        jdpescritorio.add(lblfecha);
-        lblfecha.setBounds(350, 10, 60, 17);
 
         lbfecha.setBackground(new java.awt.Color(0, 153, 153));
         lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbfecha.setForeground(new java.awt.Color(0, 102, 102));
         lbfecha.setText("jLabel1");
-        jdpescritorio.add(lbfecha);
-        lbfecha.setBounds(420, 10, 80, 17);
 
-        lbhora.setBackground(new java.awt.Color(0, 153, 153));
-        lbhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbhora.setForeground(new java.awt.Color(0, 102, 102));
-        lbhora.setText("hola");
-        jdpescritorio.add(lbhora);
-        lbhora.setBounds(650, 10, 80, 14);
+        lblhora.setBackground(new java.awt.Color(0, 153, 153));
+        lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblhora.setForeground(new java.awt.Color(0, 102, 102));
+        lblhora.setText("Hora:");
 
-        fondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"))); // NOI18N
-        jdpescritorio.add(fondo1);
-        fondo1.setBounds(0, 0, 1505, 950);
+        clockDigital1.setBackground(new java.awt.Color(0, 153, 153));
+        clockDigital1.setForeground(new java.awt.Color(0, 102, 102));
+        clockDigital1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
-        fondo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"))); // NOI18N
-        jdpescritorio.add(fondo2);
-        fondo2.setBounds(0, 0, 1366, 911);
+        javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
+        panelCurves1.setLayout(panelCurves1Layout);
+        panelCurves1Layout.setHorizontalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblimg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblusuario)
+                .addGap(123, 123, 123)
+                .addComponent(lblfecha)
+                .addGap(18, 18, 18)
+                .addComponent(lbfecha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addComponent(lblhora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
+        );
+        panelCurves1Layout.setVerticalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblhora)
+                    .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblusuario)
+                        .addComponent(lblfecha)
+                        .addComponent(lbfecha))
+                    .addComponent(lblimg))
+                .addContainerGap(512, Short.MAX_VALUE))
+        );
 
-        fondo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"))); // NOI18N
-        jdpescritorio.add(fondo3);
-        fondo3.setBounds(0, 0, 1600, 900);
+        javax.swing.GroupLayout panelImagenLayout = new javax.swing.GroupLayout(panelImagen);
+        panelImagen.setLayout(panelImagenLayout);
+        panelImagenLayout.setHorizontalGroup(
+            panelImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        panelImagenLayout.setVerticalGroup(
+            panelImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelCurves1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
-        fondo4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-s5-rear-angle-1920x1080-wallpaper-1377.jpg"))); // NOI18N
-        jdpescritorio.add(fondo4);
-        fondo4.setBounds(0, 0, 1024, 576);
+        javax.swing.GroupLayout jdpescritorioLayout = new javax.swing.GroupLayout(jdpescritorio);
+        jdpescritorio.setLayout(jdpescritorioLayout);
+        jdpescritorioLayout.setHorizontalGroup(
+            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jdpescritorioLayout.setVerticalGroup(
+            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jdpescritorio.setLayer(panelImagen, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -382,6 +383,15 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         jMenu1.add(mnif3);
+
+        jMenuItem7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jMenuItem7.setText("Fondo 4");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
 
         jMenuBar1.add(jMenu1);
 
@@ -593,11 +603,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+            .addComponent(jdpescritorio)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+            .addComponent(jdpescritorio)
         );
 
         pack();
@@ -771,21 +781,24 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_mniinsumosActionPerformed
 
     private void mnif1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif1ActionPerformed
-        fondo1.setVisible(true);
+        /*fondo1.setVisible(true);
         fondo2.setVisible(false);
         fondo3.setVisible(false);
+        fondo4.setVisible(false);*/
+        SeleccionaInsumo si= new  SeleccionaInsumo();
+        jdpescritorio.add(si);
+        si.show();
     }//GEN-LAST:event_mnif1ActionPerformed
 
     private void mnif2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif2ActionPerformed
-        fondo1.setVisible(false);
+        /*fondo1.setVisible(false);
         fondo2.setVisible(true);
         fondo3.setVisible(false);
+        fondo4.setVisible(false);*/
     }//GEN-LAST:event_mnif2ActionPerformed
 
     private void mnif3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif3ActionPerformed
-        fondo1.setVisible(false);
-        fondo2.setVisible(false);
-        fondo3.setVisible(true);
+        
     }//GEN-LAST:event_mnif3ActionPerformed
 
     private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
@@ -793,6 +806,10 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         jdpescritorio.add(cvta);
         cvta.show();
     }//GEN-LAST:event_mniviActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -830,10 +847,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel fondo1;
-    private javax.swing.JLabel fondo2;
-    private javax.swing.JLabel fondo3;
-    private javax.swing.JLabel fondo4;
+    private elaprendiz.gui.varios.ClockDigital clockDigital1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -842,10 +856,10 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
-    private javax.swing.JLabel lbhora;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblhora;
     private javax.swing.JLabel lblimg;
@@ -880,6 +894,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private javax.swing.JMenuItem mniusuarios;
     private javax.swing.JMenuItem mnivehiculos;
     private javax.swing.JMenuItem mnivi;
+    private elaprendiz.gui.panel.PanelCurves panelCurves1;
+    private elaprendiz.gui.panel.PanelImage panelImagen;
     // End of variables declaration//GEN-END:variables
 }
 /*ñeeee
@@ -920,5 +936,37 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         }
 
         
+//Metodo calcular hora     
+    public void calcula() {
+        Calendar calendario = new GregorianCalendar();
+        Date fechaHoraActual = new Date();
+        calendario.setTime(fechaHoraActual);
+        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
 
+        if (ampm.equals("PM")) {
+            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
+            hora = h > 9 ? "" + h : "0" + h;
+        } else {
+            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
+        }
+        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
+        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
+    }
+String hora, minutos, segundos, ampm;
+    Calendar calendario;
+    Thread h1;
+h1 = new Thread(this);
+        h1.start();
+public void run() {
+        Thread ct = Thread.currentThread();
+        while (ct == h1) {
+            calcula();
+            lbhora.setText(hora + ":" + minutos + ":" + segundos);
+            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+}
 */

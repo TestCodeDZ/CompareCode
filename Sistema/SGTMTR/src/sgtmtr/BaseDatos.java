@@ -31,72 +31,109 @@ public class BaseDatos extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelCurves1 = new elaprendiz.gui.panel.PanelCurves();
         btnrespaldar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         btnrestaurar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setText("Administración de la Base de Datos");
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
 
         btnrespaldar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnrespaldar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_save.png"))); // NOI18N
         btnrespaldar.setText("Respaldar");
+        btnrespaldar.setPreferredSize(new java.awt.Dimension(50, 41));
         btnrespaldar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnrespaldarActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setText("Administración de la Base de Datos");
+
         btnrestaurar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnrestaurar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_refresh.png"))); // NOI18N
         btnrestaurar.setText("Restaurar");
+        btnrestaurar.setMaximumSize(new java.awt.Dimension(20, 70));
         btnrestaurar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnrestaurarActionPerformed(evt);
             }
         });
 
+        javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
+        panelCurves1.setLayout(panelCurves1Layout);
+        panelCurves1Layout.setHorizontalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addGap(143, 143, 143)
+                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCurves1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelCurves1Layout.createSequentialGroup()
+                        .addComponent(btnrespaldar, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnrestaurar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(123, Short.MAX_VALUE))))
+        );
+        panelCurves1Layout.setVerticalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnrestaurar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnrespaldar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        jLabel1.getAccessibleContext().setAccessibleParent(panelCurves1);
+        btnrestaurar.getAccessibleContext().setAccessibleParent(panelCurves1);
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addComponent(panelCurves1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addComponent(panelCurves1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnrespaldar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnrestaurar))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48))
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnrespaldar)
-                    .addComponent(btnrestaurar))
-                .addContainerGap(27, Short.MAX_VALUE))
+            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnrespaldarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrespaldarActionPerformed
-        RespaldarBD copiasegura=new RespaldarBD(null, true);
-        copiasegura.setVisible(true);
-    }//GEN-LAST:event_btnrespaldarActionPerformed
-
     private void btnrestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrestaurarActionPerformed
         RestaurarBD restore=new RestaurarBD(null, true);
         restore.setVisible(true);
     }//GEN-LAST:event_btnrestaurarActionPerformed
+
+    private void btnrespaldarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrespaldarActionPerformed
+        RespaldarBD copiasegura=new RespaldarBD(null, true);
+        copiasegura.setVisible(true);
+    }//GEN-LAST:event_btnrespaldarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -144,5 +181,7 @@ public class BaseDatos extends javax.swing.JDialog {
     private javax.swing.JButton btnrespaldar;
     private javax.swing.JButton btnrestaurar;
     private javax.swing.JLabel jLabel1;
+    private elaprendiz.gui.panel.PanelCurves panelCurves1;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
     // End of variables declaration//GEN-END:variables
 }

@@ -226,8 +226,7 @@ void mostrarvehiculos(String valor)
                 mail = (String) tbcliente.getValueAt(fila, 5);
 
                 ComprobanteVta.txtrut.setText(rut);
-                ComprobanteVta.txtnombres.setText(nom);
-                ComprobanteVta.txtapellidos.setText(ap);
+                ComprobanteVta.txtnombrecomp.setText(nom+" "+ap);
                 ComprobanteVta.txtfono.setText(cont);
                 ComprobanteVta.txtdireccion.setText(dire);
                 ComprobanteVta.txtemail.setText(mail);
