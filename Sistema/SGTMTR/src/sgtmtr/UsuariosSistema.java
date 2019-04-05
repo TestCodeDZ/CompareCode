@@ -23,6 +23,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class UsuariosSistema extends javax.swing.JInternalFrame {
 
@@ -46,6 +47,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         CargarCBNTU();
         //txttu.setVisible(false);
         txtid.setDisabledTextColor(Color.blue);
+        txttu.setVisible(false);
     }
 
     void inicio() {
@@ -209,7 +211,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             ResultSet rs = st.executeQuery(sql);
             //Limpiamos el Combo
             cbtu.setModel(new DefaultComboBoxModel());
-
+            cbtu.addItem("Seleccione Tipo de Usuario");
             //Recorremos los registros traidos
             while (rs.next()) {
                 //Agregamos elemento al combo
@@ -360,7 +362,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(cbtu);
-        cbtu.setBounds(160, 150, 170, 30);
+        cbtu.setBounds(160, 150, 190, 30);
 
         txtusuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtusuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -573,12 +575,14 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     private void cbtuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtuItemStateChanged
         Integer indice = cbtu.getSelectedIndex();
         if (indice.equals(0)) {
-            CargarCBNTU();
+           txttu.setText("");
         } else if (indice.equals(1)) {
             CargarCBNTU();
         } else if (indice.equals(2)) {
             CargarCBNTU();
         } else if (indice.equals(3)) {
+            CargarCBNTU();
+        } else if (indice.equals(4)) {
             CargarCBNTU();
         }
     }//GEN-LAST:event_cbtuItemStateChanged
@@ -665,6 +669,11 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         if (txtpass.getText().trim().isEmpty()) {
             errores += "Por favor genere la conraseña \n";
         }
+        Integer indice = cbtu.getSelectedIndex();
+        if (indice.equals(0))
+        {
+            errores += "Seleccione Tipo de Usuario \n";
+        }
         return errores;
     }
 
@@ -682,10 +691,18 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 conexion = claseConectar.ConexionConBaseDatos.getConexion();
                 //Crear consulta
                 Statement st = conexion.createStatement();
+
+                /*Para encriptar password*/
+                /*Orden MD5-SHA256-SHA512*/
+                String enc1, enc2, enc3;
+                enc1 = DigestUtils.md5Hex(txtpass.getText());
+                enc2 = DigestUtils.sha256Hex(enc1);
+                enc3 = DigestUtils.sha512Hex(enc2);
+
                 String sql = "INSERT INTO usuarios (ID,Nombres,Apellidos,TipoUsuario,Usuario,Password)"
                         + "VALUES('" + txtid.getText() + "','" + txtnombres.getText() + "','" + txtapellidos.getText() + "',"
                         + "'" + txttu.getText() + "','" + txtusuario.getText() + "',"
-                        + "'" + txtpass.getText() + "')";
+                        + "'" + enc3 + "')";
                 //Ejecutar la consulta
                 st.executeUpdate(sql);
                 if (String.valueOf(txtid.getText()).compareTo("") == 0
@@ -700,7 +717,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                     anchocolumnas();
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El usuario ya existe","Usuario existente", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, "El usuario ya existe", "Usuario existente", JOptionPane.ERROR_MESSAGE);
             } finally {
                 claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
@@ -725,8 +742,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                     //existe
                     txtnombres.setText(rs.getObject("Nombres").toString());
                     txtapellidos.setText(rs.getObject("Apellidos").toString());
-                    cbtu.setSelectedItem(rs.getObject("TipoUsuario"));
                     txtusuario.setText(rs.getObject("Usuario").toString());
+                    cbtu.setSelectedItem(rs.getObject("TipoUsuario").toString());
                     btborrar.setEnabled(true);
                     btmodificar.setEnabled(true);
                 } else {
@@ -846,7 +863,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             txtid.setText(tbusuarios.getValueAt(fila, 0).toString());
             txtnombres.setText(tbusuarios.getValueAt(fila, 1).toString());
             txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());
-            //cbtu.getSelectedItem(tbusuarios.getCellEditor(fila,3));    
+            String tipo = tbusuarios.getValueAt(fila, 3).toString();
+            cbtu.setSelectedItem(tipo);    
             txtusuario.setText(tbusuarios.getValueAt(fila, 4).toString());
             //txttu.setText(tbusuarios.getValueAt(fila, 3).toString());
             //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());

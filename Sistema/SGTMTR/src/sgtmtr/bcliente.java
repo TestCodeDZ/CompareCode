@@ -33,11 +33,11 @@ public class bcliente extends javax.swing.JInternalFrame {
         initComponents();
         setTitle("Selección de Dueño");
         this.setLocation(280, 200);
-        mostrarvehiculos("");
+        mostrarcte("");
         anchocolumnas();
     }
 
-    void mostrarvehiculos(String valor) {
+    void mostrarcte(String valor) {
         String[] titulos = {"RUT", "Nombres", "Apellidos", "Fono", "Dirección", "E-mail"};
         String[] Registros = new String[6];
         modelo = new DefaultTableModel(null, titulos);
@@ -215,7 +215,7 @@ public class bcliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyReleased
-        mostrarvehiculos(txtrut.getText());
+        mostrarcte(txtrut.getText());
     }//GEN-LAST:event_txtrutKeyReleased
 
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
