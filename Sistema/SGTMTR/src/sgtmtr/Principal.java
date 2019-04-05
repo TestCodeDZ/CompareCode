@@ -127,7 +127,7 @@ Thread Hilo;
          //Mostramos el nombre de Usuario
         lblusuario.setText("Usuario Conectado: " + Login.nomUsuario);
         //lbnombres.setText("Nombres: " + Login.Nombres);
-        //lbapellidos.setText("Apellidos: " + Login.Apellidos);
+       // lbapellidos.setText("Apellidos: " + Login.Apellidos);
         //lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
     }
     private void deshabilitarmenu(){
@@ -402,11 +402,6 @@ Thread Hilo;
 
         mnidiag.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnidiag.setText("Diagnóstico");
-        mnidiag.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnidiagActionPerformed(evt);
-            }
-        });
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -520,13 +515,11 @@ Thread Hilo;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jdpescritorio, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
         );
 
         pack();
@@ -675,12 +668,6 @@ Thread Hilo;
         }
     }//GEN-LAST:event_formWindowOpened
 
-    private void mnidiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidiagActionPerformed
-        diagnostico diag=new diagnostico();
-        jdpescritorio.add(diag);
-        diag.show();
-    }//GEN-LAST:event_mnidiagActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -732,7 +719,7 @@ Thread Hilo;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JDesktopPane jdpescritorio;
+    public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lbhora;
     private javax.swing.JLabel lblfecha;

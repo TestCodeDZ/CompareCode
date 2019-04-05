@@ -71,7 +71,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }
     void desbloquear(){
         txtnombres.setEnabled(true);
-        txtapellidos.setEnabled(true);
+        //txtapellidos.setEnabled(true);
         //ver combos index
         btbuscar.setEnabled(true);
         btingresar.setEnabled(true);
@@ -379,6 +379,11 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 txtnombresFocusLost(evt);
             }
         });
+        txtnombres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtnombresActionPerformed(evt);
+            }
+        });
         txtnombres.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtnombresKeyTyped(evt);
@@ -388,7 +393,11 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         txtnombres.setBounds(160, 70, 170, 30);
 
         txtapellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtapellidos.setEnabled(false);
         txtapellidos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtapellidosFocusGained(evt);
+            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtapellidosFocusLost(evt);
             }
@@ -669,13 +678,15 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     //}
     
     private void txtapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusLost
-       if((txtnombres.getText().length() <= 2) || (txtapellidos.getText().length() <= 3)) {
+       if(txtapellidos.getText().length() < 3) {
            btgenerar.setEnabled(false);
-           JOptionPane.showMessageDialog(this, "¡El nombre debe contener al menos 3 caracteres para generar nick!");
-        }else
-        if ((txtnombres.getText().length() >= 3) || (txtapellidos.getText().length() >= 4)){
+           JOptionPane.showMessageDialog(this, "¡El Apellido debe contener al menos 3 caracteres para generar nick!");
+           txtapellidos.requestFocus();
+       }
+       else
+       {
             btgenerar.setEnabled(true);
-        }
+       }
     }//GEN-LAST:event_txtapellidosFocusLost
 
     private void btgenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btgenerarActionPerformed
@@ -683,6 +694,14 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btgenerarActionPerformed
 
     private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
+       
+        if (txtnombres.getText().length() < 4){
+            txtapellidos.setEnabled(false);
+                   
+        }else{
+            txtapellidos.setEnabled(true);
+        }
+        
         if (txtnombres.getText().length() == 50) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -697,12 +716,10 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtapellidosKeyTyped
 
     private void txtnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnombresFocusLost
-        if((txtnombres.getText().length() <= 2) || (txtapellidos.getText().length() <= 3)) {
+        if(txtnombres.getText().length() < 4) {
            btgenerar.setEnabled(false);
-           JOptionPane.showMessageDialog(this, "¡El apellido debe contener al menos 4 caracteres para generar nick!");
-        }else
-        if ((txtnombres.getText().length() >= 3) || (txtapellidos.getText().length() >= 4)){
-            btgenerar.setEnabled(true);
+           JOptionPane.showMessageDialog(this, "¡El Nombre debe contener al menos 4 caracteres para generar nick!");
+           txtnombres.requestFocus();
         }
     }//GEN-LAST:event_txtnombresFocusLost
      
@@ -876,6 +893,18 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, errores);
         }
     }//GEN-LAST:event_btmodificarActionPerformed
+
+    private void txtnombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnombresActionPerformed
+
+    private void txtapellidosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusGained
+        // TODO add your handling code here:
+        if(txtnombres.getText().length() < 4) {
+           btgenerar.setEnabled(false);
+           txtnombres.requestFocus();
+        }   
+    }//GEN-LAST:event_txtapellidosFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
