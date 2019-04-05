@@ -7,7 +7,6 @@ package sgtmtr;
 
 import claseConectar.conectar;
 import java.awt.Color;
-import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,15 +21,13 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class bcliente extends javax.swing.JInternalFrame {
-    DefaultTableModel modelo;
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+DefaultTableModel modelo;
     /**
      * Creates new form bv
      */
     public bcliente() {
         initComponents();
         mostrarvehiculos("");
-        anchocolumnas();
     }
 void mostrarvehiculos(String valor)
     {
@@ -58,34 +55,6 @@ void mostrarvehiculos(String valor)
         }
     }
 
-    void anchocolumnas() {
-        tbcliente.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-
-        tbcliente.getColumnModel().getColumn(0).setWidth(100);
-        tbcliente.getColumnModel().getColumn(0).setMaxWidth(100);
-        tbcliente.getColumnModel().getColumn(0).setMinWidth(100);
-        
-        tbcliente.getColumnModel().getColumn(1).setWidth(100);
-        tbcliente.getColumnModel().getColumn(1).setMaxWidth(100);
-        tbcliente.getColumnModel().getColumn(1).setMinWidth(100);
-
-        tbcliente.getColumnModel().getColumn(2).setWidth(100);
-        tbcliente.getColumnModel().getColumn(2).setMaxWidth(100);
-        tbcliente.getColumnModel().getColumn(2).setMinWidth(100);
-
-        tbcliente.getColumnModel().getColumn(3).setWidth(120);
-        tbcliente.getColumnModel().getColumn(3).setMaxWidth(120);
-        tbcliente.getColumnModel().getColumn(3).setMinWidth(120);
-
-        tbcliente.getColumnModel().getColumn(4).setWidth(90);
-        tbcliente.getColumnModel().getColumn(4).setMaxWidth(90);
-        tbcliente.getColumnModel().getColumn(4).setMinWidth(90);
-
-        tbcliente.getColumnModel().getColumn(5).setWidth(200);
-        tbcliente.getColumnModel().getColumn(5).setMaxWidth(200);
-        tbcliente.getColumnModel().getColumn(5).setMinWidth(200);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,16 +64,26 @@ void mostrarvehiculos(String valor)
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnienviar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtrut = new javax.swing.JTextField();
         jsp = new javax.swing.JScrollPane();
         tbcliente = new javax.swing.JTable();
-        btnenviar = new javax.swing.JButton();
+
+        mnienviar.setText("Enviar Datos");
+        mnienviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnienviarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnienviar);
 
         setClosable(true);
+        setIconifiable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione al dueño", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Búsqueda de Clientes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         jLabel1.setText("RUT");
 
@@ -112,21 +91,8 @@ void mostrarvehiculos(String valor)
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtrutKeyReleased(evt);
             }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtrutKeyTyped(evt);
-            }
         });
 
-        //Deshabilitar edicion de tabla
-        tbcliente = new javax.swing.JTable() {
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        //cambiar color de fila
-        tbcliente.setSelectionBackground(Color.LIGHT_GRAY);
-        tbcliente.setSelectionForeground(Color.blue);
-        tbcliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbcliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -138,35 +104,22 @@ void mostrarvehiculos(String valor)
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbcliente.getTableHeader().setResizingAllowed(false);
-        tbcliente.getTableHeader().setReorderingAllowed(false);
+        tbcliente.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbcliente);
-
-        btnenviar.setText("Enviar");
-        btnenviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnenviarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(54, 54, 54)
+                .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(54, 54, 54)
-                        .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(185, 185, 185)
-                        .addComponent(btnenviar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,8 +130,7 @@ void mostrarvehiculos(String valor)
                     .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(btnenviar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -205,44 +157,36 @@ void mostrarvehiculos(String valor)
          mostrarvehiculos(txtrut.getText());
     }//GEN-LAST:event_txtrutKeyReleased
 
-    private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
-        validarLetras.soloRUT(evt);
-        //limite de caracteres
-        if (txtrut.getText().length() == 10) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
+    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
+        String rut = "", nombres = "", apellidos = "", contacto = "", direccion = "", correo = "";
+    int fila = tbcliente.getSelectedRow();
+    try {
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun dato");
+
+        } else {
+            rut = (String) tbcliente.getValueAt(fila, 0);
+            nombres = (String) tbcliente.getValueAt(fila, 1);
+            apellidos = (String) tbcliente.getValueAt(fila, 2);
+            contacto = (String) tbcliente.getValueAt(fila, 3);
+            direccion = (String) tbcliente.getValueAt(fila, 4);
+            correo = (String) tbcliente.getValueAt(fila, 5);
+            
+            diagnostico.txtrutcliente.setDisabledTextColor(Color.blue);
+            diagnostico.txtrutcliente.setText(rut);
+            this.dispose();
         }
-    }//GEN-LAST:event_txtrutKeyTyped
-
-    private void btnenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnenviarActionPerformed
-        String rut = "", nom = "", ap = "", cont = "", dire = "", mail = "";
-        int fila = tbcliente.getSelectedRow();
-        try {
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-
-            } else {
-                rut = (String) tbcliente.getValueAt(fila, 0);
-                nom = (String) tbcliente.getValueAt(fila, 1);
-                ap = (String) tbcliente.getValueAt(fila, 2);
-                cont = (String) tbcliente.getValueAt(fila, 3);
-                dire = (String) tbcliente.getValueAt(fila, 4);
-                mail = (String) tbcliente.getValueAt(fila, 5);
-
-                diagnostico.txtrutcliente.setDisabledTextColor(Color.blue);
-                diagnostico.txtrutcliente.setText(rut);
-                this.dispose();
-            }
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnenviarActionPerformed
+    } catch (Exception e) {
+    }
+    }//GEN-LAST:event_mnienviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnenviar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnienviar;
     private javax.swing.JTable tbcliente;
     private javax.swing.JTextField txtrut;
     // End of variables declaration//GEN-END:variables

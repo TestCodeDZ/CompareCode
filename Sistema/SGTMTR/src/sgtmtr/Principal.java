@@ -365,6 +365,11 @@ Thread Hilo;
         mnivehiculos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnivehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92341_steering_wheel-512.png"))); // NOI18N
         mnivehiculos.setText("Vehículos");
+        mnivehiculos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnivehiculosActionPerformed(evt);
+            }
+        });
         mnidatos.add(mnivehiculos);
 
         mniproceso.add(mnidatos);
@@ -402,6 +407,11 @@ Thread Hilo;
 
         mnidiag.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnidiag.setText("Diagnóstico");
+        mnidiag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnidiagActionPerformed(evt);
+            }
+        });
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -448,6 +458,11 @@ Thread Hilo;
         mnirepclientes.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
         mnirepclientes.setText("Clientes");
+        mnirepclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnirepclientesActionPerformed(evt);
+            }
+        });
         mnireportes.add(mnirepclientes);
         mnireportes.add(jSeparator3);
 
@@ -667,6 +682,28 @@ Thread Hilo;
             mniconsultas.setVisible(false);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void mnidiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidiagActionPerformed
+        diagnostico diag=new diagnostico();
+        jdpescritorio.add(diag);
+        diag.show();
+    }//GEN-LAST:event_mnidiagActionPerformed
+
+    private void mnirepclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepclientesActionPerformed
+          try {
+            conectar cc= new conectar();
+            JasperReport reportes=JasperCompileManager.compileReport("reporteclientes.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperViewer.viewReport(print,false);
+            
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }//GEN-LAST:event_mnirepclientesActionPerformed
+
+    private void mnivehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnivehiculosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnivehiculosActionPerformed
 
     /**
      * @param args the command line arguments

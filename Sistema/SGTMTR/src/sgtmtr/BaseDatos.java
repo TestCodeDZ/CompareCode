@@ -36,6 +36,7 @@ public class BaseDatos extends javax.swing.JDialog {
         btnrestaurar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setText("Administración de la Base de Datos");
