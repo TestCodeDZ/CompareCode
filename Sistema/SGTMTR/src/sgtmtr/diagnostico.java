@@ -74,6 +74,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         initComponents();
         setTitle("Ingreso de Diagnóstico");
         this.setLocation(280, 0);
+        txtmecanico.setText(Login.Nombres+" "+Login.Apellidos);
+        txtmecanico.setDisabledTextColor(Color.blue);
         txtnumdiag.setDisabledTextColor(Color.red);
         txtpatentediag.setDisabledTextColor(Color.blue);
         //txtfecha.setDisabledTextColor(Color.blue);
@@ -140,7 +142,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             message.setText(Mensage);
 
             Transport.send(message);
-            JOptionPane.showMessageDialog(this, "Se ha enviado un e-mail al cliente");
+            JOptionPane.showMessageDialog(this, "Su mensaje ha sido enviado");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -153,7 +155,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
             //Crear Consulta
             Statement st = conexion.createStatement();
-            String sql = "SELECT Estado FROM estadodiag WHERE ID=1";
+            String sql = "SELECT Estado FROM estadodiag";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
 
@@ -792,16 +794,16 @@ public class diagnostico extends javax.swing.JInternalFrame {
                     this.dispose();
                     //diaag.setVisible(true);
                     try {
+
                         controldiag();
                         detallediag();
+                        generapdf();
                         
                         //Se recoge la información y se envía el email
                         Mensage = "Estimado (a): " + txtnombre.getText() + "\nSe ha ingresado el diagnóstico número " + txtnumdiag.getText() + ".\nPor favor acérquese a nuestro local para confirmación de la reparación de su vehículo con patente " + txtpatentediag.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
                         To = txtmail.getText();
                         Subject = "Ingreso de diagnóstico.";
-                        
                         SendMail();
-                        generapdf();
                         
                         txtpatentediag.setText("");
                         txtmarca.setText("");
@@ -941,7 +943,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtfono;
     public static javax.swing.JTextField txtmail;
     public static javax.swing.JTextField txtmarca;
-    public static javax.swing.JTextField txtmecanico;
+    private javax.swing.JTextField txtmecanico;
     public static javax.swing.JTextField txtmodelo;
     public static javax.swing.JTextField txtnombre;
     private javax.swing.JTextField txtnumdiag;
