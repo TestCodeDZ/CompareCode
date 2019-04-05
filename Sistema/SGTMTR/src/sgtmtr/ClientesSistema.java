@@ -6,14 +6,21 @@
 package sgtmtr;
 
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.awt.Color;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author ZuluCorp
  */
 public class ClientesSistema extends javax.swing.JInternalFrame {
-
+    ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form ClientesSistema
      */
@@ -24,8 +31,149 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         initComponents();
         this.setLocation(150,15 );
         setTitle("Mantenedor de Clientes");
+        mostrardatos("");
+        anchocolumnas();
+        bloquear();
+    }
+    
+     void mostrardatos(String valor) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        String rut=txtrut.getText();
+        String dv=txtdv.getText();
+        String union=rut+"-"+dv;
+        modelo.addColumn("RUT");
+        modelo.addColumn("Nombres");
+        modelo.addColumn("Apellidos");
+        modelo.addColumn("Fono");
+        modelo.addColumn("Dirección");
+        modelo.addColumn("E-mail");
+        tbclientes.setModel(modelo);
+        String sql = "";
+        if (valor.equals("")) {
+            sql = "SELECT * FROM clientes ";
+        } else {
+            sql = "SELECT * FROM clientes WHERE RUT='" + union + "'";
+        }
+
+        String[] datos = new String[6];
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                datos[2] = rs.getString(3);
+                datos[3] = rs.getString(4);
+                datos[4] = rs.getString(5);
+                datos[5] = rs.getString(6);
+                modelo.addRow(datos);
+            }
+            tbclientes.setModel(modelo);
+            //tbclientes.setEnabled(false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
     }
 
+    void anchocolumnas() {
+        tbclientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        tbclientes.getColumnModel().getColumn(0).setWidth(100);
+        tbclientes.getColumnModel().getColumn(0).setMaxWidth(100);
+        tbclientes.getColumnModel().getColumn(0).setMinWidth(100);
+        
+        tbclientes.getColumnModel().getColumn(1).setWidth(100);
+        tbclientes.getColumnModel().getColumn(1).setMaxWidth(100);
+        tbclientes.getColumnModel().getColumn(1).setMinWidth(100);
+
+        tbclientes.getColumnModel().getColumn(2).setWidth(100);
+        tbclientes.getColumnModel().getColumn(2).setMaxWidth(100);
+        tbclientes.getColumnModel().getColumn(2).setMinWidth(100);
+
+        tbclientes.getColumnModel().getColumn(3).setWidth(120);
+        tbclientes.getColumnModel().getColumn(3).setMaxWidth(120);
+        tbclientes.getColumnModel().getColumn(3).setMinWidth(120);
+
+        tbclientes.getColumnModel().getColumn(4).setWidth(90);
+        tbclientes.getColumnModel().getColumn(4).setMaxWidth(90);
+        tbclientes.getColumnModel().getColumn(4).setMinWidth(90);
+
+        tbclientes.getColumnModel().getColumn(5).setWidth(200);
+        tbclientes.getColumnModel().getColumn(5).setMaxWidth(200);
+        tbclientes.getColumnModel().getColumn(5).setMinWidth(200);
+    }
+
+    private String validarVacios() {
+        
+        String errores="";
+        
+        if(txtrut.getText().equals("")){
+            errores+="Por favor digite el RUT \n";
+        }
+        if(txtdv.getText().equals("")){
+            errores+="Por favor genere el dígito verificador \n";
+        }
+        if(txtapellidos.getText().trim().isEmpty()){
+            errores+="El campo nombre está vacio \n";
+        }
+        if(txtnombres.getText().trim().isEmpty()){
+            errores+="Por favor escriba el nombre \n";
+        }
+        if(txtapellidos.getText().trim().isEmpty()){
+            errores+="Por favor escriba el apellido \n";
+        }
+        if(txtfono.getText().trim().isEmpty()){
+            errores+="Escriba el número de contacto \n";
+        }
+        if(txtdireccion.getText().trim().isEmpty()){
+            errores+="Por favor escriba la dirección \n";
+        }
+        if(txtemail.getText().trim().isEmpty()){
+            errores+="Por favor escriba el correo electrónico \n";
+        }
+        return errores;       
+    }
+    
+      private String validarRUTVacio() {
+        String errores="";
+        if(txtrut.getText().equals("")){
+            errores+="Por favor digite el RUT \n";
+        }
+        if(txtdv.getText().equals("")){
+            errores+="Por favor genere el dígito verificador \n";
+        }
+        return errores;       
+    }
+       void desbloquear(){
+        txtrut.setEnabled(true);
+        txtnombres.setEnabled(true);
+        txtapellidos.setEnabled(true);
+        txtfono.setEnabled(true);
+        txtdireccion.setEnabled(true);
+        txtemail.setEnabled(true);
+        btbuscar.setEnabled(true);
+        btingresar.setEnabled(true);
+        btmodificar.setEnabled(false);
+        btborrar.setEnabled(false);
+        btlimpiar.setEnabled(true);
+        txtrut.requestFocus();
+    }
+      void bloquear(){
+        txtrut.setEnabled(false);
+        txtnombres.setEnabled(false);
+        txtapellidos.setEnabled(false);
+        txtfono.setEnabled(false);
+        txtdireccion.setEnabled(false);
+        txtemail.setEnabled(false);
+        btbuscar.setEnabled(false);
+        btingresar.setEnabled(false);
+        btmodificar.setEnabled(false);
+        btborrar.setEnabled(false);
+        btlimpiar.setEnabled(false);
+        txtrut.requestFocus();
+    }
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -114,22 +262,51 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         });
 
         txtdv.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtdv.setEnabled(false);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("-");
 
         txtnombres.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtnombres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnombresKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnombresKeyTyped(evt);
+            }
+        });
 
         txtapellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtapellidos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtapellidosKeyTyped(evt);
+            }
+        });
 
         txtfono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtfono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtfonoKeyTyped(evt);
+            }
+        });
 
         txtdireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtdireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtdireccionKeyTyped(evt);
+            }
+        });
 
         txtemail.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtemail.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtemailFocusLost(evt);
+            }
+        });
+        txtemail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtemailKeyTyped(evt);
             }
         });
 
@@ -224,14 +401,29 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
         btmodificar.setText("Modificar");
+        btmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmodificarActionPerformed(evt);
+            }
+        });
 
         btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
         btborrar.setText("Borrar");
+        btborrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btborrarActionPerformed(evt);
+            }
+        });
 
         btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512.png"))); // NOI18N
         btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbuscarActionPerformed(evt);
+            }
+        });
 
         btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
@@ -278,6 +470,15 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Clientes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbclientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        //Deshabilitar edicion de tabla
+        tbclientes = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        //cambiar color de fila
+        tbclientes.setSelectionBackground(Color.LIGHT_GRAY);
+        tbclientes.setSelectionForeground(Color.blue);
         tbclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -332,19 +533,21 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
-        //desbloquear();
+        desbloquear();
         //limpiar();
         //codigosusuarios();
         txtrut.requestFocus();
     }//GEN-LAST:event_btnuevoActionPerformed
 
     private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
-        //limpiar();
-        //generapassword();
+        limpiar();
+        mostrardatos("");
+        txtrut.setEnabled(true);
+        txtrut.requestFocus();
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void txtrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtrutFocusLost
-         String codigo;
+        String codigo;
         int multiplo=2;
         int cont=0;
         for (int x=0;x<txtrut.getText().length();x++){
@@ -383,20 +586,58 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtrutFocusLost
 
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
+        validarLetras.soloNumeros(evt);
         if(txtrut.getText().length()>=8){
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
         }
-
-        char TipoDeTecla = evt.getKeyChar();
-        if(!Character.isDigit(TipoDeTecla)){
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
     }//GEN-LAST:event_txtrutKeyTyped
-
+    void limpiar(){
+        txtrut.setText("");
+        txtdv.setText("");
+        txtnombres.setText("");
+        txtapellidos.setText("");
+        txtfono.setText("");
+        txtdireccion.setText("");
+        txtemail.setText("");
+    }
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-       
+        String errores=validarVacios();
+        if(errores.equals("")){
+             try {
+                    String rut=txtrut.getText();
+                    String dv=txtdv.getText();
+                    String union=rut+"-"+dv;
+            //Cargar driver de conexión
+                Class.forName("com.mysql.jdbc.Driver");
+                //Crear conexión
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+                //Crear consulta
+                Statement st = con.createStatement();
+                String sql = "INSERT INTO clientes (RUT,Nombres,Apellidos,Contacto,Direccion,Correo)"
+                        + "VALUES('" + union + "','" + txtnombres.getText() + "','" + txtapellidos.getText() + "',"
+                        + "'" + txtfono.getText() + "','" + txtdireccion.getText() + "',"
+                        + "'" + txtemail.getText() + "')";
+                //Ejecutar la consulta
+                st.executeUpdate(sql);
+                //Cerrar conexion
+                con.close();
+                    if (String.valueOf(txtrut.getText()).compareTo("") == 0
+                    && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+                    validarVacios(); 
+                    }else{
+                    JOptionPane.showMessageDialog(this, "Cliente Ingresado");
+                    mostrardatos("");
+                    //Limpiar
+                    limpiar(); 
+                    anchocolumnas();
+                    }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
+            }  
+        }else{
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }    
     }//GEN-LAST:event_btingresarActionPerformed
     
     private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
@@ -408,6 +649,169 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
             btborrar.setVisible(false);
         }  
     }//GEN-LAST:event_formInternalFrameOpened
+
+    private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
+        String error=validarRUTVacio();
+        if(error.equals("")){
+        // Buscar registro en la base de datos
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = sql = "SELECT * FROM clientes WHERE RUT='" + union + "'";
+            //Ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql);
+            mostrardatos(sql);
+            if (rs.next()) {
+                //existe
+                txtnombres.setText(rs.getObject("Nombres").toString());
+                txtapellidos.setText(rs.getObject("Apellidos").toString());
+                txtfono.setText(rs.getObject("Contacto").toString());
+                txtdireccion.setText(rs.getObject("Direccion").toString());
+                txtemail.setText(rs.getObject("Correo").toString());
+                btborrar.setEnabled(true);
+                btmodificar.setEnabled(true);
+                txtrut.setEnabled(false);
+            } else {
+                //no existe
+                if (String.valueOf(txtrut.getText()).compareTo("") == 0) {
+                    validarVacios();
+                }else {
+                JOptionPane.showMessageDialog(this, "El cliente no existe");
+                btborrar.setEnabled(false);
+                btmodificar.setEnabled(false);
+                txtrut.setEnabled(true);
+                txtrut.requestFocus();
+                limpiar();
+            }
+            }
+            //Cerrar conexion
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
+        anchocolumnas();
+        }else{
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btbuscarActionPerformed
+
+    private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
+        String errores=validarVacios();
+        if(errores.equals("")){
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            if (String.valueOf(txtrut.getText()).compareTo("") == 0
+                    && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Clientes Actualizado");
+            }
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE clientes SET Nombres='" + txtnombres.getText() + "',Apellidos='" + txtapellidos.getText()
+                    + "',Contacto='" + txtfono.getText() + "',Direccion='" + txtdireccion.getText()
+                    + "',Correo='" + txtemail.getText()
+                    + "' WHERE RUT='" + union + "'");
+            
+            pst.executeUpdate();
+            //cerrar conexion
+            con.close();
+            btingresar.setEnabled(true);
+            //limpiar textfields
+            limpiar();
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
+        }
+            anchocolumnas();
+        }else{
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btmodificarActionPerformed
+
+    private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
+        String error=validarRUTVacio();
+        if(error.equals("")){
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            if (String.valueOf(txtrut.getText()).compareTo("") == 0
+            && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Cliente Eliminado");
+            btmodificar.setEnabled(false);
+            btborrar.setEnabled(false);
+            }
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM clientes WHERE RUT='" + union + "'");
+            pst.executeUpdate();
+            limpiar();
+            con.close();
+            
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
+        anchocolumnas();
+        btingresar.setEnabled(true);
+        }else{
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }     
+    }//GEN-LAST:event_btborrarActionPerformed
+
+    private void txtnombresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnombresKeyPressed
+
+    private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
+        validarLetras.soloLetras(evt);
+        if (txtnombres.getText().length() == 50) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtnombresKeyTyped
+
+    private void txtapellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtapellidosKeyTyped
+        validarLetras.soloLetras(evt);
+        if (txtapellidos.getText().length() == 50) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtapellidosKeyTyped
+
+    private void txtemailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtemailKeyTyped
+        validarLetras.mail(evt);
+        if (txtemail.getText().length() == 40) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtemailKeyTyped
+
+    private void txtfonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfonoKeyTyped
+        validarLetras.soloNumeros(evt);
+        if (txtfono.getText().length() == 15) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtfonoKeyTyped
+
+    private void txtdireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtdireccionKeyTyped
+        validarLetras.LNE(evt);
+        if (txtdireccion.getText().length() == 30) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtdireccionKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;

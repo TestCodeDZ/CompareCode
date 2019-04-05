@@ -6,6 +6,10 @@
 package sgtmtr;
 
 import claseConectar.conectar;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class Desperfectos extends javax.swing.JInternalFrame {
-
+    ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form MarcaVehiculo
      */
@@ -61,7 +65,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbdesp.setModel(modelo);
-            tbdesp.setEnabled(false);
+            //tbdesp.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
@@ -149,6 +153,8 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnimod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -169,6 +175,15 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         btbuscar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
 
+        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnimod.setText("Modificar");
+        mnimod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnimodActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnimod);
+
         setClosable(true);
         setIconifiable(true);
 
@@ -181,13 +196,31 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         jLabel2.setText("Nombre");
 
         txtiddesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtiddesp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtiddespKeyTyped(evt);
+            }
+        });
 
         txtnd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtnd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtndKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Costo");
 
         txtcd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtcd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtcdKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtcdKeyTyped(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("$");
@@ -240,6 +273,15 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbdesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        //Deshabilitar edicion de tabla
+        tbdesp = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        //cambiar color de fila
+        tbdesp.setSelectionBackground(Color.LIGHT_GRAY);
+        tbdesp.setSelectionForeground(Color.blue);
         tbdesp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -251,6 +293,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbdesp.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbdesp);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -430,6 +473,9 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         btborrar.setEnabled(false);
         txtnd.requestFocus();
         btmodificar.setEnabled(false);
+        txtnd.setText("");
+        txtcd.setText("");
+        txtnd.requestFocus();
     }//GEN-LAST:event_btnuevoActionPerformed
 
     private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
@@ -471,7 +517,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
         }
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }   
     }//GEN-LAST:event_btingresarActionPerformed
 
@@ -500,7 +546,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
             anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }    
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtiddesp() {
@@ -554,7 +600,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
         anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
@@ -581,9 +627,61 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             anchocolumnas();
             btingresar.setEnabled(true);
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btborrarActionPerformed
+
+    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbdesp.getSelectedRow();
+        txtiddesp.setEnabled(false);
+        btingresar.setEnabled(false);
+
+        if (fila >= 0) {
+            txtiddesp.setText(tbdesp.getValueAt(fila, 0).toString());
+            txtnd.setText(tbdesp.getValueAt(fila, 1).toString());
+            txtcd.setText(tbdesp.getValueAt(fila, 2).toString()); 
+            txtnd.setEnabled(true);
+            txtcd.setEnabled(true);
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_mnimodActionPerformed
+
+    private void txtcdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyPressed
+        
+    }//GEN-LAST:event_txtcdKeyPressed
+
+    private void txtcdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyTyped
+        validarLetras.soloNumeros(evt);
+        //limite de caracteres
+        if (txtcd.getText().length() == 7) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtcdKeyTyped
+
+    private void txtiddespKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtiddespKeyTyped
+        validarLetras.soloLetrasyNumeros(evt);
+        //limite de caracteres
+        if (txtiddesp.getText().length() == 4) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtiddespKeyTyped
+
+    private void txtndKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtndKeyTyped
+        validarLetras.soloLetras(evt);
+        //limite de caracteres
+        if (txtnd.getText().length() == 30) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtndKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -601,7 +699,9 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnimod;
     private javax.swing.JTable tbdesp;
     private javax.swing.JTextField txtcd;
     private javax.swing.JTextField txtiddesp;

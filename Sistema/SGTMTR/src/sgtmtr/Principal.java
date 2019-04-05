@@ -8,6 +8,7 @@ package sgtmtr;
 import claseConectar.conectar;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 /**
@@ -23,46 +25,45 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 
 public class Principal extends javax.swing.JFrame implements Runnable{
-    private String horas, minutos, segundos;
-private boolean Estado;
-Thread Hilo;
+    String hora, minutos, segundos, ampm;
+    Calendar calendario;
+    Thread h1;
 
-    public void run(){
-        while (Estado ==true) {
-        Calendar fecha = new GregorianCalendar();
-        int h= fecha.get(Calendar.HOUR_OF_DAY);
-        int m = fecha.get(Calendar.MINUTE);
-        int s = fecha.get(Calendar.SECOND);
-
-        horas = Integer.toString(h);
-        minutos = Integer.toString(m);
-        segundos = Integer.toString(s);
-
-        lbhora.setText(horas+" : "+minutos+" : "+segundos);
-
-            try{
+    public void run() {
+        Thread ct = Thread.currentThread();
+        while (ct == h1) {
+            calcula();
+            lbhora.setText(hora + ":" + minutos + ":" + segundos);
+            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
+            try {
                 Thread.sleep(1000);
-            }catch (InterruptedException ex){
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException e) {
             }
-    }
+        }
+}
+   
+    //Metodo calcular hora     
+    public void calcula() {
+        Calendar calendario = new GregorianCalendar();
+        Date fechaHoraActual = new Date();
+        calendario.setTime(fechaHoraActual);
+        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+
+        if (ampm.equals("PM")) {
+            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
+            hora = h > 9 ? "" + h : "0" + h;
+        } else {
+            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
+        }
+        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
+        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
     }
 
-    public void Iniciar(){
-        Hilo=new Thread(this);
-        Estado = true;
-        Hilo.start();
-
-    }
-
-    public void stop(){
-    Estado = false;
-    }
-    
-    public static String fechaActual(){ 
-    Date fecha=new Date();
-    SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/YYYY"); 
-    return formatoFecha.format(fecha);
+    //calcular fecha
+    public static String fechaActual() {
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+        return formatoFecha.format(fecha);
     }
     
     /**
@@ -76,14 +77,16 @@ Thread Hilo;
         //Abrir ventana de validacion de usuarios
         new Login(this, true).setVisible(true);
         initComponents();
-        Iniciar();
+        h1 = new Thread(this);
+        h1.start();
         lbfecha.setText(fechaActual());
         //centrar la pantalla
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
+        //fondos
+        fondo1.setVisible(true);
         this.setSize(1000, 768);
         //this.setLocation(600,150);
          this.addWindowListener(new WindowListener() {
-
             @Override
             public void windowOpened(WindowEvent e) {
                
@@ -155,7 +158,6 @@ Thread Hilo;
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JSeparator();
         jdpescritorio = new javax.swing.JDesktopPane();
         lblimg = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
@@ -163,40 +165,43 @@ Thread Hilo;
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
         lbhora = new javax.swing.JLabel();
+        fondo1 = new javax.swing.JLabel();
+        fondo2 = new javax.swing.JLabel();
+        fondo3 = new javax.swing.JLabel();
+        fondo4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnicerrarsesion = new javax.swing.JMenuItem();
-        mnisalir = new javax.swing.JMenuItem();
         mnisistema = new javax.swing.JMenu();
         mniusuarios = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        mniinsumos = new javax.swing.JMenuItem();
         mnibd = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        mnif1 = new javax.swing.JMenuItem();
+        mnif2 = new javax.swing.JMenuItem();
+        mnif3 = new javax.swing.JMenuItem();
         mniproceso = new javax.swing.JMenu();
         mnidatos = new javax.swing.JMenu();
         mniclientes = new javax.swing.JMenuItem();
         mnimarca = new javax.swing.JMenuItem();
         mnivehiculos = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mniaverias = new javax.swing.JMenu();
         mnidesperfectos = new javax.swing.JMenuItem();
         mnicpd = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mniprincipal = new javax.swing.JMenu();
         mnidiag = new javax.swing.JMenuItem();
         mnirep = new javax.swing.JMenuItem();
+        mnivi = new javax.swing.JMenuItem();
         mniconsultas = new javax.swing.JMenu();
         mnireportes = new javax.swing.JMenu();
         mniusers = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnirepclientes = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnirepmarcas = new javax.swing.JMenuItem();
         mnirepdesperfectos = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         mniayuda = new javax.swing.JMenu();
         mniacercade = new javax.swing.JMenuItem();
 
@@ -221,35 +226,56 @@ Thread Hilo;
         jdpescritorio.add(lblimg);
         lblimg.setBounds(10, 10, 40, 30);
 
+        lblusuario.setBackground(new java.awt.Color(0, 153, 153));
         lblusuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblusuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblusuario.setForeground(new java.awt.Color(0, 102, 102));
         lblusuario.setText("Usuario Conectado: ");
         jdpescritorio.add(lblusuario);
         lblusuario.setBounds(60, 10, 260, 17);
 
+        lblhora.setBackground(new java.awt.Color(0, 153, 153));
         lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblhora.setForeground(new java.awt.Color(255, 255, 255));
+        lblhora.setForeground(new java.awt.Color(0, 102, 102));
         lblhora.setText("Hora:");
         jdpescritorio.add(lblhora);
         lblhora.setBounds(580, 10, 50, 17);
 
+        lblfecha.setBackground(new java.awt.Color(0, 153, 153));
         lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lblfecha.setForeground(new java.awt.Color(0, 102, 102));
         lblfecha.setText("Fecha:");
         jdpescritorio.add(lblfecha);
         lblfecha.setBounds(350, 10, 60, 17);
 
+        lbfecha.setBackground(new java.awt.Color(0, 153, 153));
         lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lbfecha.setForeground(new java.awt.Color(0, 102, 102));
         lbfecha.setText("jLabel1");
         jdpescritorio.add(lbfecha);
         lbfecha.setBounds(420, 10, 80, 17);
 
+        lbhora.setBackground(new java.awt.Color(0, 153, 153));
         lbhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbhora.setForeground(new java.awt.Color(255, 255, 255));
+        lbhora.setForeground(new java.awt.Color(0, 102, 102));
         lbhora.setText("hola");
         jdpescritorio.add(lbhora);
         lbhora.setBounds(650, 10, 80, 14);
+
+        fondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"))); // NOI18N
+        jdpescritorio.add(fondo1);
+        fondo1.setBounds(0, 0, 1505, 950);
+
+        fondo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"))); // NOI18N
+        jdpescritorio.add(fondo2);
+        fondo2.setBounds(0, 0, 1366, 911);
+
+        fondo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"))); // NOI18N
+        jdpescritorio.add(fondo3);
+        fondo3.setBounds(0, 0, 1600, 900);
+
+        fondo4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-s5-rear-angle-1920x1080-wallpaper-1377.jpg"))); // NOI18N
+        jdpescritorio.add(fondo4);
+        fondo4.setBounds(0, 0, 1024, 576);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -270,7 +296,6 @@ Thread Hilo;
             }
         });
         mnipersonal.add(mnicambiarpass);
-        mnipersonal.add(jSeparator6);
 
         mnicerrarsesion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnicerrarsesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disconnect.png"))); // NOI18N
@@ -286,16 +311,6 @@ Thread Hilo;
             }
         });
         mnipersonal.add(mnicerrarsesion);
-
-        mnisalir.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnisalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir1.JPG"))); // NOI18N
-        mnisalir.setText("Salir de la Aplicación");
-        mnisalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnisalirActionPerformed(evt);
-            }
-        });
-        mnipersonal.add(mnisalir);
 
         jMenuBar1.add(mnipersonal);
 
@@ -316,7 +331,15 @@ Thread Hilo;
             }
         });
         mnisistema.add(mniusuarios);
-        mnisistema.add(jSeparator5);
+
+        mniinsumos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mniinsumos.setText("Insumos");
+        mniinsumos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniinsumosActionPerformed(evt);
+            }
+        });
+        mnisistema.add(mniinsumos);
 
         mnibd.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnibd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/copia-seguridad.png"))); // NOI18N
@@ -329,6 +352,38 @@ Thread Hilo;
         mnisistema.add(mnibd);
 
         jMenuBar1.add(mnisistema);
+
+        jMenu1.setText("Fondo");
+        jMenu1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+
+        mnif1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif1.setText("Fondo 1");
+        mnif1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif1);
+
+        mnif2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif2.setText("Fondo 2");
+        mnif2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif2);
+
+        mnif3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif3.setText("Fondo 3");
+        mnif3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif3);
+
+        jMenuBar1.add(jMenu1);
 
         mniproceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/procesos.png"))); // NOI18N
         mniproceso.setText("Proceso");
@@ -365,10 +420,14 @@ Thread Hilo;
         mnivehiculos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnivehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92341_steering_wheel-512.png"))); // NOI18N
         mnivehiculos.setText("Vehículos");
+        mnivehiculos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnivehiculosActionPerformed(evt);
+            }
+        });
         mnidatos.add(mnivehiculos);
 
         mniproceso.add(mnidatos);
-        mniproceso.add(jSeparator7);
 
         mniaverias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/multi.png"))); // NOI18N
         mniaverias.setText("Averías");
@@ -395,7 +454,6 @@ Thread Hilo;
         mniaverias.add(mnicpd);
 
         mniproceso.add(mniaverias);
-        mniproceso.add(jSeparator1);
 
         mniprincipal.setText("Principal");
         mniprincipal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -410,13 +468,22 @@ Thread Hilo;
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnirep.setText("Reparación");
+        mnirep.setText("Reparaciones");
         mnirep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnirepActionPerformed(evt);
             }
         });
         mniprincipal.add(mnirep);
+
+        mnivi.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnivi.setText("Venta Insumos");
+        mnivi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniviActionPerformed(evt);
+            }
+        });
+        mniprincipal.add(mnivi);
 
         mniproceso.add(mniprincipal);
 
@@ -448,13 +515,16 @@ Thread Hilo;
             }
         });
         mnireportes.add(mniusers);
-        mnireportes.add(jSeparator2);
 
         mnirepclientes.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
         mnirepclientes.setText("Clientes");
+        mnirepclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnirepclientesActionPerformed(evt);
+            }
+        });
         mnireportes.add(mnirepclientes);
-        mnireportes.add(jSeparator3);
 
         mnirepmarcas.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
@@ -475,7 +545,6 @@ Thread Hilo;
             }
         });
         mnireportes.add(mnirepdesperfectos);
-        mnireportes.add(jSeparator4);
 
         jMenuItem3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
@@ -491,6 +560,10 @@ Thread Hilo;
             }
         });
         mnireportes.add(jMenuItem6);
+
+        jMenuItem8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jMenuItem8.setText("Insumos");
+        mnireportes.add(jMenuItem8);
 
         jMenuBar1.add(mnireportes);
 
@@ -540,14 +613,6 @@ Thread Hilo;
         acerca.setVisible(true);
     }//GEN-LAST:event_mniacercadeActionPerformed
 
-    private void mnisalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnisalirActionPerformed
-        int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la aplicación?","Cerrando programa",0,3);
-        if(salir==JOptionPane.OK_OPTION)
-        {
-            System.exit(0);
-        }
-    }//GEN-LAST:event_mnisalirActionPerformed
-
     private void mniusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusuariosActionPerformed
         UsuariosSistema us= new UsuariosSistema();
         jdpescritorio.add(us);
@@ -561,14 +626,15 @@ Thread Hilo;
     }//GEN-LAST:event_mniclientesActionPerformed
 
     private void mnicerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicerrarsesionActionPerformed
-        this.dispose();
-        JOptionPane.showMessageDialog(this, "Has salido del sistema");
-        
+        /*this.dispose();
         Login log = new Login(null, true);
-        log.setVisible(true);
-      
-        
-        
+        log.setVisible(true);*/
+        int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la aplicación?","Cerrando programa",0,3);
+        if(salir==JOptionPane.OK_OPTION)
+        {
+            JOptionPane.showMessageDialog(this, "Has salido del sistema");
+            System.exit(0);
+        }
     }//GEN-LAST:event_mnicerrarsesionActionPerformed
 
     private void mnicerrarsesionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_mnicerrarsesionItemStateChanged
@@ -679,6 +745,55 @@ Thread Hilo;
         diag.show();
     }//GEN-LAST:event_mnidiagActionPerformed
 
+    private void mnirepclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepclientesActionPerformed
+          try {
+            conectar cc= new conectar();
+            JasperReport reportes=JasperCompileManager.compileReport("reporteclientes.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperViewer.viewReport(print,false);
+            
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }//GEN-LAST:event_mnirepclientesActionPerformed
+
+    private void mnivehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnivehiculosActionPerformed
+        // TODO add your handling code here:
+        vehiculos vehi= new  vehiculos();
+        jdpescritorio.add(vehi);
+        vehi.show();
+    }//GEN-LAST:event_mnivehiculosActionPerformed
+
+    private void mniinsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniinsumosActionPerformed
+        Insumos in= new  Insumos();
+        jdpescritorio.add(in);
+        in.show();
+    }//GEN-LAST:event_mniinsumosActionPerformed
+
+    private void mnif1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif1ActionPerformed
+        fondo1.setVisible(true);
+        fondo2.setVisible(false);
+        fondo3.setVisible(false);
+    }//GEN-LAST:event_mnif1ActionPerformed
+
+    private void mnif2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif2ActionPerformed
+        fondo1.setVisible(false);
+        fondo2.setVisible(true);
+        fondo3.setVisible(false);
+    }//GEN-LAST:event_mnif2ActionPerformed
+
+    private void mnif3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif3ActionPerformed
+        fondo1.setVisible(false);
+        fondo2.setVisible(false);
+        fondo3.setVisible(true);
+    }//GEN-LAST:event_mnif3ActionPerformed
+
+    private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
+        ComprobanteVta cvta= new  ComprobanteVta();
+        jdpescritorio.add(cvta);
+        cvta.show();
+    }//GEN-LAST:event_mniviActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -715,6 +830,11 @@ Thread Hilo;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel fondo1;
+    private javax.swing.JLabel fondo2;
+    private javax.swing.JLabel fondo3;
+    private javax.swing.JLabel fondo4;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -722,14 +842,7 @@ Thread Hilo;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JPopupMenu.Separator jSeparator4;
-    private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JPopupMenu.Separator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JMenuItem jMenuItem8;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lbhora;
@@ -749,6 +862,10 @@ Thread Hilo;
     private javax.swing.JMenu mnidatos;
     private javax.swing.JMenuItem mnidesperfectos;
     private javax.swing.JMenuItem mnidiag;
+    private javax.swing.JMenuItem mnif1;
+    private javax.swing.JMenuItem mnif2;
+    private javax.swing.JMenuItem mnif3;
+    private javax.swing.JMenuItem mniinsumos;
     private javax.swing.JMenuItem mnimarca;
     private javax.swing.JMenu mnipersonal;
     private javax.swing.JMenu mniprincipal;
@@ -758,10 +875,50 @@ Thread Hilo;
     private javax.swing.JMenuItem mnirepdesperfectos;
     private javax.swing.JMenuItem mnirepmarcas;
     private javax.swing.JMenu mnireportes;
-    private javax.swing.JMenuItem mnisalir;
     private javax.swing.JMenu mnisistema;
     private javax.swing.JMenuItem mniusers;
     private javax.swing.JMenuItem mniusuarios;
     private javax.swing.JMenuItem mnivehiculos;
+    private javax.swing.JMenuItem mnivi;
     // End of variables declaration//GEN-END:variables
 }
+/*ñeeee
+        private String horas, minutos, segundos;
+        private boolean Estado;
+        Thread Hilo;
+
+        public void run(){
+        while (Estado ==true) {
+        Calendar fecha = new GregorianCalendar();
+        int h= fecha.get(Calendar.HOUR_OF_DAY);
+        int m = fecha.get(Calendar.MINUTE);
+        int s = fecha.get(Calendar.SECOND);
+
+        horas = Integer.toString(h);
+        minutos = Integer.toString(m);
+        segundos = Integer.toString(s);
+
+        lbhora.setText(horas+" : "+minutos+" : "+segundos);
+
+        try{
+        Thread.sleep(1000);
+        }catch (InterruptedException ex){
+        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        }
+
+        public void Iniciar(){
+        Hilo=new Thread(this);
+        Estado = true;
+        Hilo.start();
+
+        }
+
+        public void stop(){
+        Estado = false;
+        }
+
+        
+
+*/

@@ -6,6 +6,8 @@
 package sgtmtr;
 
 import claseConectar.conectar;
+import java.awt.Color;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class MarcaVehiculo extends javax.swing.JInternalFrame {
-
+    ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form MarcaVehiculo
      */
@@ -59,7 +61,7 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbmarcas.setModel(modelo);
-            tbmarcas.setEnabled(false);
+           //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
@@ -141,6 +143,8 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnmod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -158,6 +162,14 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btbuscar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
 
+        mnmod.setText("Modificar");
+        mnmod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnmodActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnmod);
+
         setClosable(true);
         setIconifiable(true);
 
@@ -170,8 +182,18 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         jLabel2.setText("Nombre");
 
         txtidmarca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtidmarca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtidmarcaKeyTyped(evt);
+            }
+        });
 
         txtmn.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtmn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtmnKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -206,6 +228,16 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Marcas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
+        tbmarcas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        //Deshabilitar edicion de tabla
+        tbmarcas = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        //cambiar color de fila
+        tbmarcas.setSelectionBackground(Color.LIGHT_GRAY);
+        tbmarcas.setSelectionForeground(Color.blue);
         tbmarcas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -217,6 +249,7 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbmarcas.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbmarcas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -545,6 +578,36 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btborrarActionPerformed
 
+    private void mnmodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnmodActionPerformed
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbmarcas.getSelectedRow();
+        txtidmarca.setEnabled(false);
+        btingresar.setEnabled(false);
+
+        if (fila >= 0) {
+            txtidmarca.setText(tbmarcas.getValueAt(fila, 0).toString());
+            txtmn.setText(tbmarcas.getValueAt(fila, 1).toString());
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_mnmodActionPerformed
+
+    private void txtmnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmnKeyTyped
+        validarLetras.soloLetras(evt);
+    }//GEN-LAST:event_txtmnKeyTyped
+
+    private void txtidmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidmarcaKeyTyped
+        validarLetras.soloLetrasyNumeros(evt);
+        if (txtidmarca.getText().length() == 4) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtidmarcaKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
@@ -559,7 +622,9 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnmod;
     private javax.swing.JTable tbmarcas;
     private javax.swing.JTextField txtidmarca;
     private javax.swing.JTextField txtmn;
