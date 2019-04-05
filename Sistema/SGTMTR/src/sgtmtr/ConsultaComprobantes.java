@@ -50,7 +50,6 @@ DateFormat df = DateFormat.getDateInstance();
         txtsucursal.setDisabledTextColor(Color.blue);
         txttotal.setDisabledTextColor(Color.red);
         mniVerDetalle.setVisible(false);
-        vefecha.setVisible(false);
         bfecha.getDateEditor().setEnabled(false);
     }
 
@@ -150,7 +149,7 @@ DateFormat df = DateFormat.getDateInstance();
             } catch (SQLException ex) {
                 Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
         }
     }
@@ -217,7 +216,6 @@ DateFormat df = DateFormat.getDateInstance();
         btnbuscardetalle = new javax.swing.JButton();
         jsp = new javax.swing.JScrollPane();
         tbbusqins = new javax.swing.JTable();
-        vefecha = new javax.swing.JTextField();
         bfecha = new com.toedter.calendar.JDateChooser();
         jRadioButton1 = new javax.swing.JRadioButton();
         dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
@@ -325,8 +323,6 @@ DateFormat df = DateFormat.getDateInstance();
         });
         jsp.setViewportView(tbbusqins);
 
-        vefecha.setEnabled(false);
-
         bfecha.setDate(Calendar.getInstance().getTime());
         bfecha.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -363,11 +359,8 @@ DateFormat df = DateFormat.getDateInstance();
                                         .addGap(27, 27, 27)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(134, 134, 134)
-                                                .addComponent(vefecha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(72, 72, 72)
+                                            .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(283, 283, 283)
                                 .addComponent(btnbuscardetalle))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jRadioButton1)
@@ -385,8 +378,7 @@ DateFormat df = DateFormat.getDateInstance();
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(rbtbxn)
-                            .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vefecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -727,8 +719,8 @@ DateFormat df = DateFormat.getDateInstance();
     }//GEN-LAST:event_btnimprimirActionPerformed
 
     private void bfechaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bfechaMousePressed
-        String fecha = df.format(bfecha.getDate());
-        vefecha.setText(fecha);        
+//        String fecha = df.format(bfecha.getDate());
+//        vefecha.setText(fecha);        
     }//GEN-LAST:event_bfechaMousePressed
 
     private void txtnumcompKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnumcompKeyTyped
@@ -773,6 +765,5 @@ DateFormat df = DateFormat.getDateInstance();
     public static javax.swing.JTextField txtrutcte;
     public static javax.swing.JTextField txtsucursal;
     public static javax.swing.JTextField txttotal;
-    private javax.swing.JTextField vefecha;
     // End of variables declaration//GEN-END:variables
 }

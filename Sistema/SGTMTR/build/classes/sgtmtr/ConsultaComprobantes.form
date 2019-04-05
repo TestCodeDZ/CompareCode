@@ -102,15 +102,11 @@
                                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="bfecha" min="-2" pref="138" max="-2" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtnumcomp" min="-2" pref="107" max="-2" attributes="0"/>
-                                                  <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
-                                                  <Component id="vefecha" min="-2" pref="108" max="-2" attributes="0"/>
-                                              </Group>
+                                              <Component id="txtnumcomp" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="283" max="-2" attributes="0"/>
                                   <Component id="btnbuscardetalle" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -136,7 +132,6 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="rbtbxn" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtnumcomp" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="vefecha" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -264,11 +259,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JTextField" name="vefecha">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="bfecha">
           <Properties>
             <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">

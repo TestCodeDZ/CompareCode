@@ -6,7 +6,6 @@
 package sgtmtr;
 
 import static claseConectar.ConexionConBaseDatos.conexion;
-import sgtmtr.Login;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -48,6 +47,7 @@ import static sgtmtr.Principal.jdpescritorio;
  * @author ZuluCorp
  */
 public class diagnostico extends javax.swing.JInternalFrame {
+
     ValidarCaracteres validarLetras = new ValidarCaracteres();
     CalculaPrecioTB calcula = new CalculaPrecioTB();
 
@@ -84,7 +84,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         /*Deshabilitar txt del jcalendar*/
         //fing.getDateEditor().setEnabled(false);
         //fent.getDateEditor().setEnabled(false);
-        
+        txtmecanico.setText("" + Login.Nombres + " " + Login.Apellidos);
+        txtmecanico.setDisabledTextColor(Color.blue);
         //jdatechooser vacio
         /*if(jdcfed.getDate()==null){
          }*/
@@ -103,8 +104,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         Year2 = 2000 + (y.getYear() - 100);
         //Date fing = Calendar.getInstance().getTime();
        //Date fent = Calendar.getInstance().getTime();
-        Username = "tallertechorojo@gmail.com";
-        PassWord = new String("techrojo");
+        Username = "respaldo4a@gmail.com";
+        PassWord = new String("respaldo2015");
         txtrepuestos.setLineWrap(true); //Se logra que haya salto de línea en el TextArea
         txtrepuestos.setWrapStyleWord(true); //Se impide la división de palabras en el TestArea
     }
@@ -114,8 +115,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
     String Mensage = "";
     String To = "";
     String Subject = "";
-    bv bv = new bv(); //crear el nuevo formulario
-     
+
     public void SendMail() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -140,7 +140,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             message.setText(Mensage);
 
             Transport.send(message);
-            JOptionPane.showMessageDialog(this, "Se ha enviado un e-mail al cliente");
+            JOptionPane.showMessageDialog(this, "Su mensaje ha sido enviado");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -153,7 +153,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
             //Crear Consulta
             Statement st = conexion.createStatement();
-            String sql = "SELECT Estado FROM estadodiag WHERE ID=1";
+            String sql = "SELECT Estado FROM estadodiag";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
 
@@ -336,7 +336,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
 
         setClosable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Diagnóstico N°", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Diagnóstico N°", 0, 0, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         txtnumdiag.setEnabled(false);
 
@@ -357,7 +357,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Vehículo", 0, 0, new java.awt.Font("Arial", 0, 14))); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -440,7 +440,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
         txtmail.setEnabled(false);
         jPanel4.add(txtmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 90, 180, -1));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", 0, 0, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbdiag.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -565,7 +565,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 .addGap(0, 15, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Diagnóstico", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Diagnóstico", 0, 0, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         txtrepuestos.setColumns(20);
         txtrepuestos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -707,7 +707,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 17, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -718,7 +718,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btejecutartbvehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutartbvehiculoActionPerformed
-        if (!bv.isVisible()) {
+        try {
+            bv bv = new bv(); //crear el nuevo formulario
             boolean mostrar = true;
             for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
                 if (bv.getClass().isInstance(jdpescritorio.getComponent(a))) {
@@ -737,8 +738,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             /*Principal.jdpescritorio.add(bv);
             
              bv.setVisible(true);*/
-        } else {
-            System.out.println("Busca Vehículo: Esto no se volverá a mostrar porque ya está abierta la ventana");
+        } catch (Exception e) {
         }
     }//GEN-LAST:event_btejecutartbvehiculoActionPerformed
 
@@ -792,16 +792,16 @@ public class diagnostico extends javax.swing.JInternalFrame {
                     this.dispose();
                     //diaag.setVisible(true);
                     try {
+
                         controldiag();
                         detallediag();
+                        generapdf();
                         
                         //Se recoge la información y se envía el email
                         Mensage = "Estimado (a): " + txtnombre.getText() + "\nSe ha ingresado el diagnóstico número " + txtnumdiag.getText() + ".\nPor favor acérquese a nuestro local para confirmación de la reparación de su vehículo con patente " + txtpatentediag.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
                         To = txtmail.getText();
                         Subject = "Ingreso de diagnóstico.";
-                        
                         SendMail();
-                        generapdf();
                         
                         txtpatentediag.setText("");
                         txtmarca.setText("");
@@ -941,7 +941,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtfono;
     public static javax.swing.JTextField txtmail;
     public static javax.swing.JTextField txtmarca;
-    public static javax.swing.JTextField txtmecanico;
+    private javax.swing.JTextField txtmecanico;
     public static javax.swing.JTextField txtmodelo;
     public static javax.swing.JTextField txtnombre;
     private javax.swing.JTextField txtnumdiag;

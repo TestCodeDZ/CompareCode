@@ -56,6 +56,8 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         txtemail.setDisabledTextColor(Color.blue);
         txtfecha.setText(fechaactual());
         txtfecha.setDisabledTextColor(Color.blue);
+        txtvendedor.setText("" + Login.Nombres + " " + Login.Apellidos);
+        txtvendedor.setDisabledTextColor(Color.blue);
         txtmtotal.setDisabledTextColor(Color.red);
         txtvuelto.setDisabledTextColor(Color.red);
         CargarComboMP();
@@ -904,7 +906,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     private javax.swing.JTextField txtpagado;
     public static javax.swing.JTextField txtrut;
     private javax.swing.JTextField txtsucursal;
-    public static javax.swing.JTextField txtvendedor;
+    private javax.swing.JTextField txtvendedor;
     private javax.swing.JTextField txtvuelto;
     // End of variables declaration//GEN-END:variables
 }
