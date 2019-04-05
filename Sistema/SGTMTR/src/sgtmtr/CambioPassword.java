@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -79,7 +80,7 @@ public class CambioPassword extends javax.swing.JDialog {
         }
         return salida;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -293,38 +294,55 @@ public class CambioPassword extends javax.swing.JDialog {
     }//GEN-LAST:event_pfccnKeyTyped
 
     private void btcambiarpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcambiarpassActionPerformed
+        /*Para encriptar password*/
+        /*Orden MD5-SHA256-SHA512*/
+        String encca1, encca2, encca3, enccn1, enccn2, enccn3, encccn1, encccn2, encccn3;
+
+        /*Password Actual*/
+        encca1 = DigestUtils.md5Hex(pfca.getText());
+        encca2 = DigestUtils.sha256Hex(encca1);
+        encca3 = DigestUtils.sha512Hex(encca2);
+        /*Password Nueva*/
+        enccn1 = DigestUtils.md5Hex(pfcn.getText());
+        enccn2 = DigestUtils.sha256Hex(enccn1);
+        enccn3 = DigestUtils.sha512Hex(enccn2);
+        /*Confirma Password*/
+        encccn1 = DigestUtils.md5Hex(pfccn.getText());
+        encccn2 = DigestUtils.sha256Hex(encccn1);
+        encccn3 = DigestUtils.sha512Hex(encccn2);
+
         // revisar que los campos tengan datos en el formulario
         String cn = pfcn.getText();
         String ccn = pfccn.getText();
-        if (pfca.getText().trim().isEmpty()) {
+        if (encca3.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe ingresar contraseña antigua!");
             return;
         }
-        if (pfcn.getText().trim().isEmpty()) {
+        if (enccn3.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe ingresar contraseña nueva!");
             return;
         }
-        if (pfccn.getText().trim().isEmpty()) {
+        if (encccn3.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe confirmar la contraseña nueva!");
             return;
         }
         // revisar que el valor de la clave existe para el usuario conectado
         if (this.getValorClaveUsuario(ClassUtils.USUARIO_CONECTADO).compareToIgnoreCase(
-                pfca.getText().trim()) != 0) {
+                encca3.trim()) != 0) {
             JOptionPane.showMessageDialog(this, "¡Contraseña antigua no corresponde!");
             return;
         }
         //no logro hacer funcionar esta parte del codigo
-        if (!cn.equalsIgnoreCase(ccn)) {
+        if (!enccn3.equalsIgnoreCase(encccn3)) {
             JOptionPane.showMessageDialog(this, "¡Confirmación de contraseña nueva no corresponde!");
             return;
         }
         //JOptionPane.showMessageDialog(this, App.pwd);
-        if (pfcn.getText().equals(App.pwd)) {
+        if (enccn3.equals(Login.pwd)) {
             JOptionPane.showMessageDialog(this, "¡Ud. no puede volver a poner la misma contraseña que tiene actualmente!");
             return;
         }
-        if (actualizarClave(ClassUtils.USUARIO_CONECTADO, pfcn.getText().trim())) {
+        if (actualizarClave(ClassUtils.USUARIO_CONECTADO, enccn3.trim())) {
             //se actualizó la clave
             JOptionPane.showMessageDialog(this, "¡Contraseña actualizada con éxito!");
             //Limpiar passwordfields
