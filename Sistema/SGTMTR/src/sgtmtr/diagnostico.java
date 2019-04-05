@@ -104,8 +104,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         Year2 = 2000 + (y.getYear() - 100);
         //Date fing = Calendar.getInstance().getTime();
        //Date fent = Calendar.getInstance().getTime();
-        Username = "respaldo4a@gmail.com";
-        PassWord = new String("respaldo2015");
+        Username = "tallertechorojo@gmail.com";
+        PassWord = new String("techrojo");
         txtrepuestos.setLineWrap(true); //Se logra que haya salto de línea en el TextArea
         txtrepuestos.setWrapStyleWord(true); //Se impide la división de palabras en el TestArea
     }

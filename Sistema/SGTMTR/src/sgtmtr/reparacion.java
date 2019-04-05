@@ -46,6 +46,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         txtnumdiag.setDisabledTextColor(Color.red);
         txtcd.setDisabledTextColor(Color.red);
         CargarComboER();
+        
     }
 
     public static String fechaactual() {
@@ -257,7 +258,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jsp1 = new javax.swing.JScrollPane();
         tbdiag = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnimprimir = new javax.swing.JButton();
         txtnum = new javax.swing.JTextField();
         panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
         txtnumdiag = new javax.swing.JTextField();
@@ -304,11 +305,12 @@ public class reparacion extends javax.swing.JInternalFrame {
         });
         jsp1.setViewportView(tbdiag);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
-        jButton1.setText("Imprimir");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnimprimir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
+        btnimprimir.setText("Imprimir");
+        btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnimprimirActionPerformed(evt);
             }
         });
 
@@ -324,7 +326,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addGap(76, 76, 76)
                 .addComponent(txtnum, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButton1)
+                .addComponent(btnimprimir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido1Layout.setVerticalGroup(
@@ -333,7 +335,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnum)
-                    .addComponent(jButton1))
+                    .addComponent(btnimprimir))
                 .addGap(18, 18, 18)
                 .addComponent(jsp1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -492,7 +494,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         mostrarcoddiag();
     }//GEN-LAST:event_tbrepMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
         String errores = validarnumdiag();
         if (errores.equals("")) {
             try {
@@ -511,7 +513,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnimprimirActionPerformed
 
     private void btnrepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepActionPerformed
         String errores = validartxtrep();
@@ -540,9 +542,9 @@ public class reparacion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbestadorepActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnrep;
     private javax.swing.JComboBox cbestadorep;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jsp1;
     private javax.swing.JScrollPane jsp2;
     private elaprendiz.gui.panel.PanelImage panelImage1;
