@@ -82,10 +82,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         lbfecha.setText(fechaActual());
         //centrar la pantalla
         setLocationRelativeTo(null);
+        //fondos
+        fondo1.setVisible(true);
         this.setSize(1000, 768);
         //this.setLocation(600,150);
          this.addWindowListener(new WindowListener() {
-
             @Override
             public void windowOpened(WindowEvent e) {
                
@@ -157,7 +158,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JSeparator();
         jdpescritorio = new javax.swing.JDesktopPane();
         lblimg = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
@@ -165,38 +165,41 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
         lbhora = new javax.swing.JLabel();
+        fondo1 = new javax.swing.JLabel();
+        fondo2 = new javax.swing.JLabel();
+        fondo3 = new javax.swing.JLabel();
+        fondo4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnicerrarsesion = new javax.swing.JMenuItem();
         mnisalir = new javax.swing.JMenuItem();
         mnisistema = new javax.swing.JMenu();
         mniusuarios = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem7 = new javax.swing.JMenuItem();
         mnibd = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        mnif1 = new javax.swing.JMenuItem();
+        mnif2 = new javax.swing.JMenuItem();
+        mnif3 = new javax.swing.JMenuItem();
         mniproceso = new javax.swing.JMenu();
         mnidatos = new javax.swing.JMenu();
         mniclientes = new javax.swing.JMenuItem();
         mnimarca = new javax.swing.JMenuItem();
         mnivehiculos = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mniaverias = new javax.swing.JMenu();
         mnidesperfectos = new javax.swing.JMenuItem();
         mnicpd = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mniprincipal = new javax.swing.JMenu();
         mnidiag = new javax.swing.JMenuItem();
         mnirep = new javax.swing.JMenuItem();
+        mnivi = new javax.swing.JMenuItem();
         mniconsultas = new javax.swing.JMenu();
         mnireportes = new javax.swing.JMenu();
         mniusers = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnirepclientes = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnirepmarcas = new javax.swing.JMenuItem();
         mnirepdesperfectos = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         mniayuda = new javax.swing.JMenu();
@@ -223,35 +226,56 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         jdpescritorio.add(lblimg);
         lblimg.setBounds(10, 10, 40, 30);
 
+        lblusuario.setBackground(new java.awt.Color(0, 153, 153));
         lblusuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblusuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblusuario.setForeground(new java.awt.Color(0, 102, 102));
         lblusuario.setText("Usuario Conectado: ");
         jdpescritorio.add(lblusuario);
         lblusuario.setBounds(60, 10, 260, 17);
 
+        lblhora.setBackground(new java.awt.Color(0, 153, 153));
         lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblhora.setForeground(new java.awt.Color(255, 255, 255));
+        lblhora.setForeground(new java.awt.Color(0, 102, 102));
         lblhora.setText("Hora:");
         jdpescritorio.add(lblhora);
         lblhora.setBounds(580, 10, 50, 17);
 
+        lblfecha.setBackground(new java.awt.Color(0, 153, 153));
         lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lblfecha.setForeground(new java.awt.Color(0, 102, 102));
         lblfecha.setText("Fecha:");
         jdpescritorio.add(lblfecha);
         lblfecha.setBounds(350, 10, 60, 17);
 
+        lbfecha.setBackground(new java.awt.Color(0, 153, 153));
         lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lbfecha.setForeground(new java.awt.Color(0, 102, 102));
         lbfecha.setText("jLabel1");
         jdpescritorio.add(lbfecha);
         lbfecha.setBounds(420, 10, 80, 17);
 
+        lbhora.setBackground(new java.awt.Color(0, 153, 153));
         lbhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbhora.setForeground(new java.awt.Color(255, 255, 255));
+        lbhora.setForeground(new java.awt.Color(0, 102, 102));
         lbhora.setText("hola");
         jdpescritorio.add(lbhora);
         lbhora.setBounds(650, 10, 80, 14);
+
+        fondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"))); // NOI18N
+        jdpescritorio.add(fondo1);
+        fondo1.setBounds(0, 0, 1366, 911);
+
+        fondo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"))); // NOI18N
+        jdpescritorio.add(fondo2);
+        fondo2.setBounds(0, 0, 1505, 950);
+
+        fondo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"))); // NOI18N
+        jdpescritorio.add(fondo3);
+        fondo3.setBounds(0, 0, 1600, 900);
+
+        fondo4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-s5-rear-angle-1920x1080-wallpaper-1377.jpg"))); // NOI18N
+        jdpescritorio.add(fondo4);
+        fondo4.setBounds(0, 0, 1024, 576);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -272,7 +296,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         mnipersonal.add(mnicambiarpass);
-        mnipersonal.add(jSeparator6);
 
         mnicerrarsesion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnicerrarsesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disconnect.png"))); // NOI18N
@@ -318,7 +341,15 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         mnisistema.add(mniusuarios);
-        mnisistema.add(jSeparator5);
+
+        jMenuItem7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jMenuItem7.setText("Insumos");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        mnisistema.add(jMenuItem7);
 
         mnibd.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnibd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/copia-seguridad.png"))); // NOI18N
@@ -331,6 +362,38 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         mnisistema.add(mnibd);
 
         jMenuBar1.add(mnisistema);
+
+        jMenu1.setText("Fondo");
+        jMenu1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+
+        mnif1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif1.setText("Fondo 1");
+        mnif1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif1);
+
+        mnif2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif2.setText("Fondo 2");
+        mnif2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif2);
+
+        mnif3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnif3.setText("Fondo 3");
+        mnif3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnif3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnif3);
+
+        jMenuBar1.add(jMenu1);
 
         mniproceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/procesos.png"))); // NOI18N
         mniproceso.setText("Proceso");
@@ -375,7 +438,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         mnidatos.add(mnivehiculos);
 
         mniproceso.add(mnidatos);
-        mniproceso.add(jSeparator7);
 
         mniaverias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/multi.png"))); // NOI18N
         mniaverias.setText("Averías");
@@ -402,7 +464,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         mniaverias.add(mnicpd);
 
         mniproceso.add(mniaverias);
-        mniproceso.add(jSeparator1);
 
         mniprincipal.setText("Principal");
         mniprincipal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -417,13 +478,22 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnirep.setText("Reparación");
+        mnirep.setText("Reparaciones");
         mnirep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnirepActionPerformed(evt);
             }
         });
         mniprincipal.add(mnirep);
+
+        mnivi.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnivi.setText("Venta Insumos");
+        mnivi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniviActionPerformed(evt);
+            }
+        });
+        mniprincipal.add(mnivi);
 
         mniproceso.add(mniprincipal);
 
@@ -455,7 +525,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         mnireportes.add(mniusers);
-        mnireportes.add(jSeparator2);
 
         mnirepclientes.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
@@ -466,7 +535,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         mnireportes.add(mnirepclientes);
-        mnireportes.add(jSeparator3);
 
         mnirepmarcas.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
@@ -487,7 +555,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
         });
         mnireportes.add(mnirepdesperfectos);
-        mnireportes.add(jSeparator4);
 
         jMenuItem3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
@@ -710,6 +777,36 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         vehi.show();
     }//GEN-LAST:event_mnivehiculosActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        Insumos in= new  Insumos();
+        jdpescritorio.add(in);
+        in.show();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void mnif1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif1ActionPerformed
+        fondo1.setVisible(true);
+        fondo2.setVisible(false);
+        fondo3.setVisible(false);
+    }//GEN-LAST:event_mnif1ActionPerformed
+
+    private void mnif2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif2ActionPerformed
+        fondo1.setVisible(false);
+        fondo2.setVisible(true);
+        fondo3.setVisible(false);
+    }//GEN-LAST:event_mnif2ActionPerformed
+
+    private void mnif3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif3ActionPerformed
+        fondo1.setVisible(false);
+        fondo2.setVisible(false);
+        fondo3.setVisible(true);
+    }//GEN-LAST:event_mnif3ActionPerformed
+
+    private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
+        ComprobanteVta cvta= new  ComprobanteVta();
+        jdpescritorio.add(cvta);
+        cvta.show();
+    }//GEN-LAST:event_mniviActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -746,6 +843,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel fondo1;
+    private javax.swing.JLabel fondo2;
+    private javax.swing.JLabel fondo3;
+    private javax.swing.JLabel fondo4;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -753,14 +855,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JPopupMenu.Separator jSeparator4;
-    private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JPopupMenu.Separator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JMenuItem jMenuItem7;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lbhora;
@@ -780,6 +875,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private javax.swing.JMenu mnidatos;
     private javax.swing.JMenuItem mnidesperfectos;
     private javax.swing.JMenuItem mnidiag;
+    private javax.swing.JMenuItem mnif1;
+    private javax.swing.JMenuItem mnif2;
+    private javax.swing.JMenuItem mnif3;
     private javax.swing.JMenuItem mnimarca;
     private javax.swing.JMenu mnipersonal;
     private javax.swing.JMenu mniprincipal;
@@ -794,6 +892,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private javax.swing.JMenuItem mniusers;
     private javax.swing.JMenuItem mniusuarios;
     private javax.swing.JMenuItem mnivehiculos;
+    private javax.swing.JMenuItem mnivi;
     // End of variables declaration//GEN-END:variables
 }
 /*ñeeee

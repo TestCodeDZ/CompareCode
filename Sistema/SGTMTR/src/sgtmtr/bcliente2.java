@@ -95,14 +95,25 @@ void mostrarvehiculos(String valor)
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnienviar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtrut = new javax.swing.JTextField();
         jsp = new javax.swing.JScrollPane();
         tbcliente = new javax.swing.JTable();
-        btnenviar = new javax.swing.JButton();
+
+        mnienviar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnienviar.setText("Agregar");
+        mnienviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnienviarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnienviar);
 
         setClosable(true);
+        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione al cliente comprador", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -126,7 +137,6 @@ void mostrarvehiculos(String valor)
         //cambiar color de fila
         tbcliente.setSelectionBackground(Color.LIGHT_GRAY);
         tbcliente.setSelectionForeground(Color.blue);
-        tbcliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbcliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -138,35 +148,22 @@ void mostrarvehiculos(String valor)
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbcliente.getTableHeader().setResizingAllowed(false);
-        tbcliente.getTableHeader().setReorderingAllowed(false);
+        tbcliente.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbcliente);
-
-        btnenviar.setText("Enviar");
-        btnenviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnenviarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(54, 54, 54)
+                .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(54, 54, 54)
-                        .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(189, 189, 189)
-                        .addComponent(btnenviar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,8 +174,7 @@ void mostrarvehiculos(String valor)
                     .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addComponent(btnenviar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -214,7 +210,7 @@ void mostrarvehiculos(String valor)
         }
     }//GEN-LAST:event_txtrutKeyTyped
 
-    private void btnenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnenviarActionPerformed
+    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
         String rut = "", nom = "", ap = "", cont = "", dire = "", mail = "";
         int fila = tbcliente.getSelectedRow();
         try {
@@ -230,7 +226,8 @@ void mostrarvehiculos(String valor)
                 mail = (String) tbcliente.getValueAt(fila, 5);
 
                 ComprobanteVta.txtrut.setText(rut);
-                ComprobanteVta.txtnombrecomp.setText(nom+" "+ap);
+                ComprobanteVta.txtnombres.setText(nom);
+                ComprobanteVta.txtapellidos.setText(ap);
                 ComprobanteVta.txtfono.setText(cont);
                 ComprobanteVta.txtdireccion.setText(dire);
                 ComprobanteVta.txtemail.setText(mail);
@@ -238,14 +235,15 @@ void mostrarvehiculos(String valor)
             }
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_btnenviarActionPerformed
+    }//GEN-LAST:event_mnienviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnenviar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnienviar;
     private javax.swing.JTable tbcliente;
     private javax.swing.JTextField txtrut;
     // End of variables declaration//GEN-END:variables

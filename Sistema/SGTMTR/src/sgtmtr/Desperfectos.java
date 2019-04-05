@@ -517,7 +517,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
         }
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }   
     }//GEN-LAST:event_btingresarActionPerformed
 
@@ -546,7 +546,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
             anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }    
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtiddesp() {
@@ -600,7 +600,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
         anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
@@ -627,7 +627,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             anchocolumnas();
             btingresar.setEnabled(true);
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btborrarActionPerformed
 

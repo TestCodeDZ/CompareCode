@@ -547,7 +547,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void txtrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtrutFocusLost
-         String codigo;
+        String codigo;
         int multiplo=2;
         int cont=0;
         for (int x=0;x<txtrut.getText().length();x++){
@@ -636,7 +636,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
             }  
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }    
     }//GEN-LAST:event_btingresarActionPerformed
     
@@ -698,12 +698,12 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         }
         anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-         String errores=validarVacios();
+        String errores=validarVacios();
         if(errores.equals("")){
         try {
             String rut=txtrut.getText();
@@ -733,7 +733,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         }
             anchocolumnas();
         }else{
-            JOptionPane.showMessageDialog(null, errores);
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btmodificarActionPerformed
 
@@ -765,7 +765,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         anchocolumnas();
         btingresar.setEnabled(true);
         }else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }     
     }//GEN-LAST:event_btborrarActionPerformed
 

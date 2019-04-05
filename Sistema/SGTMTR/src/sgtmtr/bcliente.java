@@ -103,7 +103,8 @@ void mostrarvehiculos(String valor)
         jsp = new javax.swing.JScrollPane();
         tbcliente = new javax.swing.JTable();
 
-        mnienviar.setText("Enviar Datos");
+        mnienviar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnienviar.setText("Agregar");
         mnienviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnienviarActionPerformed(evt);
@@ -200,29 +201,6 @@ void mostrarvehiculos(String valor)
          mostrarvehiculos(txtrut.getText());
     }//GEN-LAST:event_txtrutKeyReleased
 
-    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
-        String rut = "", nombres = "", apellidos = "", contacto = "", direccion = "", correo = "";
-    int fila = tbcliente.getSelectedRow();
-    try {
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun dato");
-
-        } else {
-            rut = (String) tbcliente.getValueAt(fila, 0);
-            nombres = (String) tbcliente.getValueAt(fila, 1);
-            apellidos = (String) tbcliente.getValueAt(fila, 2);
-            contacto = (String) tbcliente.getValueAt(fila, 3);
-            direccion = (String) tbcliente.getValueAt(fila, 4);
-            correo = (String) tbcliente.getValueAt(fila, 5);
-            
-            vehiculos.txtrutdueño.setDisabledTextColor(Color.blue);
-            vehiculos.txtrutdueño.setText(rut);
-            this.dispose();
-        }
-    } catch (Exception e) {
-    }
-    }//GEN-LAST:event_mnienviarActionPerformed
-
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
         validarLetras.soloRUT(evt);
         //limite de caracteres
@@ -231,6 +209,29 @@ void mostrarvehiculos(String valor)
             Toolkit.getDefaultToolkit().beep();
         }
     }//GEN-LAST:event_txtrutKeyTyped
+
+    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
+        String rut = "", nom = "", ap = "", cont = "", dire = "", mail = "";
+        int fila = tbcliente.getSelectedRow();
+        try {
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun dato");
+
+            } else {
+                rut = (String) tbcliente.getValueAt(fila, 0);
+                nom = (String) tbcliente.getValueAt(fila, 1);
+                ap = (String) tbcliente.getValueAt(fila, 2);
+                cont = (String) tbcliente.getValueAt(fila, 3);
+                dire = (String) tbcliente.getValueAt(fila, 4);
+                mail = (String) tbcliente.getValueAt(fila, 5);
+
+                diagnostico.txtrutcliente.setDisabledTextColor(Color.blue);
+                diagnostico.txtrutcliente.setText(rut);
+                this.dispose();
+            }
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_mnienviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

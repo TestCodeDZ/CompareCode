@@ -206,6 +206,7 @@ public class Insumos extends javax.swing.JInternalFrame {
         btmt = new javax.swing.JButton();
 
         setClosable(true);
+        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle del Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -380,8 +381,6 @@ public class Insumos extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbprod.getTableHeader().setResizingAllowed(false);
-        tbprod.getTableHeader().setReorderingAllowed(false);
         tbprod.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbprodMouseClicked(evt);

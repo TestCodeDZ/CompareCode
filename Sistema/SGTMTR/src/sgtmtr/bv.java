@@ -72,7 +72,8 @@ void mostrarvehiculos(String valor)
         jsp = new javax.swing.JScrollPane();
         tbvehiculo = new javax.swing.JTable();
 
-        mnienviar.setText("Enviar Datos");
+        mnienviar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnienviar.setText("Agregar");
         mnienviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnienviarActionPerformed(evt);
@@ -159,25 +160,25 @@ void mostrarvehiculos(String valor)
 
     private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
         String patente = "", marca = "", modelo = "", año = "", color = "", dueño = "";
-    int fila = tbvehiculo.getSelectedRow();
-    try {
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun dato");
+        int fila = tbvehiculo.getSelectedRow();
+        try {
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun dato");
 
-        } else {
-            patente = (String) tbvehiculo.getValueAt(fila, 0);
-            marca = (String) tbvehiculo.getValueAt(fila, 1);
-            modelo = (String) tbvehiculo.getValueAt(fila, 2);
-            año = (String) tbvehiculo.getValueAt(fila, 3);
-            color = (String) tbvehiculo.getValueAt(fila, 4);
-            dueño = (String) tbvehiculo.getValueAt(fila, 5);
-            
-            diagnostico.txtpatentediag.setDisabledTextColor(Color.blue);
-            diagnostico.txtpatentediag.setText(patente);
-            this.dispose();
+            } else {
+                patente = (String) tbvehiculo.getValueAt(fila, 0);
+                marca = (String) tbvehiculo.getValueAt(fila, 1);
+                modelo = (String) tbvehiculo.getValueAt(fila, 2);
+                año = (String) tbvehiculo.getValueAt(fila, 3);
+                color = (String) tbvehiculo.getValueAt(fila, 4);
+                dueño = (String) tbvehiculo.getValueAt(fila, 5);
+
+                diagnostico.txtpatentediag.setDisabledTextColor(Color.blue);
+                diagnostico.txtpatentediag.setText(patente);
+                this.dispose();
+            }
+        } catch (Exception e) {
         }
-    } catch (Exception e) {
-    }
     }//GEN-LAST:event_mnienviarActionPerformed
 
 
