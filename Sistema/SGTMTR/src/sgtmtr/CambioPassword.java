@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  * @author ZuluCorp
  */
 public class CambioPassword extends javax.swing.JDialog {
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form CambioPassword
      */
@@ -236,32 +236,103 @@ public class CambioPassword extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pfcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfcaActionPerformed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfca.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if ((caracter == 32)
+                    || (caracter == '@')
+                    || (caracter == ';')
+                    || (caracter == '|')
+                    || (caracter == '&')
+                    || (caracter == '=')
+                    || (caracter == '*')
+                    || (caracter == 39)
+                    || (caracter == 13)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfcaActionPerformed
 
     private void pfcnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfcnActionPerformed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfcn.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if ((caracter == 32)
+                    || (caracter == '@')
+                    || (caracter == ';')
+                    || (caracter == '|')
+                    || (caracter == '&')
+                    || (caracter == '=')
+                    || (caracter == '*')
+                    || (caracter == 39)
+                    || (caracter == 13)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfcnActionPerformed
 
     private void pfccnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfccnActionPerformed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfccn.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if ((caracter == 32)
+                    || (caracter == '@')
+                    || (caracter == ';')
+                    || (caracter == '|')
+                    || (caracter == '&')
+                    || (caracter == '=')
+                    || (caracter == '*')
+                    || (caracter == 39)
+                    || (caracter == 13)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfccnActionPerformed
 
     private void pfcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcaKeyPressed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfca.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter == 32)) || (caracter == '@') || (caracter == ';') || (caracter == '|') || (caracter == '&') || (caracter == 39)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfcaKeyPressed
 
     private void pfcnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcnKeyPressed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfcn.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter == 32)) || (caracter == '@') || (caracter == ';') || (caracter == '|') || (caracter == '&') || (caracter == 39)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfcnKeyPressed
 
     private void pfccnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfccnKeyPressed
-        
+        //Impedir teclear algunos caraceres para no inyectar query
+        pfccn.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter == 32)) || (caracter == '@') || (caracter == ';') || (caracter == '|') || (caracter == '&') || (caracter == 39)) {
+                    e.consume();
+                }
+            }
+        });
     }//GEN-LAST:event_pfccnKeyPressed
 
     private void pfcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcaKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
-        //limite de caracteres
+         //limite de caracteres
         if (pfca.getText().length() == 15) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -269,7 +340,6 @@ public class CambioPassword extends javax.swing.JDialog {
     }//GEN-LAST:event_pfcaKeyTyped
 
     private void pfcnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcnKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
         //limite de caracteres
         if (pfcn.getText().length() == 15) {
             evt.consume();
@@ -278,9 +348,8 @@ public class CambioPassword extends javax.swing.JDialog {
     }//GEN-LAST:event_pfcnKeyTyped
 
     private void pfccnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfccnKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
         //limite de caracteres
-        if (pfccn.getText().length() == 15) {
+        if (pfcn.getText().length() == 15) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
         }

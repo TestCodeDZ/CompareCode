@@ -39,12 +39,14 @@ public class diagnostico extends javax.swing.JInternalFrame {
         txtfecha.setDisabledTextColor(Color.blue);
         txtfecha.setText(fechaact());
         txtrutcliente.setDisabledTextColor(Color.blue);
-        txtnumrep.setDisabledTextColor(Color.blue);   
+        txtmecanico.setDisabledTextColor(Color.blue);
+        txtnumrep.setDisabledTextColor(Color.blue);
+        txtestdiag.setDisabledTextColor(Color.blue);    
         CargarComboTipoUsers();
+        Cargartextfieldmecanico();
         CargarComboED();
+        CargartextfieldED();
         numeros();
-        /*Deshabilitar txt del jcalendar*/
-        jdcfed.getDateEditor().setEnabled(false);
     }
     
     private void CargarComboTipoUsers(){
@@ -56,7 +58,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
             //Crear Consulta
             Statement st = con.createStatement();
-            String sql = "SELECT usuario FROM usuarios WHERE TipoUsuario=3";
+            String sql = "SELECT *  FROM usuarios WHERE TipoUsuario=3";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
             //Limpiamos el Combo
@@ -74,6 +76,29 @@ public class diagnostico extends javax.swing.JInternalFrame {
         }
     }
     
+    private void Cargartextfieldmecanico(){
+        //Carga de Combo
+        try{
+            //Cargar Driver
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear Conexion
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
+            //Crear Consulta
+            Statement st1 = con.createStatement();  
+            String sql1 = "SELECT Usuario FROM usuarios WHERE TipoUsuario='"+cmbmecanico.getSelectedItem()+"'";
+            //Ejecutar consulta
+            ResultSet rs1= st1.executeQuery(sql1);
+            //Recorremos los registros traidos
+            while(rs1.next()){
+                //Agregamos elemento al text
+                txtmecanico.setText(rs1.getObject("Usuario").toString());
+            }
+            //Cerramos conexión
+            con.close();
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        }
+    }
     private void CargarComboED(){
         //Carga de Combo
         try{
@@ -83,7 +108,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
             //Crear Consulta
             Statement st = con.createStatement();
-            String sql = "SELECT Estado FROM estadodiag";
+            String sql = "SELECT ID, Estado FROM estadodiag";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
             //Limpiamos el Combo
@@ -100,7 +125,29 @@ public class diagnostico extends javax.swing.JInternalFrame {
              JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
         }
     }
-    
+    private void CargartextfieldED(){
+        //Carga de Combo
+        try{
+            //Cargar Driver
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear Conexion
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
+            //Crear Consulta
+            Statement st1 = con.createStatement();  
+            String sql1 = "SELECT Estado FROM estadodiag WHERE ID='"+cmbed.getSelectedItem()+"'";
+            //Ejecutar consulta
+            ResultSet rs1= st1.executeQuery(sql1);
+            //Recorremos los registros traidos
+            while(rs1.next()){
+                //Agregamos elemento al text
+                txtestdiag.setText(rs1.getObject("Estado").toString());
+            }
+            //Cerramos conexión
+            con.close();
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        }
+    }
     public static String fechaact(){
     Date fecha= new Date();
     SimpleDateFormat formatofecha= new SimpleDateFormat("dd/MM/YYYY");
@@ -216,6 +263,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jLabel15 = new javax.swing.JLabel();
         txtrutcliente = new javax.swing.JTextField();
         cmbmecanico = new javax.swing.JComboBox();
+        txtmecanico = new javax.swing.JTextField();
         jdcfed = new com.toedter.calendar.JDateChooser();
         jLabel16 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -225,14 +273,13 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         txtnumrep = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        txtestdiag = new javax.swing.JTextField();
         cmbed = new javax.swing.JComboBox();
         btingresodiag = new javax.swing.JButton();
         btejecutarcotizacion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
         tbdiag = new javax.swing.JTable();
-
-        setClosable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Diagnóstico N°", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -289,6 +336,9 @@ public class diagnostico extends javax.swing.JInternalFrame {
             }
         });
 
+        txtmecanico.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtmecanico.setEnabled(false);
+
         jdcfed.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -322,6 +372,9 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Estado del Diagnóstico");
 
+        txtestdiag.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtestdiag.setEnabled(false);
+
         cmbed.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cmbed.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbed.addItemListener(new java.awt.event.ItemListener() {
@@ -343,11 +396,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         });
 
         btejecutarcotizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/eject.png"))); // NOI18N
-        btejecutarcotizacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btejecutarcotizacionActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -357,11 +405,11 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jdcfed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jdcfed, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
@@ -380,7 +428,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
                             .addComponent(jLabel16)))
                     .addComponent(btingresodiag))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -392,17 +440,26 @@ public class diagnostico extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btejecutarcotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbed, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cmbed, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1))
-                .addGap(0, 10, Short.MAX_VALUE))
+                                .addComponent(cmbmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(txtmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(20, Short.MAX_VALUE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(txtestdiag, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +472,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
                             .addComponent(jLabel15)
                             .addComponent(txtrutcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7)
-                            .addComponent(cmbmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cmbmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,7 +490,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1)
                         .addComponent(txtnumrep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
-                        .addComponent(cmbed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtestdiag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btejecutarcotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,7 +564,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -523,26 +582,26 @@ public class diagnostico extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btejecutartbvehiculoActionPerformed
 
     private void cmbmecanicoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbmecanicoItemStateChanged
-       /* if(evt.getStateChange() == ItemEvent.SELECTED) {
+        if(evt.getStateChange() == ItemEvent.SELECTED) {
              Cargartextfieldmecanico();
-        }*/
+        }
     }//GEN-LAST:event_cmbmecanicoItemStateChanged
 
     private void cmbedItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbedItemStateChanged
-        /*if(evt.getStateChange() == ItemEvent.SELECTED) {
+        if(evt.getStateChange() == ItemEvent.SELECTED) {
              CargartextfieldED();
-        }*/
+        }
     }//GEN-LAST:event_cmbedItemStateChanged
 
     private void btejecutartbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutartbActionPerformed
         try {
-            bcliente bc = new bcliente();
+            bcliente bc= new bcliente();
             Principal.jdpescritorio.add(bc);
             bc.toFront();
             bc.setVisible(true);
 
-        } catch (Exception e) {
-        }
+            } catch (Exception e) {
+            }
     }//GEN-LAST:event_btejecutartbActionPerformed
 
     private void btingresodiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresodiagActionPerformed
@@ -576,12 +635,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
     }
     }//GEN-LAST:event_btingresodiagActionPerformed
 
-    private void btejecutarcotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutarcotizacionActionPerformed
-        // TODO add your handling code here:
-     
-        
-    }//GEN-LAST:event_btejecutarcotizacionActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btejecutarcotizacion;
@@ -605,7 +658,9 @@ public class diagnostico extends javax.swing.JInternalFrame {
     private com.toedter.calendar.JDateChooser jdcfed;
     private javax.swing.JScrollPane jsp;
     private javax.swing.JTable tbdiag;
+    private javax.swing.JTextField txtestdiag;
     private javax.swing.JTextField txtfecha;
+    private javax.swing.JTextField txtmecanico;
     private javax.swing.JTextField txtnumdiag;
     public static javax.swing.JTextField txtnumrep;
     public static javax.swing.JTextField txtpatentediag;
@@ -615,52 +670,3 @@ public class diagnostico extends javax.swing.JInternalFrame {
     conectar cc= new conectar();
     Connection cn = cc.conexion();  
 }
-
-/*
-    private void Cargartextfieldmecanico(){
-        //Carga de Combo
-        try{
-            //Cargar Driver
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear Conexion
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
-            //Crear Consulta
-            Statement st1 = con.createStatement();  
-            String sql1 = "SELECT Usuario FROM usuarios WHERE TipoUsuario='"+cmbmecanico.getSelectedItem()+"'";
-            //Ejecutar consulta
-            ResultSet rs1= st1.executeQuery(sql1);
-            //Recorremos los registros traidos
-            while(rs1.next()){
-                //Agregamos elemento al text
-                txtmecanico.setText(rs1.getObject("Usuario").toString());
-            }
-            //Cerramos conexión
-            con.close();
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        }
-    }
-    private void CargartextfieldED(){
-        //Carga de Combo
-        try{
-            //Cargar Driver
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear Conexion
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
-            //Crear Consulta
-            Statement st1 = con.createStatement();  
-            String sql1 = "SELECT Estado FROM estadodiag WHERE ID='"+cmbed.getSelectedItem()+"'";
-            //Ejecutar consulta
-            ResultSet rs1= st1.executeQuery(sql1);
-            //Recorremos los registros traidos
-            while(rs1.next()){
-                //Agregamos elemento al text
-                txtestdiag.setText(rs1.getObject("Estado").toString());
-            }
-            //Cerramos conexión
-            con.close();
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        }
-    }
-*/

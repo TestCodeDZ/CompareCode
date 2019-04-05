@@ -10,7 +10,6 @@ package sgtmtr;
  * @author ZuluCorp
  */
 import claseConectar.conectar;
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,12 +19,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.*;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class UsuariosSistema extends javax.swing.JInternalFrame {
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form UsuariosSistema
      */
@@ -113,6 +111,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbusuarios.setModel(modelo);
+            tbusuarios.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
@@ -299,8 +298,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mnimod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -330,15 +327,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jsp = new java.awt.ScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbusuarios = new javax.swing.JTable();
-
-        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        mnimod.setText("Modificar");
-        mnimod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnimodActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mnimod);
 
         setClosable(true);
         setIconifiable(true);
@@ -382,11 +370,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jLabel7.setBounds(20, 280, 55, 17);
 
         txtid.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtid.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtidKeyTyped(evt);
-            }
-        });
         jPanel1.add(txtid);
         txtid.setBounds(160, 30, 60, 30);
 
@@ -569,16 +552,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación de la tabla Usuarios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
-        tbusuarios.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        //Deshabilitar edicion de tabla
-        tbusuarios = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        //cambiar color de fila
-        tbusuarios.setSelectionBackground(Color.LIGHT_GRAY);
-        tbusuarios.setSelectionForeground(Color.blue);
+        tbusuarios.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbusuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -590,7 +564,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbusuarios.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(tbusuarios);
 
         jsp.add(jScrollPane1);
@@ -721,7 +694,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btgenerarActionPerformed
 
     private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
-        validarLetras.soloLetras(evt);
+       
         if (txtnombres.getText().length() < 4){
             txtapellidos.setEnabled(false);
                    
@@ -736,7 +709,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtnombresKeyTyped
 
     private void txtapellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtapellidosKeyTyped
-        validarLetras.soloLetras(evt);
         if (txtapellidos.getText().length() == 50) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -934,38 +906,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         }   
     }//GEN-LAST:event_txtapellidosFocusGained
 
-    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
-        //al momento de hacer click derecho aparecerá el menu modificar
-        //que se irá directamente con los valores de la BD a sus respectivos 
-        //textfields para hacer las respectivas modificaciones
-        int fila = tbusuarios.getSelectedRow();
-        txtid.setEnabled(false);
-        btingresar.setEnabled(false);
-
-        if (fila >= 0) {
-            txtid.setText(tbusuarios.getValueAt(fila, 0).toString());
-            txtnombres.setText(tbusuarios.getValueAt(fila, 1).toString());
-            txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());     
-            //cbtu.getSelectedItem(tbusuarios.getCellEditor(fila,3));    
-            txtusuario.setText(tbusuarios.getValueAt(fila, 4).toString());
-            //txtpass.setText(tbusuarios.getValueAt(fila, 5).toString());
-            //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());
-            btmodificar.setEnabled(true);
-            btborrar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_mnimodActionPerformed
-
-    private void txtidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
-        //limite de caracteres
-        if (txtid.getText().length() == 4) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }//GEN-LAST:event_txtidKeyTyped
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
     private javax.swing.JButton btbuscar;
@@ -986,11 +926,9 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.ScrollPane jsp;
-    private javax.swing.JMenuItem mnimod;
-    public static javax.swing.JTable tbusuarios;
+    private javax.swing.JTable tbusuarios;
     private javax.swing.JTextField txtapellidos;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnombres;

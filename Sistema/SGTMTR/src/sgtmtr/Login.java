@@ -28,7 +28,7 @@ public class Login extends javax.swing.JDialog {
     static String Nombres;
     static String Apellidos;
     
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+    
     /**
      * Creates new form Login
      */
@@ -38,7 +38,6 @@ public class Login extends javax.swing.JDialog {
         //centrar la pantalla
         setLocationRelativeTo(null);
         setTitle("Validación de Usuarios del Sistema");
-        txtuser.requestFocus();
     }
 
     public void keyTyped(KeyEvent ke) {          
@@ -225,7 +224,6 @@ public class Login extends javax.swing.JDialog {
     }//GEN-LAST:event_txtuserKeyPressed
 
     private void txtuserKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtuserKeyTyped
-        validarLetras.LoginUser(evt);
         if (txtuser.getText().length() == 15) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -233,7 +231,6 @@ public class Login extends javax.swing.JDialog {
     }//GEN-LAST:event_txtuserKeyTyped
 
     private void txtpassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpassKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
         //limite de caracteres
         if (txtpass.getText().length() == 15) {
             evt.consume();

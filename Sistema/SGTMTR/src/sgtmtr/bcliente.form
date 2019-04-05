@@ -10,10 +10,7 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="mnienviar">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="12" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Agregar"/>
+            <Property name="text" type="java.lang.String" value="Enviar Datos"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnienviarActionPerformed"/>
@@ -66,7 +63,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Seleccione al due&#xf1;o">
+            <TitledBorder title="B&#xfa;squeda de Clientes">
               <Font PropertyName="font" name="Arial" size="14" style="0"/>
             </TitledBorder>
           </Border>
@@ -113,7 +110,6 @@
         <Component class="javax.swing.JTextField" name="txtrut">
           <Events>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtrutKeyReleased"/>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtrutKeyTyped"/>
           </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jsp">
@@ -134,9 +130,6 @@
                   <ComponentRef name="jPopupMenu1"/>
                 </Property>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="//Deshabilitar edicion de tabla&#xa;        tbcliente = new javax.swing.JTable() {&#xa;            public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;                return false; //Disallow the editing of any cell&#xa;            }&#xa;        };&#xa;        //cambiar color de fila&#xa;        tbcliente.setSelectionBackground(Color.LIGHT_GRAY);&#xa;        tbcliente.setSelectionForeground(Color.blue);"/>
-              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
