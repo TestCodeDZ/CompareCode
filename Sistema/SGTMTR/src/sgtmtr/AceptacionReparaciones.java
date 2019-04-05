@@ -68,8 +68,8 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
     String Mensage = "";
     String To = "";
     String Subject = "";
-    
-     public void SendMail() {
+
+    public void SendMail() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -112,7 +112,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         modelo.addColumn("Patente");
         modelo.addColumn("RUT Cliente");
         modelo.addColumn("Nombre Cliente");
-        modelo.addColumn("Apellidor Cliente");
+        modelo.addColumn("Apellidos Cliente");
         modelo.addColumn("E-mail Cliente");
         modelo.addColumn("Mecánico");
         modelo.addColumn("Ingreso D.");
@@ -219,7 +219,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
             String apellido = tbdiag.getValueAt(filaseleccionada, 4).toString();
             String correo = tbdiag.getValueAt(filaseleccionada, 5).toString();
             txtnum.setText(nd);
-            txtnom.setText(nombre +" "+apellido);
+            txtnom.setText(nombre + " " + apellido);
             txtmail.setText(correo);
             txtpatente.setText(patente);
         }
@@ -292,7 +292,6 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
 //        tbdiag.getColumnModel().getColumn(1).setWidth(180);
 //        tbdiag.getColumnModel().getColumn(1).setMaxWidth(180);
 //        tbdiag.getColumnModel().getColumn(1).setMinWidth(180);
-
         tbdiag.getColumnModel().getColumn(2).setWidth(100);
         tbdiag.getColumnModel().getColumn(2).setMaxWidth(100);
         tbdiag.getColumnModel().getColumn(2).setMinWidth(100);
@@ -312,7 +311,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         tbdiag.getColumnModel().getColumn(6).setWidth(150);
         tbdiag.getColumnModel().getColumn(6).setMaxWidth(150);
         tbdiag.getColumnModel().getColumn(6).setMinWidth(150);
-        
+
 //        tbdiag.getColumnModel().getColumn(7).setWidth(135);
 //        tbdiag.getColumnModel().getColumn(7).setMaxWidth(135);
 //        tbdiag.getColumnModel().getColumn(7).setMinWidth(135);
@@ -320,11 +319,10 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
 //        tbdiag.getColumnModel().getColumn(8).setWidth(135);
 //        tbdiag.getColumnModel().getColumn(8).setMaxWidth(135);
 //        tbdiag.getColumnModel().getColumn(8).setMinWidth(135);
-        
         tbdiag.getColumnModel().getColumn(9).setWidth(250);
         tbdiag.getColumnModel().getColumn(9).setMaxWidth(250);
         tbdiag.getColumnModel().getColumn(9).setMinWidth(250);
-        
+
         tbdiag.getColumnModel().getColumn(10).setWidth(150);
         tbdiag.getColumnModel().getColumn(10).setMaxWidth(150);
         tbdiag.getColumnModel().getColumn(10).setMinWidth(150);
@@ -344,15 +342,24 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
     private String validaestrepauto() {
         String error = "";
         if (txtnom.getText().equals("")) {
-           error += "Debe seleccionar algún dato de la tabla para obtener el nombre\n"; 
+            error += "Debe seleccionar algún dato de la tabla para obtener el nombre\n";
         }
         if (txtmail.getText().equals("")) {
-             error += "Debe seleccionar algún dato de la tabla para obtener el E-mail\n"; 
+            error += "Debe seleccionar algún dato de la tabla para obtener el E-mail\n";
         }
         if (txtpatente.getText().equals("")) {
-             error += "Debe seleccionar algún dato de la tabla para obtener la patente\n"; 
-        }  
+            error += "Debe seleccionar algún dato de la tabla para obtener la patente\n";
+        }
         return error;
+    }
+
+    private void LimpiaTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        tbrep.setModel(new DefaultTableModel());
+        for (int i = 0; i < tbrep.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i -= 1;
+        }
     }
 
     /**
@@ -697,9 +704,10 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
                 txtnom.setText("");
                 txtmail.setText("");
                 txtpatente.setText("");
+                cbcambioestauto.setSelectedIndex(0);
                 mostrardatos();
                 anchocolumnas();
-                this.setVisible(false);
+                LimpiaTabla();
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             } finally {

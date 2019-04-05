@@ -115,7 +115,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         modelo.addColumn("Patente");
         modelo.addColumn("RUT Cliente");
         modelo.addColumn("Nombre Cliente");
-        modelo.addColumn("Apellidor Cliente");
+        modelo.addColumn("Apellidos Cliente");
         modelo.addColumn("E-mail Cliente");
         modelo.addColumn("Mecánico");
         modelo.addColumn("Ingreso D.");
@@ -404,7 +404,16 @@ public class reparacion extends javax.swing.JInternalFrame {
         }
         return errores;
     }
-
+    
+    private void LimpiaTabla(){
+       DefaultTableModel modelo = new DefaultTableModel();
+       tbrep.setModel(new DefaultTableModel());
+       for (int i = 0; i < tbrep.getRowCount(); i++) {
+           modelo.removeRow(i);
+           i-=1;
+       }
+   } 
+    
     private String validaestrepauto() {
         String error = "";
         Integer i2 = cbcambioestauto.getSelectedIndex();
@@ -810,8 +819,10 @@ public class reparacion extends javax.swing.JInternalFrame {
                         txtpatente.setText("");
                         cbcambioestauto.setVisible(false);
                         btcev.setVisible(false);
+                        cbcambioestauto.setSelectedIndex(0);
                 mostrardatos();
                 anchocolumnas();
+                LimpiaTabla();
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             } finally {

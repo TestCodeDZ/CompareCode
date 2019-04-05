@@ -874,7 +874,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             txtnombres.setEnabled(true);
             txtapellidos.setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+            //JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
         }
     }//GEN-LAST:event_tbusuariosMouseClicked
 
