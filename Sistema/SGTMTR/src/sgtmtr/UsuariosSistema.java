@@ -23,7 +23,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.codec.digest.DigestUtils;
 
 public class UsuariosSistema extends javax.swing.JInternalFrame {
 
@@ -245,46 +244,67 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelImage1 = new elaprendiz.gui.panel.PanelImage();
-        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
-        txttu = new javax.swing.JTextField();
-        txtid = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtnombres = new javax.swing.JTextField();
-        txtapellidos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cbtu = new javax.swing.JComboBox();
-        txtusuario = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        txtid = new javax.swing.JTextField();
+        txtnombres = new javax.swing.JTextField();
+        txtapellidos = new javax.swing.JTextField();
+        cbtu = new javax.swing.JComboBox();
+        txtusuario = new javax.swing.JTextField();
         txtpass = new javax.swing.JTextField();
         btgenerar = new javax.swing.JButton();
-        panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
+        txttu = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         btnuevo = new javax.swing.JButton();
-        btbuscar = new javax.swing.JButton();
         btingresar = new javax.swing.JButton();
         btmodificar = new javax.swing.JButton();
         btborrar = new javax.swing.JButton();
+        btbuscar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
-        panelTranslucido3 = new elaprendiz.gui.panel.PanelTranslucido();
+        jPanel3 = new javax.swing.JPanel();
         jsp = new java.awt.ScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbusuarios = new javax.swing.JTable();
 
         setClosable(true);
 
-        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Usuario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel1.setLayout(null);
 
-        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Usuario del Sistema", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setText("N° Identificador");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(20, 40, 96, 20);
 
-        txttu.setEnabled(false);
-        txttu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttuActionPerformed(evt);
-            }
-        });
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setText("Nombres");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(20, 80, 56, 17);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setText("Apellidos");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(20, 120, 57, 17);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setText("Tipo de Usuario");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(20, 160, 100, 17);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setText("Usuario");
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(20, 200, 48, 17);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setText("Contraseña");
+        jPanel1.add(jLabel6);
+        jLabel6.setBounds(20, 240, 74, 20);
 
         txtid.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtid.setEnabled(false);
@@ -293,14 +313,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 txtidKeyTyped(evt);
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("N° Identificador");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Nombres");
+        jPanel1.add(txtid);
+        txtid.setBounds(160, 30, 60, 30);
 
         txtnombres.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtnombres.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -318,6 +332,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 txtnombresKeyTyped(evt);
             }
         });
+        jPanel1.add(txtnombres);
+        txtnombres.setBounds(160, 70, 170, 30);
 
         txtapellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtapellidos.setEnabled(false);
@@ -334,14 +350,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 txtapellidosKeyTyped(evt);
             }
         });
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Apellidos");
-
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Tipo de Usuario");
+        jPanel1.add(txtapellidos);
+        txtapellidos.setBounds(160, 110, 170, 30);
 
         cbtu.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbtu.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -350,6 +360,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 cbtuItemStateChanged(evt);
             }
         });
+        jPanel1.add(cbtu);
+        cbtu.setBounds(160, 150, 190, 30);
 
         txtusuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtusuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -357,16 +369,12 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 txtusuarioKeyTyped(evt);
             }
         });
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Usuario");
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Contraseña");
+        jPanel1.add(txtusuario);
+        txtusuario.setBounds(160, 190, 120, 30);
 
         txtpass.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanel1.add(txtpass);
+        txtpass.setBounds(160, 230, 60, 30);
 
         btgenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group_key.png"))); // NOI18N
         btgenerar.addActionListener(new java.awt.event.ActionListener() {
@@ -374,88 +382,20 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 btgenerarActionPerformed(evt);
             }
         });
+        jPanel1.add(btgenerar);
+        btgenerar.setBounds(290, 200, 40, 40);
 
-        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
-        panelTranslucido1.setLayout(panelTranslucido1Layout);
-        panelTranslucido1Layout.setHorizontalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(44, 44, 44)
-                        .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(txttu, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(84, 84, 84)
-                        .addComponent(txtnombres, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(83, 83, 83)
-                        .addComponent(txtapellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(40, 40, 40)
-                        .addComponent(cbtu, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(66, 66, 66)
-                        .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addComponent(btgenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelTranslucido1Layout.setVerticalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txttu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2))
-                    .addComponent(txtnombres, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel3))
-                    .addComponent(txtapellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel4))
-                    .addComponent(cbtu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel5)
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addComponent(txtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btgenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        txttu.setEnabled(false);
+        txttu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txttuActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txttu);
+        txttu.setBounds(250, 30, 70, 30);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
@@ -463,15 +403,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         btnuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnuevoActionPerformed(evt);
-            }
-        });
-
-        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512.png"))); // NOI18N
-        btbuscar.setText("Buscar");
-        btbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btbuscarActionPerformed(evt);
             }
         });
 
@@ -502,6 +433,15 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             }
         });
 
+        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512.png"))); // NOI18N
+        btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbuscarActionPerformed(evt);
+            }
+        });
+
         btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
         btlimpiar.setText("Limpiar");
@@ -511,24 +451,24 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
-        panelTranslucido2.setLayout(panelTranslucido2Layout);
-        panelTranslucido2Layout.setHorizontalGroup(
-            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btmodificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btingresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btborrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btlimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panelTranslucido2Layout.setVerticalGroup(
-            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido2Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -543,6 +483,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 .addComponent(btlimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación de la tabla Usuarios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbusuarios.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         //Deshabilitar edicion de tabla
@@ -577,45 +519,15 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
 
         jsp.add(jScrollPane1);
 
-        javax.swing.GroupLayout panelTranslucido3Layout = new javax.swing.GroupLayout(panelTranslucido3);
-        panelTranslucido3.setLayout(panelTranslucido3Layout);
-        panelTranslucido3Layout.setHorizontalGroup(
-            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-        panelTranslucido3Layout.setVerticalGroup(
-            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
-        panelImage1.setLayout(panelImage1Layout);
-        panelImage1Layout.setHorizontalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelTranslucido3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panelImage1Layout.createSequentialGroup()
-                        .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        panelImage1Layout.setVerticalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelTranslucido2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelTranslucido3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -623,12 +535,27 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 28, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -763,18 +690,10 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 conexion = claseConectar.ConexionConBaseDatos.getConexion();
                 //Crear consulta
                 Statement st = conexion.createStatement();
-
-                /*Para encriptar password*/
-                /*Orden MD5-SHA256-SHA512*/
-                String enc1, enc2, enc3;
-                enc1 = DigestUtils.md5Hex(txtpass.getText());
-                enc2 = DigestUtils.sha256Hex(enc1);
-                enc3 = DigestUtils.sha512Hex(enc2);
-
                 String sql = "INSERT INTO usuarios (ID,Nombres,Apellidos,TipoUsuario,Usuario,Password)"
                         + "VALUES('" + txtid.getText() + "','" + txtnombres.getText() + "','" + txtapellidos.getText() + "',"
                         + "'" + txttu.getText() + "','" + txtusuario.getText() + "',"
-                        + "'" + enc3 + "')";
+                        + "'" + txtpass.getText() + "')";
                 //Ejecutar la consulta
                 st.executeUpdate(sql);
                 if (String.valueOf(txtid.getText()).compareTo("") == 0
@@ -789,7 +708,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                     anchocolumnas();
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "El usuario ya existe", "Usuario existente", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane,"El usuario ya existe","Usuario existente", JOptionPane.ERROR_MESSAGE);
             } finally {
                 claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
@@ -922,40 +841,32 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             Toolkit.getDefaultToolkit().beep();
         }
     }//GEN-LAST:event_txtidKeyTyped
-    
-    private void mostrardatosuser() {
-        int fila = tbusuarios.getSelectedRow();
-        if (fila >= 0) {
-            String id = tbusuarios.getValueAt(fila, 0).toString();
-            String nombres = tbusuarios.getValueAt(fila, 1).toString();
-            String apellidos = tbusuarios.getValueAt(fila, 2).toString();
-            String tipo = tbusuarios.getValueAt(fila, 3).toString();
-            String usuario = tbusuarios.getValueAt(fila, 4).toString();
-            txtid.setText(id);
-            txtnombres.setText(nombres);
-            txtapellidos.setText(apellidos);
-            cbtu.setSelectedItem(tipo);
-            txtusuario.setText(usuario);
-        } else {
-            
-            //txttu.setText(tbusuarios.getValueAt(fila, 3).toString());
-            //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());
-            //CargarCBNTU();
-            //JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }
-    
+
     private void tbusuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbusuariosMouseClicked
         //al momento de hacer click derecho aparecerá el menu modificar
         //que se irá directamente con los valores de la BD a sus respectivos 
         //textfields para hacer las respectivas modificaciones
-        mostrardatosuser();
+        int fila = tbusuarios.getSelectedRow();
         txtid.setEnabled(false);
         btingresar.setEnabled(false);
-        btmodificar.setEnabled(true);
-        btborrar.setEnabled(true);
-        txtnombres.setEnabled(true);
-        txtapellidos.setEnabled(true);
+
+        if (fila >= 0) {
+            txtid.setText(tbusuarios.getValueAt(fila, 0).toString());
+            txtnombres.setText(tbusuarios.getValueAt(fila, 1).toString());
+            txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());
+            String tipo = tbusuarios.getValueAt(fila, 3).toString();
+            cbtu.setSelectedItem(tipo);    
+            txtusuario.setText(tbusuarios.getValueAt(fila, 4).toString());
+            //txttu.setText(tbusuarios.getValueAt(fila, 3).toString());
+            //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());
+            //CargarCBNTU();
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+            txtnombres.setEnabled(true);
+            txtapellidos.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
     }//GEN-LAST:event_tbusuariosMouseClicked
 
     private void txttuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttuActionPerformed
@@ -988,12 +899,11 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.ScrollPane jsp;
-    private elaprendiz.gui.panel.PanelImage panelImage1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido3;
     public static javax.swing.JTable tbusuarios;
     private javax.swing.JTextField txtapellidos;
     private javax.swing.JTextField txtid;

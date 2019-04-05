@@ -5,16 +5,11 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.*;
 import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import static sgtmtr.UsuariosSistema.tbusuarios;
 
 /**
  *
@@ -32,41 +27,8 @@ public class Correito extends javax.swing.JDialog {
         PassWord = new String("respaldo2015");
         //jTextAreaMessage.setLineWrap(true); //Se logra que haya salto de línea en el TextArea
         //jTextAreaMessage.setWrapStyleWord(true); //Se impide la división de palabras en el TestArea
-        btncorreoenvia.setVisible(false);
-        mostrardatos("");
     }
 
-    void mostrardatos(String valor) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Medio de Pago");
-        jTable1.setModel(modelo);
-        String sql = "";
-        if (valor.equals("")) {
-            sql = "SELECT * FROM modopago";
-        } else {
-            //sql = "SELECT * FROM usuarios WHERE ID='" + txtmodo.getText() + "'";
-        }
-
-        String[] datos = new String[2];
-        try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                datos[0] = rs.getString(1);
-                datos[1] = rs.getString(2);
-                modelo.addRow(datos);
-            }
-            jTable1.setModel(modelo);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-        }
-    }
-
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,101 +38,32 @@ public class Correito extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        btncorreoenvia = new javax.swing.JButton();
-        rbtncheque = new javax.swing.JRadioButton();
-        rbtnefectivo = new javax.swing.JRadioButton();
-        jButton2 = new javax.swing.JButton();
-        txtmodo = new javax.swing.JTextField();
-        rbtntarjeta = new javax.swing.JRadioButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        btncorreoenvia.setText("jButton1");
-        btncorreoenvia.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btncorreoenviaActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
-
-        buttonGroup1.add(rbtncheque);
-        rbtncheque.setText("Cheque");
-
-        buttonGroup1.add(rbtnefectivo);
-        rbtnefectivo.setText("Efectivo");
-
-        jButton2.setText("Buscar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(rbtntarjeta);
-        rbtntarjeta.setText("Tarjeta de Crédito");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btncorreoenvia)
-                                    .addComponent(rbtntarjeta)
-                                    .addComponent(rbtnefectivo, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbtncheque, javax.swing.GroupLayout.Alignment.LEADING)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(txtmodo, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
-                        .addGap(0, 69, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(123, 123, 123)
+                .addComponent(jButton1)
+                .addContainerGap(204, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btncorreoenvia)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtmodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addGap(12, 12, 12)
-                .addComponent(rbtncheque)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rbtnefectivo)
-                .addGap(6, 6, 6)
-                .addComponent(rbtntarjeta)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(55, 55, 55)
+                .addComponent(jButton1)
+                .addContainerGap(222, Short.MAX_VALUE))
         );
 
         pack();
@@ -213,62 +106,13 @@ public class Correito extends javax.swing.JDialog {
         }
     }
 
-    private void btncorreoenviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncorreoenviaActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //Se recoge la información y se envía el email
         Mensage = "asdasdasdasdasd";
         To = "kpino.zulucorp@hotmail.com";
         Subject = "asdasd";
         SendMail();
-    }//GEN-LAST:event_btncorreoenviaActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Buscar registro en la base de datos
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = sql = "SELECT Desc_MP FROM modopago WHERE Desc_MP='" + txtmodo.getText() + "'";
-                //Ejecutar la consulta
-                ResultSet rs = st.executeQuery(sql);
-                if (rs.next()) {
-                    //existe
-                    
-                } else {
-                    //no existe
-                    if (String.valueOf(txtmodo.getText()).compareTo("") == 0) {
-                        //validarVacios();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "El modo de pago no existe","Datos Inexistentes", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-            }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        int fila = jTable1.getSelectedRow();
-        txtmodo.setEnabled(false);
-        if (fila >= 0) {
-            String tipo = jTable1.getValueAt(fila, 0).toString();
-            System.out.println(tipo);
-            
-            if (tipo.equals("1")){
-                rbtncheque.setSelected(true);
-            }
-            if (tipo.equals("2")){
-                rbtnefectivo.setSelected(true);
-            }
-            if (tipo.equals("3")){
-                rbtntarjeta.setSelected(true);
-            }
-                    //cbtu.setSelectedItem(tipo);   
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -313,14 +157,6 @@ public class Correito extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btncorreoenvia;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JRadioButton rbtncheque;
-    private javax.swing.JRadioButton rbtnefectivo;
-    private javax.swing.JRadioButton rbtntarjeta;
-    private javax.swing.JTextField txtmodo;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }
