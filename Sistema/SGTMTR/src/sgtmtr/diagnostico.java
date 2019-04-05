@@ -281,6 +281,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jsp = new javax.swing.JScrollPane();
         tbdiag = new javax.swing.JTable();
 
+        setClosable(true);
+
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Diagnóstico N°", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         txtnumdiag.setEnabled(false);
@@ -396,6 +398,11 @@ public class diagnostico extends javax.swing.JInternalFrame {
         });
 
         btejecutarcotizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/eject.png"))); // NOI18N
+        btejecutarcotizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btejecutarcotizacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -634,6 +641,12 @@ public class diagnostico extends javax.swing.JInternalFrame {
         numeros();
     }
     }//GEN-LAST:event_btingresodiagActionPerformed
+
+    private void btejecutarcotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutarcotizacionActionPerformed
+        // TODO add your handling code here:
+     
+        
+    }//GEN-LAST:event_btejecutarcotizacionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

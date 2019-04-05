@@ -703,6 +703,9 @@ Thread Hilo;
 
     private void mnivehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnivehiculosActionPerformed
         // TODO add your handling code here:
+        vehiculos vehi= new  vehiculos();
+        jdpescritorio.add(vehi);
+        vehi.show();
     }//GEN-LAST:event_mnivehiculosActionPerformed
 
     /**

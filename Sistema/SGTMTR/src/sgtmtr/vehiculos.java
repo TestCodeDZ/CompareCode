@@ -54,6 +54,8 @@ public class vehiculos extends javax.swing.JInternalFrame {
         btborrar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
 
+        setClosable(true);
+
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -163,6 +165,11 @@ public class vehiculos extends javax.swing.JInternalFrame {
 
         btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnuevo.setText("Nuevo");
+        btnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnuevoActionPerformed(evt);
+            }
+        });
 
         btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btbuscar.setText("Buscar");
@@ -243,6 +250,11 @@ public class vehiculos extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnuevoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
