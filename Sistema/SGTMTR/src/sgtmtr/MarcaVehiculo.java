@@ -1,0 +1,655 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package sgtmtr;
+
+import static claseConectar.ConexionConBaseDatos.conexion;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author ZuluCorp
+ */
+public class MarcaVehiculo extends javax.swing.JInternalFrame {
+
+    ValidarCaracteres validarLetras = new ValidarCaracteres();
+
+    /**
+     * Creates new form MarcaVehiculo
+     */
+    public MarcaVehiculo() {
+        initComponents();
+        this.setTitle("Mantenedor de Marcas");
+        this.setLocation(280, 15);
+        mostrardatos("");
+        anchocolumnas();
+        bloquear();
+        codigomarcas();
+        txtidmarca.setDisabledTextColor(Color.blue);
+    }
+
+    void mostrardatos(String valor) {
+        String id = txtidmarca.getText();
+        String NM = txtmn.getText();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Nombre de la Marca");
+        tbmarcas.setModel(modelo);
+        String sql = "";
+        if (valor.equals("")) {
+            sql = "SELECT * FROM marcas";
+        } else {
+            sql = "SELECT * FROM marcas WHERE ID='" + id + "'";
+        }
+
+        String[] datos = new String[2];
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                modelo.addRow(datos);
+            }
+            tbmarcas.setModel(modelo);
+            //tbmarcas.setEnabled(false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        }
+    }
+
+    void anchocolumnas() {
+        tbmarcas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        tbmarcas.getColumnModel().getColumn(0).setWidth(100);
+        tbmarcas.getColumnModel().getColumn(0).setMaxWidth(100);
+        tbmarcas.getColumnModel().getColumn(0).setMinWidth(100);
+
+        tbmarcas.getColumnModel().getColumn(1).setWidth(300);
+        tbmarcas.getColumnModel().getColumn(1).setMaxWidth(300);
+        tbmarcas.getColumnModel().getColumn(1).setMinWidth(300);
+    }
+
+    void bloquear() {
+        txtmn.setEnabled(false);
+        btbuscar.setEnabled(false);
+        btingresar.setEnabled(false);
+        btmodificar.setEnabled(false);
+        btborrar.setEnabled(false);
+        btlimpiar.setEnabled(false);
+    }
+
+    void limpiar() {
+        txtmn.setText("");
+        codigomarcas();
+    }
+
+    void desbloquear() {
+        txtmn.setEnabled(true);
+        //ver combos index
+        btbuscar.setEnabled(true);
+        btingresar.setEnabled(true);
+        btmodificar.setEnabled(true);
+        btborrar.setEnabled(true);
+        btlimpiar.setEnabled(true);
+    }
+
+    void codigomarcas() {
+        int j;
+        int cont = 1;
+        String num = "";
+        String c = "";
+        String SQL = "select max(ID) from marcas";
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            if (rs.next()) {
+                c = rs.getString(1);
+            }
+            if (c == null) {
+                txtidmarca.setText("MV0001");
+            } else {
+                char r1 = c.charAt(2);
+                char r2 = c.charAt(3);
+                char r3 = c.charAt(4);
+                char r4 = c.charAt(5);
+                String r = "";
+                r = "" + r1 + r2 + r3 + r4;
+                j = Integer.parseInt(r);
+                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
+                gen.generar(j);
+                txtidmarca.setText("MV" + gen.serie());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
+        jLabel1 = new javax.swing.JLabel();
+        txtidmarca = new javax.swing.JTextField();
+        txtmn = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
+        btbuscar = new javax.swing.JButton();
+        btnuevo = new javax.swing.JButton();
+        btlimpiar = new javax.swing.JButton();
+        panelTranslucido3 = new elaprendiz.gui.panel.PanelTranslucido();
+        btborrar = new javax.swing.JButton();
+        btmodificar = new javax.swing.JButton();
+        btingresar = new javax.swing.JButton();
+        panelTranslucido4 = new elaprendiz.gui.panel.PanelTranslucido();
+        jsp = new javax.swing.JScrollPane();
+        tbmarcas = new javax.swing.JTable();
+
+        setClosable(true);
+
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
+
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Marcas de Vehículos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Código");
+
+        txtidmarca.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtidmarca.setEnabled(false);
+        txtidmarca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtidmarcaKeyTyped(evt);
+            }
+        });
+
+        txtmn.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtmn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtmnKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Nombre");
+
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                        .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 201, Short.MAX_VALUE))
+                    .addComponent(txtmn))
+                .addContainerGap())
+        );
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtmn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512(2).png"))); // NOI18N
+        btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbuscarActionPerformed(evt);
+            }
+        });
+
+        btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
+        btnuevo.setText("Nuevo");
+        btnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnuevoActionPerformed(evt);
+            }
+        });
+
+        btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
+        btlimpiar.setText("Limpiar");
+        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimpiarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
+        panelTranslucido2.setLayout(panelTranslucido2Layout);
+        panelTranslucido2Layout.setHorizontalGroup(
+            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
+                .addContainerGap(11, Short.MAX_VALUE)
+                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        panelTranslucido2Layout.setVerticalGroup(
+            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addComponent(btnuevo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btbuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btlimpiar)
+                .addContainerGap())
+        );
+
+        btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btborrar.setText("Borrar");
+        btborrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btborrarActionPerformed(evt);
+            }
+        });
+
+        btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
+        btmodificar.setText("Modificar");
+        btmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmodificarActionPerformed(evt);
+            }
+        });
+
+        btingresar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
+        btingresar.setText("Ingresar");
+        btingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btingresarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTranslucido3Layout = new javax.swing.GroupLayout(panelTranslucido3);
+        panelTranslucido3.setLayout(panelTranslucido3Layout);
+        panelTranslucido3Layout.setHorizontalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btingresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btmodificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btborrar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelTranslucido3Layout.setVerticalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btingresar)
+                    .addComponent(btmodificar)
+                    .addComponent(btborrar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tbmarcas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        //Deshabilitar edicion de tabla
+        tbmarcas = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        //cambiar color de fila
+        tbmarcas.setSelectionBackground(Color.LIGHT_GRAY);
+        tbmarcas.setSelectionForeground(Color.blue);
+        tbmarcas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbmarcas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbmarcas.getTableHeader().setResizingAllowed(false);
+        tbmarcas.getTableHeader().setReorderingAllowed(false);
+        tbmarcas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbmarcasMousePressed(evt);
+            }
+        });
+        jsp.setViewportView(tbmarcas);
+
+        javax.swing.GroupLayout panelTranslucido4Layout = new javax.swing.GroupLayout(panelTranslucido4);
+        panelTranslucido4.setLayout(panelTranslucido4Layout);
+        panelTranslucido4Layout.setHorizontalGroup(
+            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelTranslucido4Layout.setVerticalGroup(
+            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jsp.getAccessibleContext().setAccessibleDescription("");
+        jsp.getAccessibleContext().setAccessibleParent(panelTranslucido4);
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(panelTranslucido4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(panelTranslucido4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+    private String validarVacios() {
+
+        String errores = "";
+
+        if (txtidmarca.getText().equals("")) {
+            errores += "Por favor genere el código de marca \n";
+        }
+        if (txtmn.getText().equals("")) {
+            errores += "Por favor ingrese el nombre de la marca \n";
+        }
+        return errores;
+    }
+
+    private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
+        desbloquear();
+        codigomarcas();
+        txtidmarca.setEnabled(false);
+        btborrar.setEnabled(false);
+        txtmn.requestFocus();
+        btmodificar.setEnabled(false);
+    }//GEN-LAST:event_btnuevoActionPerformed
+
+    private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
+        limpiar();
+        mostrardatos("");
+        anchocolumnas();
+        bloquear();
+        btbuscar.setEnabled(true);
+        txtidmarca.setEnabled(true);
+    }//GEN-LAST:event_btlimpiarActionPerformed
+
+    private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            // Insertar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "INSERT INTO marcas (ID,NombreMarca)"
+                        + "VALUES('" + txtidmarca.getText() + "','" + txtmn.getText() + "')";
+                //Ejecutar la consulta
+                st.executeUpdate(sql);
+                if (String.valueOf(txtmn.getText()).compareTo("") == 0) {
+                    validarVacios();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Ingresada","Ingresado", JOptionPane.INFORMATION_MESSAGE);
+                    txtmn.requestFocus();
+                    mostrardatos("");
+                    anchocolumnas();
+                    //Limpiar
+                    limpiar();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "La marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, errores);
+        }
+    }//GEN-LAST:event_btingresarActionPerformed
+
+    private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            String ID = txtidmarca.getText();
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE marcas SET NombreMarca='" + txtmn.getText() + "' WHERE ID='" + ID + "'");
+                pst.executeUpdate();
+
+                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Actualizada","Datos Actualizados", JOptionPane.INFORMATION_MESSAGE);
+                    btingresar.setEnabled(true);
+                    //limpiar textfields
+                    limpiar();
+                    mostrardatos("");
+                    anchocolumnas();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "La Marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, errores);
+        }
+    }//GEN-LAST:event_btmodificarActionPerformed
+    private String validartxtidmarcas() {
+        String error = "";
+        if (txtidmarca.getText().equals("")) {
+            error += "Por favor ingrese el ID de la marca a buscar o eliminar\n";
+        }
+        return error;
+    }
+
+    private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
+        String error = validartxtidmarcas();
+        if (error.equals("")) {
+        //unir RUT
+            // Buscar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "SELECT * FROM marcas WHERE ID='" + txtidmarca.getText() + "'";
+                //Ejecutar la consulta
+                ResultSet rs = st.executeQuery(sql);
+                mostrardatos(txtidmarca.getText());
+
+                if (rs.next()) {
+                    //existe
+                    txtidmarca.setText(rs.getObject("ID").toString());
+                    txtmn.setText(rs.getObject("NombreMarca").toString());
+                    btborrar.setEnabled(true);
+                    btmodificar.setEnabled(true);
+                } else {
+                    //no existe
+                    if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+                        validartxtidmarcas();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La marca no existe","Marca inexistente", JOptionPane.ERROR_MESSAGE);
+                        mostrardatos("");
+                        anchocolumnas();
+                        btborrar.setEnabled(false);
+                        btmodificar.setEnabled(false);
+                        limpiar();
+                        anchocolumnas();
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, error);
+        }
+    }//GEN-LAST:event_btbuscarActionPerformed
+
+    private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
+        String error = validartxtidmarcas();
+        if (error.equals("")) {
+            try {
+                String ID = txtidmarca.getText();
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM marcas WHERE ID='" + ID + "'");
+                pst.executeUpdate();
+                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Eliminada","Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                    mostrardatos("");
+                    bloquear();
+                    anchocolumnas();
+                    btingresar.setEnabled(true);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, error);
+        }
+    }//GEN-LAST:event_btborrarActionPerformed
+
+    private void txtmnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmnKeyTyped
+        validarLetras.soloLetras(evt);
+    }//GEN-LAST:event_txtmnKeyTyped
+
+    private void txtidmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidmarcaKeyTyped
+        validarLetras.soloLetrasyNumeros(evt);
+        if (txtidmarca.getText().length() == 4) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtidmarcaKeyTyped
+
+    private void tbmarcasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbmarcasMousePressed
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbmarcas.getSelectedRow();
+        txtidmarca.setEnabled(false);
+        btingresar.setEnabled(false);
+
+        if (fila >= 0) {
+            txtidmarca.setText(tbmarcas.getValueAt(fila, 0).toString());
+            txtmn.setText(tbmarcas.getValueAt(fila, 1).toString());
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+            txtmn.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_tbmarcasMousePressed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btborrar;
+    private javax.swing.JButton btbuscar;
+    private javax.swing.JButton btingresar;
+    private javax.swing.JButton btlimpiar;
+    private javax.swing.JButton btmodificar;
+    private javax.swing.JButton btnuevo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jsp;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido3;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido4;
+    private javax.swing.JTable tbmarcas;
+    private javax.swing.JTextField txtidmarca;
+    private javax.swing.JTextField txtmn;
+    // End of variables declaration//GEN-END:variables
+}
