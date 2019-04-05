@@ -5,11 +5,12 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,10 +40,6 @@ public class Principal extends javax.swing.JFrame{
      */
     javax.swing.ImageIcon iconoConectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"));
     javax.swing.ImageIcon iconoDesconectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_offline.png"));
-    /*javax.swing.ImageIcon fondo1= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"));
-    javax.swing.ImageIcon fondo2= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"));
-    javax.swing.ImageIcon fondo3= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/status_offline.png"));
-    javax.swing.ImageIcon fondo4= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"));*/
     
     public Principal() {
         super("Sistema de Gestión de Taller Mecánico");
@@ -72,7 +69,7 @@ public class Principal extends javax.swing.JFrame{
             @Override
             public void windowClosing(WindowEvent e) {
               
-            int rpt=JOptionPane.showConfirmDialog(null,"¿Seguro que desea salir del sistema?","¡Advertencia!",JOptionPane.YES_NO_OPTION);
+            int rpt=JOptionPane.showConfirmDialog(null,"¿Seguro que desea salir del programa?","¡Advertencia!",JOptionPane.YES_NO_OPTION);
             if(rpt==JOptionPane.YES_OPTION){
             System.exit(0);
             }
@@ -104,12 +101,16 @@ public class Principal extends javax.swing.JFrame{
             }
 
         });
-         //Mostramos el nombre de Usuario
-        lblusuario.setText("Usuario Conectado: " + Login.nomUsuario);
+        //Mostramos el nombre de Usuario
+        lblusuario.setText("Usuario Conectado: " + Login.Nombres + " " + Login.Apellidos);
+        lbltipo.setText("Tipo de Usuario: " + Login.Cargo);
         //lbnombres.setText("Nombres: " + Login.Nombres);
-       // lbapellidos.setText("Apellidos: " + Login.Apellidos);
-        //lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
+        // lbapellidos.setText("Apellidos: " + Login.Apellidos);
+        /*btnusuarios.setOpaque(false);
+        .setContentAreaFilled(false);
+        btnusuarios.setBorderPainted(false);*/
     }
+
     private void deshabilitarmenu(){
         this.mniproceso.setVisible(false);
         this.mniconsultas.setVisible(false);
@@ -142,6 +143,19 @@ public class Principal extends javax.swing.JFrame{
         lbfecha = new javax.swing.JLabel();
         lblhora = new javax.swing.JLabel();
         clockDigital1 = new elaprendiz.gui.varios.ClockDigital();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
+        btnusuarios = new javax.swing.JButton();
+        btninsumos = new javax.swing.JButton();
+        btnbd = new javax.swing.JButton();
+        btnclientes = new javax.swing.JButton();
+        btnmarcas = new javax.swing.JButton();
+        btnvehiculos = new javax.swing.JButton();
+        btndesperfectos = new javax.swing.JButton();
+        btndiagnostico = new javax.swing.JButton();
+        btnreparaciones = new javax.swing.JButton();
+        btnvtains = new javax.swing.JButton();
+        btncvi = new javax.swing.JButton();
+        lbltipo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
@@ -172,8 +186,10 @@ public class Principal extends javax.swing.JFrame{
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         mniayuda = new javax.swing.JMenu();
         mniacercade = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -220,6 +236,155 @@ public class Principal extends javax.swing.JFrame{
         clockDigital1.setForeground(new java.awt.Color(0, 102, 102));
         clockDigital1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
+        btnusuarios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnusuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/agente.png"))); // NOI18N
+        btnusuarios.setText("Usuarios");
+        btnusuarios.setOpaque(false);
+        btnusuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnusuariosActionPerformed(evt);
+            }
+        });
+
+        btninsumos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btninsumos.setText("Insumos");
+        btninsumos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btninsumosActionPerformed(evt);
+            }
+        });
+
+        btnbd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnbd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/copia-seguridad.png"))); // NOI18N
+        btnbd.setText("Base de Datos");
+        btnbd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbdActionPerformed(evt);
+            }
+        });
+
+        btnclientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
+        btnclientes.setText("Clientes");
+        btnclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnclientesActionPerformed(evt);
+            }
+        });
+
+        btnmarcas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
+        btnmarcas.setText("Marcas");
+        btnmarcas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmarcasActionPerformed(evt);
+            }
+        });
+
+        btnvehiculos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnvehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92341_steering_wheel-512.png"))); // NOI18N
+        btnvehiculos.setText("Vehículos");
+        btnvehiculos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnvehiculosActionPerformed(evt);
+            }
+        });
+
+        btndesperfectos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btndesperfectos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/multi.png"))); // NOI18N
+        btndesperfectos.setText("Desperfectos");
+        btndesperfectos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndesperfectosActionPerformed(evt);
+            }
+        });
+
+        btndiagnostico.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btndiagnostico.setText("Diagnóstico");
+        btndiagnostico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndiagnosticoActionPerformed(evt);
+            }
+        });
+
+        btnreparaciones.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnreparaciones.setText("Reparaciones");
+        btnreparaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnreparacionesActionPerformed(evt);
+            }
+        });
+
+        btnvtains.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnvtains.setText("Venta de Insumos");
+        btnvtains.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnvtainsActionPerformed(evt);
+            }
+        });
+
+        btncvi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btncvi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
+        btncvi.setText("Consulta de Ventas");
+        btncvi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncviActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btncvi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnvtains, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnreparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btndiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btndesperfectos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnvehiculos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnmarcas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnclientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnbd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btninsumos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnusuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnusuarios)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btninsumos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnbd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnclientes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnmarcas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnvehiculos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btndesperfectos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btndiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnreparaciones)
+                .addGap(4, 4, 4)
+                .addComponent(btnvtains)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btncvi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lbltipo.setBackground(new java.awt.Color(0, 153, 153));
+        lbltipo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbltipo.setForeground(new java.awt.Color(0, 102, 102));
+        lbltipo.setText("Tipo:");
+
         javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
         panelCurves1.setLayout(panelCurves1Layout);
         panelCurves1Layout.setHorizontalGroup(
@@ -229,15 +394,20 @@ public class Principal extends javax.swing.JFrame{
                 .addComponent(lblimg)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblusuario)
-                .addGap(123, 123, 123)
+                .addGap(79, 79, 79)
+                .addComponent(lbltipo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblfecha)
                 .addGap(18, 18, 18)
                 .addComponent(lbfecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
                 .addComponent(lblhora)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 459, Short.MAX_VALUE))
         );
         panelCurves1Layout.setVerticalGroup(
             panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,13 +415,18 @@ public class Principal extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblhora)
+                    .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblfecha)
+                            .addComponent(lbfecha))
+                        .addComponent(lblhora))
                     .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblusuario)
-                        .addComponent(lblfecha)
-                        .addComponent(lbfecha))
+                        .addComponent(lbltipo))
                     .addComponent(lblimg))
-                .addContainerGap(512, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelImagenLayout = new javax.swing.GroupLayout(panelImagen);
@@ -525,7 +700,12 @@ public class Principal extends javax.swing.JFrame{
 
         jMenuItem3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
-        jMenuItem3.setText("Cotizaciones");
+        jMenuItem3.setText("Diagnósticos");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         mnireportes.add(jMenuItem3);
 
         jMenuItem6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -540,7 +720,16 @@ public class Principal extends javax.swing.JFrame{
 
         jMenuItem8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jMenuItem8.setText("Insumos");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
         mnireportes.add(jMenuItem8);
+
+        jMenuItem7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jMenuItem7.setText("Ventas Diarias");
+        mnireportes.add(jMenuItem7);
 
         jMenuBar1.add(mnireportes);
 
@@ -561,6 +750,14 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mniayuda.add(mniacercade);
+
+        jMenuItem9.setText("jMenuItem9");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        mniayuda.add(jMenuItem9);
 
         jMenuBar1.add(mniayuda);
 
@@ -591,22 +788,15 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mniacercadeActionPerformed
 
     private void mniusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusuariosActionPerformed
-        UsuariosSistema us= new UsuariosSistema();
-        jdpescritorio.add(us);
-        us.show();
+        
     }//GEN-LAST:event_mniusuariosActionPerformed
 
     private void mniclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniclientesActionPerformed
-        ClientesSistema cs= new ClientesSistema();
-        jdpescritorio.add(cs);
-        cs.show();
+        
     }//GEN-LAST:event_mniclientesActionPerformed
 
     private void mnicerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicerrarsesionActionPerformed
-        /*this.dispose();
-        Login log = new Login(null, true);
-        log.setVisible(true);*/
-        int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la aplicación?","Cerrando programa",0,3);
+        int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la sesión actual?","Cerrando sesión",0,3);
         if(salir==JOptionPane.OK_OPTION)
         {
             //deshabilitar menu, imagen y label de usuario
@@ -616,9 +806,14 @@ public class Principal extends javax.swing.JFrame{
             mniconsultas.setVisible(false);
             mnireportes.setVisible(false);
             lblimg.setIcon(iconoDesconectado);
+            panelTranslucido1.setVisible(false);
             lblusuario.setText("Usuario Desconectado");
-            JOptionPane.showMessageDialog(this, "Has salido del sistema");
-            System.exit(0);
+            lbltipo.setVisible(false);
+            JOptionPane.showMessageDialog(this, "Has cerrado correctamente la sesión");
+            //System.exit(0);
+            this.dispose();
+            Principal x =new Principal();
+            x.setVisible(true);
         }
     }//GEN-LAST:event_mnicerrarsesionActionPerformed
 
@@ -627,26 +822,32 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mnicerrarsesionItemStateChanged
 
     private void mnibdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnibdActionPerformed
-        BaseDatos base = new BaseDatos(null, true);
-        base.setVisible(true);
+        
     }//GEN-LAST:event_mnibdActionPerformed
 
     private void mnimarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimarcaActionPerformed
-        MarcaVehiculo mv= new  MarcaVehiculo();
-        jdpescritorio.add(mv);
-        mv.show();
+        
     }//GEN-LAST:event_mnimarcaActionPerformed
 
     private void mnidesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidesperfectosActionPerformed
-        Desperfectos d= new  Desperfectos();
-        jdpescritorio.add(d);
-        d.show();
+        
     }//GEN-LAST:event_mnidesperfectosActionPerformed
 
     private void mnicpdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicpdActionPerformed
-        CPD cpd=new CPD();
-        jdpescritorio.add(cpd);
-        cpd.show();
+        CPD cp = new CPD(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (cp.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Cambio Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Cambio Precios Desperfectos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(cp);
+        }
+        cp.show();
     }//GEN-LAST:event_mnicpdActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -654,16 +855,14 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void mnirepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepActionPerformed
-        reparacion rep=new reparacion();
-        jdpescritorio.add(rep);
-        rep.show();
+        
     }//GEN-LAST:event_mnirepActionPerformed
 
     private void mnirepdesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepdesperfectosActionPerformed
        try {
-            conectar cc= new conectar();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
             JasperReport reportes=JasperCompileManager.compileReport("reportesdesp.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,conexion/*getConexion()*/);
             JasperViewer view = new JasperViewer(print,false);
             JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
             view.setTitle("Reporte de Desperfectos");
@@ -676,9 +875,9 @@ public class Principal extends javax.swing.JFrame{
 
     private void mnirepmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepmarcasActionPerformed
         try {
-            conectar cc= new conectar();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
             JasperReport reportes=JasperCompileManager.compileReport("reportemarcas.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,conexion/*getConexion()*/);
             JasperViewer view = new JasperViewer(print,false);
             JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
             view.setTitle("Reporte de Marcas");
@@ -691,9 +890,9 @@ public class Principal extends javax.swing.JFrame{
 
     private void mniusersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusersActionPerformed
         try {
-            conectar cc= new conectar();
-            JasperReport reportes=JasperCompileManager.compileReport("reporteempleados.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            JasperReport reportes=JasperCompileManager.compileReport("reporteusuarios.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,conexion/*getConexion()*/);
             JasperViewer view = new JasperViewer(print,false);
             JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
             view.setTitle("Reporte de Usuarios del Sistema");
@@ -707,27 +906,72 @@ public class Principal extends javax.swing.JFrame{
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         //Privilegios del sistema
          if (Login.tipoUsuario==1){
+            btnclientes.setVisible(false);
+            btnmarcas.setVisible(false);
+            btnvehiculos.setVisible(false);
+            btndesperfectos.setVisible(false);
+            btndiagnostico.setVisible(false);
+            btnreparaciones.setVisible(false);
+            btnvtains.setVisible(false);
+            //borrar despues
+            mnisistema.setVisible(false);
             mniproceso.setVisible(false);
+            mniconsultas.setVisible(false);
+            mnidiag.setVisible(false);
+            mnirep.setVisible(false);
         }
         if (Login.tipoUsuario==2) {
-            mnibd.setVisible(false);
+            btnbd.setVisible(false);
             mnireportes.setVisible(false);
+            btndiagnostico.setVisible(false);
+            btnreparaciones.setVisible(false);
+            btnvtains.setVisible(false);
+            //borrar despues
+            mnibd.setVisible(false);
             mniprincipal.setVisible(false);
+            
+            mnisistema.setVisible(false);
+            mniproceso.setVisible(false);
+            mniconsultas.setVisible(false);
+            mnidiag.setVisible(false);
+            mnirep.setVisible(false);
         }       
         
         if (Login.tipoUsuario==3) {
-            mnidatos.setVisible(false);
+            btnclientes.setVisible(false);
+            btnmarcas.setVisible(false);
+            btnvehiculos.setVisible(false);
+            btndesperfectos.setVisible(false);
+            btnusuarios.setVisible(false);
+            btninsumos.setVisible(false);
+            btnbd.setVisible(false);
+            btncvi.setVisible(false);
             mnireportes.setVisible(false);
-            mniaverias.setVisible(false);
+            btnvtains.setVisible(false);
+            //borrar despues
             mnisistema.setVisible(false);
+            mnidatos.setVisible(false);
+            mniproceso.setVisible(false);
             mniconsultas.setVisible(false);
             mnireportes.setVisible(false);
             mnivi.setVisible(false);
         }
         if (Login.tipoUsuario==4) {
+            btnusuarios.setVisible(false);
+            btninsumos.setVisible(false);
+            btnbd.setVisible(false);
+            btnclientes.setVisible(false);
+            btnmarcas.setVisible(false);
+            btnvehiculos.setVisible(false);
+            btndesperfectos.setVisible(false);
+            btndiagnostico.setVisible(false);
+            btnreparaciones.setVisible(false);
+            btncvi.setVisible(false);
+            //no ver menu
+            
             mnisistema.setVisible(false);
-            mnidatos.setVisible(false);
-            mniaverias.setVisible(false);
+            mniproceso.setVisible(false);
+            mniconsultas.setVisible(false);
             mnidiag.setVisible(false);
             mnirep.setVisible(false);
             mniconsultas.setVisible(false);
@@ -735,16 +979,14 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_formWindowOpened
 
     private void mnidiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidiagActionPerformed
-        diagnostico diag=new diagnostico();
-        jdpescritorio.add(diag);
-        diag.show();
+        
     }//GEN-LAST:event_mnidiagActionPerformed
 
     private void mnirepclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepclientesActionPerformed
           try {
-            conectar cc= new conectar();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
             JasperReport reportes=JasperCompileManager.compileReport("reporteclientes.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,conexion);
             JasperViewer view = new JasperViewer(print,false);
             JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
             view.setTitle("Reporte de Clientes");
@@ -756,29 +998,231 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mnirepclientesActionPerformed
 
     private void mnivehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnivehiculosActionPerformed
-        // TODO add your handling code here:
-        vehiculos vehi= new  vehiculos();
-        jdpescritorio.add(vehi);
-        vehi.show();
+        
     }//GEN-LAST:event_mnivehiculosActionPerformed
 
     private void mniinsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniinsumosActionPerformed
-        Insumos in= new  Insumos();
-        jdpescritorio.add(in);
-        in.show();
+        
     }//GEN-LAST:event_mniinsumosActionPerformed
 
     private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
-        ComprobanteVta cvta= new  ComprobanteVta();
-        jdpescritorio.add(cvta);
-        cvta.show();
+        
     }//GEN-LAST:event_mniviActionPerformed
 
     private void mnicompvtaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicompvtaActionPerformed
-        ConsultaComprobantes Comp = new ConsultaComprobantes();
-        jdpescritorio.add(Comp);
-        Comp.show();
+        
     }//GEN-LAST:event_mnicompvtaActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            JasperReport reportes=JasperCompileManager.compileReport("reporteinsumos.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,conexion);
+            JasperViewer view = new JasperViewer(print,false);
+            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
+            view.setTitle("Reporte de Insumos");
+            view.setExtendedState(this.MAXIMIZED_BOTH);
+            view.setVisible(true);
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void btnbdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbdActionPerformed
+        BaseDatos base = new BaseDatos(null, true);
+        base.setVisible(true);
+    }//GEN-LAST:event_btnbdActionPerformed
+
+    private void btnusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuariosActionPerformed
+        UsuariosSistema us = new UsuariosSistema(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (us.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Usuarios: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(us);
+        }
+        us.show();
+    }//GEN-LAST:event_btnusuariosActionPerformed
+
+    private void btninsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsumosActionPerformed
+        Insumos in = new Insumos(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (in.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Insumos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Insumos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(in);
+        }
+        in.show();
+    }//GEN-LAST:event_btninsumosActionPerformed
+
+    private void btnclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclientesActionPerformed
+        ClientesSistema cs = new ClientesSistema(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (cs.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Clientes: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Clientes: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(cs);
+        }
+        cs.show();
+    }//GEN-LAST:event_btnclientesActionPerformed
+
+    private void btnmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmarcasActionPerformed
+        MarcaVehiculo mv = new MarcaVehiculo(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (mv.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Marcas: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Marcas: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(mv);
+        }
+        mv.show();
+    }//GEN-LAST:event_btnmarcasActionPerformed
+
+    private void btnvehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvehiculosActionPerformed
+        vehiculos v = new vehiculos(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (v.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Vehículos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Vehículos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(v);
+        }
+        v.show();
+    }//GEN-LAST:event_btnvehiculosActionPerformed
+
+    private void btndesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesperfectosActionPerformed
+        Desperfectos d = new Desperfectos(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (d.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Desperfectos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(d);
+        }
+        d.show();
+    }//GEN-LAST:event_btndesperfectosActionPerformed
+
+    private void btndiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndiagnosticoActionPerformed
+        diagnostico diag = new diagnostico(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (diag.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Diagnóstico: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Diagnóstico: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(diag);
+        }
+        diag.show();
+    }//GEN-LAST:event_btndiagnosticoActionPerformed
+
+    private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
+        reparacion rep= new reparacion(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Reparación: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(rep);
+        }
+        rep.show();
+    }//GEN-LAST:event_btnreparacionesActionPerformed
+
+    private void btnvtainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvtainsActionPerformed
+        ComprobanteVta cvta = new ComprobanteVta(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (cvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Comprobante: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(cvta);
+        }
+        cvta.show();
+    }//GEN-LAST:event_btnvtainsActionPerformed
+
+    private void btncviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncviActionPerformed
+        ConsultaComprobantes ccvta = new ConsultaComprobantes(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (ccvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Consulta Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Consulta Comprobante: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(ccvta);
+        }
+        ccvta.show();
+    }//GEN-LAST:event_btncviActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        detallediagnostico ccvta = new detallediagnostico(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (ccvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Consulta Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Consulta Comprobante: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(ccvta);
+        }
+        ccvta.show();
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -810,12 +1254,24 @@ public class Principal extends javax.swing.JFrame{
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                /*new Principal().setVisible(true);*/
+                new Thread(new start()).start(); 
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnbd;
+    private javax.swing.JButton btnclientes;
+    private javax.swing.JButton btncvi;
+    private javax.swing.JButton btndesperfectos;
+    private javax.swing.JButton btndiagnostico;
+    private javax.swing.JButton btninsumos;
+    private javax.swing.JButton btnmarcas;
+    private javax.swing.JButton btnreparaciones;
+    private javax.swing.JButton btnusuarios;
+    private javax.swing.JButton btnvehiculos;
+    private javax.swing.JButton btnvtains;
     private elaprendiz.gui.varios.ClockDigital clockDigital1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -824,12 +1280,15 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblhora;
     private javax.swing.JLabel lblimg;
+    private javax.swing.JLabel lbltipo;
     private javax.swing.JLabel lblusuario;
     private javax.swing.JMenuItem mniacercade;
     private javax.swing.JMenu mniaverias;
@@ -861,77 +1320,6 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mnivi;
     private elaprendiz.gui.panel.PanelCurves panelCurves1;
     private elaprendiz.gui.panel.PanelImage panelImagen;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     // End of variables declaration//GEN-END:variables
-}
-/*ñeeee
-        private String horas, minutos, segundos;
-        private boolean Estado;
-        Thread Hilo;
-
-        public void run(){
-        while (Estado ==true) {
-        Calendar fecha = new GregorianCalendar();
-        int h= fecha.get(Calendar.HOUR_OF_DAY);
-        int m = fecha.get(Calendar.MINUTE);
-        int s = fecha.get(Calendar.SECOND);
-
-        horas = Integer.toString(h);
-        minutos = Integer.toString(m);
-        segundos = Integer.toString(s);
-
-        lbhora.setText(horas+" : "+minutos+" : "+segundos);
-
-        try{
-        Thread.sleep(1000);
-        }catch (InterruptedException ex){
-        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }
-        }
-
-        public void Iniciar(){
-        Hilo=new Thread(this);
-        Estado = true;
-        Hilo.start();
-
-        }
-
-        public void stop(){
-        Estado = false;
-        }
-
-        
-//Metodo calcular hora     
-    public void calcula() {
-        Calendar calendario = new GregorianCalendar();
-        Date fechaHoraActual = new Date();
-        calendario.setTime(fechaHoraActual);
-        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-
-        if (ampm.equals("PM")) {
-            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
-            hora = h > 9 ? "" + h : "0" + h;
-        } else {
-            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
-        }
-        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
-        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
-    }
-String hora, minutos, segundos, ampm;
-    Calendar calendario;
-    Thread h1;
-h1 = new Thread(this);
-        h1.start();
-public void run() {
-        Thread ct = Thread.currentThread();
-        while (ct == h1) {
-            calcula();
-            lbhora.setText(hora + ":" + minutos + ":" + segundos);
-            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-        }
-}
-*/
+}   

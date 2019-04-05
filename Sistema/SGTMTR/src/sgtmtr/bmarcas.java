@@ -5,7 +5,8 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,6 +28,8 @@ DefaultTableModel modelo;
      */
     public bmarcas() {
         initComponents();
+        setTitle("Selección de Marcas");
+        this.setLocation(280,200);
         mostrarvehiculos("");
         anchocolumnas();
     }
@@ -38,7 +41,8 @@ void mostrarvehiculos(String valor)
         String Sql="SELECT * FROM marcas";
        
         try {
-             Statement st = cn.createStatement();
+             conexion = claseConectar.ConexionConBaseDatos.getConexion();
+             Statement st = conexion.createStatement();
              ResultSet rs = st.executeQuery(Sql);
              while(rs.next())
              {
@@ -49,6 +53,8 @@ void mostrarvehiculos(String valor)
              tbmarca.setModel(modelo);
         } catch (SQLException ex) {
             Logger.getLogger(bv.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
     void anchocolumnas() {
@@ -71,25 +77,16 @@ void mostrarvehiculos(String valor)
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mnienviar = new javax.swing.JMenuItem();
-        jPanel1 = new javax.swing.JPanel();
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jsp = new javax.swing.JScrollPane();
         tbmarca = new javax.swing.JTable();
 
-        mnienviar.setText("Enviar Datos");
-        mnienviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnienviarActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mnienviar);
-
         setClosable(true);
-        setIconifiable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione Marca", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
-        jPanel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
+
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione Marca", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
 
         //Deshabilitar edicion de tabla
         tbmarca = new javax.swing.JTable(){
@@ -100,6 +97,7 @@ void mostrarvehiculos(String valor)
         //cambiar color de fila
         tbmarca.setSelectionBackground(Color.LIGHT_GRAY);
         tbmarca.setSelectionForeground(Color.blue);
+        tbmarca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbmarca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -111,46 +109,62 @@ void mostrarvehiculos(String valor)
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbmarca.setComponentPopupMenu(jPopupMenu1);
+        tbmarca.getTableHeader().setResizingAllowed(false);
+        tbmarca.getTableHeader().setReorderingAllowed(false);
+        tbmarca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbmarcaMousePressed(evt);
+            }
+        });
         jsp.setViewportView(tbmarca);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
+    private void tbmarcaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbmarcaMousePressed
         String IDm = "", nombremarca = "";
         int fila = tbmarca.getSelectedRow();
         try {
@@ -166,16 +180,13 @@ void mostrarvehiculos(String valor)
             }
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_mnienviarActionPerformed
+    }//GEN-LAST:event_tbmarcaMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
-    private javax.swing.JMenuItem mnienviar;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     private javax.swing.JTable tbmarca;
     // End of variables declaration//GEN-END:variables
-    conectar cc= new conectar();
-    Connection cn = cc.conexion();
 }

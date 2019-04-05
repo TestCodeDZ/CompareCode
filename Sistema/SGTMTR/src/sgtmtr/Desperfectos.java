@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -26,21 +26,29 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class Desperfectos extends javax.swing.JInternalFrame {
+
+    Connection connection = null;
+    ResultSet rs = null;
+    Statement s = null;
     ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form MarcaVehiculo
      */
     public Desperfectos() {
         initComponents();
         this.setTitle("Mantenedor de Desperfectos");
+        this.setLocation(280, 15);
         mostrardatos("");
         anchocolumnas();
         bloquear();
+        codigodesp();
+        txtiddesp.setDisabledTextColor(Color.blue);
     }
-    
+
     void mostrardatos(String valor) {
-        String id=txtiddesp.getText();
-        String NM=txtnd.getText();
+        String id = txtiddesp.getText();
+        String NM = txtnd.getText();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Descripción del Desperfecto");
@@ -49,13 +57,13 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         String sql = "";
         if (valor.equals("")) {
             sql = "SELECT * FROM desperfectos";
-        }else{
+        } else {
             sql = "SELECT * FROM desperfectos WHERE ID='" + id + "'";
         }
         String[] datos = new String[3];
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            Statement st = con.createStatement();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -67,26 +75,28 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             //tbdesp.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-    
+
     void anchocolumnas() {
         tbdesp.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
         tbdesp.getColumnModel().getColumn(0).setWidth(100);
         tbdesp.getColumnModel().getColumn(0).setMaxWidth(100);
         tbdesp.getColumnModel().getColumn(0).setMinWidth(100);
-        
+
         tbdesp.getColumnModel().getColumn(1).setWidth(250);
         tbdesp.getColumnModel().getColumn(1).setMaxWidth(250);
         tbdesp.getColumnModel().getColumn(1).setMinWidth(250);
-        
+
         tbdesp.getColumnModel().getColumn(2).setWidth(130);
         tbdesp.getColumnModel().getColumn(2).setMaxWidth(130);
         tbdesp.getColumnModel().getColumn(2).setMinWidth(130);
     }
-    
-    void bloquear(){
+
+    void bloquear() {
         txtiddesp.setEnabled(false);
         txtnd.setEnabled(false);
         txtcd.setEnabled(false);
@@ -96,53 +106,56 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         btborrar.setEnabled(false);
         btlimpiar.setEnabled(false);
     }
-    void limpiar(){
-        txtiddesp.setText("");
+
+    void limpiar() {
+        codigodesp();
         txtnd.setText("");
         txtcd.setText("");
     }
-    void desbloquear(){
+
+    void desbloquear() {
         txtnd.setEnabled(true);
         txtcd.setEnabled(true);
         btbuscar.setEnabled(true);
         btingresar.setEnabled(true);
-        btmodificar.setEnabled(true);
-        btborrar.setEnabled(true);
         btlimpiar.setEnabled(true);
     }
 
-     void codigomarcas(){
-     int j;
-        int cont=1;
-        String num="";
-        String c="";
-         String SQL="select max(ID) from desperfectos";
+    void codigodesp() {
+        int j;
+        int cont = 1;
+        String num = "";
+        String c = "";
+        String SQL = "select max(ID) from desperfectos";
         try {
-            Statement st = cn.createStatement();
-            ResultSet rs=st.executeQuery(SQL);
-            if(rs.next())
-            {              
-                 c=rs.getString(1);
-            }    
-            if(c==null){
-                txtiddesp.setText("D001");
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            if (rs.next()) {
+                c = rs.getString(1);
             }
-            else{
-            char r1=c.charAt(2);
-            char r2=c.charAt(3);
-            
-            String r="";
-            r=""+r1+r2;
-            
-                 j=Integer.parseInt(r);
-                 sgtmtr.GenerarCodigos gen= new sgtmtr.GenerarCodigos();
-                 gen.generar(j);
-                 txtiddesp.setText("D"+gen.serie());
+            if (c == null) {
+                txtiddesp.setText("CD0001");
+            } else {
+                char r1 = c.charAt(2);
+                char r2 = c.charAt(3);
+                char r3 = c.charAt(4);
+                char r4 = c.charAt(5);
+                String r = "";
+                r = "" + r1 + r2 + r3 + r4;
+
+                j = Integer.parseInt(r);
+                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
+                gen.generar(j);
+                txtiddesp.setText("CD" + gen.serie());
             }
         } catch (SQLException ex) {
-           Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -152,8 +165,6 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mnimod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -174,17 +185,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         btbuscar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
 
-        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        mnimod.setText("Modificar");
-        mnimod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnimodActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mnimod);
-
         setClosable(true);
-        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -194,7 +195,8 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nombre");
 
-        txtiddesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtiddesp.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtiddesp.setEnabled(false);
         txtiddesp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtiddespKeyTyped(evt);
@@ -292,7 +294,19 @@ public class Desperfectos extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbdesp.setComponentPopupMenu(jPopupMenu1);
+        tbdesp.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbdesp.getTableHeader().setResizingAllowed(false);
+        tbdesp.getTableHeader().setReorderingAllowed(false);
+        tbdesp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbdespMouseClicked(evt);
+            }
+        });
+        tbdesp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbdespKeyPressed(evt);
+            }
+        });
         jsp.setViewportView(tbdesp);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -450,24 +464,24 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private String validarVacios() {
-        
-        String errores="";
-        
-        if(txtiddesp.getText().equals("")){
-            errores+="Por favor genere el código del desperfecto \n";
+
+        String errores = "";
+
+        if (txtiddesp.getText().equals("")) {
+            errores += "Por favor genere el código del desperfecto \n";
         }
-        if(txtnd.getText().equals("")){
-            errores+="Por favor ingrese el nombre del desperfecto \n";
+        if (txtnd.getText().equals("")) {
+            errores += "Por favor ingrese el nombre del desperfecto \n";
         }
-        if(txtcd.getText().equals("")){
-            errores+="Por favor ingrese el costo \n";
+        if (txtcd.getText().equals("")) {
+            errores += "Por favor ingrese el costo \n";
         }
-        return errores;       
+        return errores;
     }
-    
+
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
-        codigomarcas();
+        codigodesp();
         txtiddesp.setEnabled(false);
         btborrar.setEnabled(false);
         txtnd.requestFocus();
@@ -487,172 +501,149 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores=validarVacios();
-        if(errores.equals("")){
-        // Insertar registro en la base de datos
-        try {
-            //Cargar driver de conexión
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear conexión
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            //Crear consulta
-            Statement st = con.createStatement();
-            String sql = "INSERT INTO desperfectos (ID,descripcion,costo)"
-                    + "VALUES('" + txtiddesp.getText()+"','"+txtnd.getText() + "','"+txtcd.getText() + "')";
-            //Ejecutar la consulta
-            st.executeUpdate(sql);
-            //Cerrar conexion
-            con.close();               
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            // Insertar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "INSERT INTO desperfectos (ID,descripcion,costo)"
+                        + "VALUES('" + txtiddesp.getText() + "','" + txtnd.getText() + "','" + txtcd.getText() + "')";
+                //Ejecutar la consulta
+                st.executeUpdate(sql);
                 if (String.valueOf(txtnd.getText()).compareTo("") == 0) {
-                validarVacios();
-            } else{
-                JOptionPane.showMessageDialog(this, "Desperfecto Ingresado");
-                mostrardatos("");
-                anchocolumnas();
-                //Limpiar
-                limpiar(); 
-            }  
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
-        }
-        }else{
+                    validarVacios();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Desperfecto Ingresado","Ingresado", JOptionPane.INFORMATION_MESSAGE);
+                    txtnd.requestFocus();
+                    mostrardatos("");
+                    anchocolumnas();
+                    //Limpiar
+                    limpiar();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane,"El desperfecto ya existe","Desperfecto existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
-        }   
+        }
     }//GEN-LAST:event_btingresarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores=validarVacios();
-        if(errores.equals("")){
-            String ID=txtiddesp.getText();
-        try {
-            if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-            
-            }else{
-            JOptionPane.showMessageDialog(this, "Desperfecto Actualizado");
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            String ID = txtiddesp.getText();
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE desperfectos SET Descripcion='" + txtnd.getText() + "',Costo='" + txtcd.getText()
+                        + "' WHERE ID='" + txtiddesp.getText() + "'");
+                pst.executeUpdate();
+                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Desperfecto Actualizado","Modificado", JOptionPane.INFORMATION_MESSAGE);
+                    //limpiar textfields
+                    limpiar();
+                    mostrardatos("");
+                    anchocolumnas();
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane,"El desperfecto ya existe","Desperfecto existente", JOptionPane.ERROR_MESSAGE/* + e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE desperfectos SET Descripcion='" + txtnd.getText() + "',Costo='" + txtcd.getText()
-                    + "' WHERE ID='" + txtiddesp.getText() + "'");
-            pst.executeUpdate();
-            //cerrar conexion
-            con.close();
-            btingresar.setEnabled(true);
-            //limpiar textfields
-            limpiar();
-            mostrardatos("");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
-        }
-            anchocolumnas();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
-        }    
+        }
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtiddesp() {
-        String error="";
-        if(txtiddesp.getText().equals("")){
-            error+="Por favor ingrese el ID del desperfecto a buscar o eliminar\n";
+        String error = "";
+        if (txtiddesp.getText().equals("")) {
+            error += "Por favor ingrese el ID del desperfecto a buscar o eliminar\n";
         }
         return error;
     }
-    
+
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
-        String error=validartxtiddesp();
-        if(error.equals("")){
-        // Buscar registro en la base de datos
-        try {
-            //Cargar driver de conexión
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear conexión
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            //Crear consulta
-            Statement st = con.createStatement();
-            String sql = "SELECT * FROM desperfectos WHERE ID='" + txtiddesp.getText() + "'";
-            //Ejecutar la consulta
-            ResultSet rs = st.executeQuery(sql);
-            mostrardatos(txtiddesp.getText());
-            
-            if (rs.next()) {
-                //existe
-                txtiddesp.setText(rs.getObject("ID").toString());
-                txtnd.setText(rs.getObject("Descripcion").toString());
-                txtcd.setText(rs.getObject("Costo").toString());
-                txtnd.setEnabled(true);
-                txtcd.setEnabled(true);
-                btborrar.setEnabled(true);
-                btmodificar.setEnabled(true);
-            } else {
-                //no existe
-                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-                    validartxtiddesp();
-                }else {
-                JOptionPane.showMessageDialog(this, "El desperfecto no existe");
-                btborrar.setEnabled(false);
-                btmodificar.setEnabled(false);
-                limpiar();
+        String error = validartxtiddesp();
+        if (error.equals("")) {
+            // Buscar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "SELECT * FROM desperfectos WHERE ID='" + txtiddesp.getText() + "'";
+                //Ejecutar la consulta
+                ResultSet rs = st.executeQuery(sql);
+                mostrardatos(txtiddesp.getText());
+
+                if (rs.next()) {
+                    //existe
+                    txtiddesp.setText(rs.getObject("ID").toString());
+                    txtnd.setText(rs.getObject("Descripcion").toString());
+                    txtcd.setText(rs.getObject("Costo").toString());
+                    txtnd.setEnabled(true);
+                    txtcd.setEnabled(true);
+                    btborrar.setEnabled(true);
+                    btmodificar.setEnabled(true);
+                } else {
+                    //no existe
+                    if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
+                        validartxtiddesp();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "El desperfecto no existe","Datos Inexistentes", JOptionPane.ERROR_MESSAGE);
+                        mostrardatos("");
+                        btborrar.setEnabled(false);
+                        btmodificar.setEnabled(false);
+                        limpiar();
+                    }
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-            }
-            //Cerrar conexion
-            con.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        }
-        anchocolumnas();
-        }else{
+            anchocolumnas();
+        } else {
             JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-         String error=validartxtiddesp();
-        if(error.equals("")){
+        String error = validartxtiddesp();
+        if (error.equals("")) {
             try {
-                String ID=txtiddesp.getText();
-                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-                    
-                }else{
-                    JOptionPane.showMessageDialog(this, "Desperdecto Eliminado");
-                }
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-                PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM desperfectos WHERE ID='" + ID + "'");
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                String ID = txtiddesp.getText();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM desperfectos WHERE ID='" + ID + "'");
                 pst.executeUpdate();
-                limpiar();
-                con.close();
-                mostrardatos("");
-                bloquear();
+                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Desperdecto Eliminado","Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                    mostrardatos("");
+                    bloquear();
+                }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+                JOptionPane.showMessageDialog(rootPane, "No se pudo borrar el desperfecto", "Mensaje de Error", JOptionPane.ERROR_MESSAGE/*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
             anchocolumnas();
             btingresar.setEnabled(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btborrarActionPerformed
 
-    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
-        //al momento de hacer click derecho aparecerá el menu modificar
-        //que se irá directamente con los valores de la BD a sus respectivos 
-        //textfields para hacer las respectivas modificaciones
-        int fila = tbdesp.getSelectedRow();
-        txtiddesp.setEnabled(false);
-        btingresar.setEnabled(false);
-
-        if (fila >= 0) {
-            txtiddesp.setText(tbdesp.getValueAt(fila, 0).toString());
-            txtnd.setText(tbdesp.getValueAt(fila, 1).toString());
-            txtcd.setText(tbdesp.getValueAt(fila, 2).toString()); 
-            txtnd.setEnabled(true);
-            txtcd.setEnabled(true);
-            btmodificar.setEnabled(true);
-            btborrar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_mnimodActionPerformed
-
     private void txtcdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyPressed
-        
+
     }//GEN-LAST:event_txtcdKeyPressed
 
     private void txtcdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyTyped
@@ -682,6 +673,30 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtndKeyTyped
 
+    private void tbdespKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbdespKeyPressed
+        
+    }//GEN-LAST:event_tbdespKeyPressed
+
+    private void tbdespMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdespMouseClicked
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbdesp.getSelectedRow();
+        btingresar.setEnabled(false);
+
+        if (fila >= 0) {
+            txtiddesp.setText(tbdesp.getValueAt(fila, 0).toString());
+            txtnd.setText(tbdesp.getValueAt(fila, 1).toString());
+            txtcd.setText(tbdesp.getValueAt(fila, 2).toString());
+            txtnd.setEnabled(true);
+            txtcd.setEnabled(true);
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_tbdespMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
@@ -698,14 +713,10 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
-    private javax.swing.JMenuItem mnimod;
     private javax.swing.JTable tbdesp;
     private javax.swing.JTextField txtcd;
     private javax.swing.JTextField txtiddesp;
     private javax.swing.JTextField txtnd;
     // End of variables declaration//GEN-END:variables
-    conectar cc= new conectar();
-    Connection cn= cc.conexion();
 }

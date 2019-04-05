@@ -1,6 +1,4 @@
-/**
- * @author elaprendiz http://www.youtube.com/user/JleoD7
- */
+
 package sgtmtr;
 
 

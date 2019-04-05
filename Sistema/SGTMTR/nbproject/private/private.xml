@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/sgtmtr/UsuariosSistema.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>785</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/M:/Proyectos/VentaIns/Para%20Final/SGTMTR/src/sgtmtr/ConsultaComprobantes.java</file>
-            <file>file:/M:/Proyectos/VentaIns/Para%20Final/SGTMTR/src/sgtmtr/Insumos.java</file>
-            <file>file:/M:/Proyectos/VentaIns/Para%20Final/SGTMTR/src/sgtmtr/Reportes.java</file>
-            <file>file:/M:/Proyectos/VentaIns/Para%20Final/SGTMTR/src/sgtmtr/ComprobanteVta.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/CPD.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/Principal.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/bv.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/SeleccionDesperfecto.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/diagnostico.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/ClientesSistema.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/rut.java</file>
+            <file>file:/C:/Users/ZuluCorp/Desktop/Para%20Final/SGTMTR/src/sgtmtr/reparacion.java</file>
         </group>
     </open-files>
 </project-private>
