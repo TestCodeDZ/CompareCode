@@ -74,8 +74,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         initComponents();
         setTitle("Ingreso de Diagnóstico");
         this.setLocation(280, 0);
-        txtmecanico.setText(Login.Nombres+" "+Login.Apellidos);
-        txtmecanico.setDisabledTextColor(Color.blue);
         txtnumdiag.setDisabledTextColor(Color.red);
         txtpatentediag.setDisabledTextColor(Color.blue);
         //txtfecha.setDisabledTextColor(Color.blue);
@@ -943,7 +941,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtfono;
     public static javax.swing.JTextField txtmail;
     public static javax.swing.JTextField txtmarca;
-    private javax.swing.JTextField txtmecanico;
+    public static javax.swing.JTextField txtmecanico;
     public static javax.swing.JTextField txtmodelo;
     public static javax.swing.JTextField txtnombre;
     private javax.swing.JTextField txtnumdiag;

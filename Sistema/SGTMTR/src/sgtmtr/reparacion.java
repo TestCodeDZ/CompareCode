@@ -32,7 +32,7 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author ZuluCorp
  */
 public class reparacion extends javax.swing.JInternalFrame {
-
+    
     /**
      * Creates new form reparacion
      */
@@ -46,7 +46,11 @@ public class reparacion extends javax.swing.JInternalFrame {
         txtnumdiag.setDisabledTextColor(Color.red);
         txtcd.setDisabledTextColor(Color.red);
         CargarComboER();
-        
+        txtconteorep.setVisible(false);
+        txtconteototal.setVisible(false);
+        cbcambioestauto.setVisible(false);
+        btcev.setVisible(false);
+        CargarConteo();
     }
 
     public static String fechaactual() {
@@ -66,7 +70,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         modelo.addColumn("Repuestos");
         tbdiag.setModel(modelo);
         String sql = "";
-        sql = "SELECT * FROM controldiag WHERE Mecanico='" + Login.Nombres + " " + Login.Apellidos + "'";
+        sql = "SELECT * FROM controldiag WHERE Mecanico='" + Login.Nombres+" "+Login.Apellidos+ "'";
         String[] datos = new String[7];
         String primerId = "";
         try {
@@ -108,7 +112,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         modelo2.addColumn("Estado");
         String sql1 = "";
         sql1 = "SELECT ID_Diag,Cod_Desp,Desc_Desperfecto,Cantidad,PrecioDesp,Ptotal,Estado FROM detallediag INNER JOIN controldiag ON detallediag.ID_Diag = controldiag.ID_Diagnostico "
-                + "WHERE Estado <> 'Reparado' AND ID_Diag =" + iddetalle;
+                + "WHERE ID_Diag =" + iddetalle; //Estado <> 'Reparado' AND
         String[] datos2 = new String[7];
         try {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
@@ -125,7 +129,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 modelo2.addRow(datos2);
             }
             tbrep.setModel(modelo2);
-
+            txtconteototal.setText("" + tbrep.getRowCount());
         } catch (SQLException ex) {
             //System.out.println(ex);
             //Logger.getLogger(reparacion.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,6 +138,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         }
 
     }
+
 
     private void mostrarcoddiag() {
         int filaseleccionada = tbrep.getSelectedRow();
@@ -146,7 +151,13 @@ public class reparacion extends javax.swing.JInternalFrame {
             txtnumdiag.setText(nd);
             txtcd.setText(cd);
             cbestadorep.setSelectedItem(er);
-            //if(){}
+            if (er.equals("Reparado")) {
+                cbestadorep.setEnabled(false);
+                btnrep.setEnabled(false);
+            } else {
+                cbestadorep.setEnabled(true);
+                btnrep.setEnabled(true);
+            }
         }
 
     }
@@ -160,7 +171,7 @@ public class reparacion extends javax.swing.JInternalFrame {
             txtnum.setText(nd);
         }
     }
-    
+
     private void CargarComboER() {
         //Carga de Combo
         try {
@@ -184,7 +195,50 @@ public class reparacion extends javax.swing.JInternalFrame {
             claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-    
+    private void CargarConteo() {
+        //Carga de Combo
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            //Crear Consulta
+            Statement st1 = conexion.createStatement();
+            String sql1 = "SELECT count(*) as 'total' FROM controldiag, detallediag WHERE controldiag.ID_Diagnostico=detallediag.ID_Diag AND ID_Diag='"+txtnum.getText()+"' AND Estado='Reparado'";
+            //Ejecutar consulta
+            ResultSet rs1 = st1.executeQuery(sql1);
+            //Recorremos los registros traidos
+           // Creamos el Statement
+            int nRegistros;
+            if (rs1.next()) {
+                nRegistros = Integer.parseInt(rs1.getString("total"));
+                String convierte = Integer.toString(nRegistros);
+                txtconteorep.setText(convierte);
+            } else {
+                nRegistros = 0;
+            }
+            //return count;
+            /*if (count >= 0) {
+                
+            } else {
+                txtconteorep.setText("" + count);
+            }*/
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        }
+            finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        }
+    }
+    private void IgualarNumeros() {
+        String conteoRep = txtconteorep.getText();
+        String total = txtconteototal.getText();
+        if (total.equals(conteoRep)) {
+            cbcambioestauto.setVisible(true);
+            btcev.setVisible(true);
+        } else {
+            cbcambioestauto.setVisible(false);
+            btcev.setVisible(false);
+        }
+    }
     void anchocolumnas() {
         tbdiag.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
@@ -239,8 +293,7 @@ public class reparacion extends javax.swing.JInternalFrame {
             errores += "seleccione la condición Código de Desperfecto \n";
         }
         Integer indice = cbestadorep.getSelectedIndex();
-        if (indice.equals(0))
-        {
+        if (indice.equals(0)) {
             errores += "Seleccione Estado de Reparación \n";
         }
         return errores;
@@ -261,6 +314,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         tbdiag = new javax.swing.JTable();
         btnimprimir = new javax.swing.JButton();
         txtnum = new javax.swing.JTextField();
+        cbcambioestauto = new javax.swing.JComboBox();
+        btcev = new javax.swing.JButton();
         panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
         txtnumdiag = new javax.swing.JTextField();
         txtcd = new javax.swing.JTextField();
@@ -268,6 +323,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         tbrep = new javax.swing.JTable();
         btnrep = new javax.swing.JButton();
         cbestadorep = new javax.swing.JComboBox();
+        txtconteorep = new javax.swing.JTextField();
+        txtconteototal = new javax.swing.JTextField();
 
         setClosable(true);
 
@@ -317,17 +374,32 @@ public class reparacion extends javax.swing.JInternalFrame {
 
         txtnum.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtnum.setEnabled(false);
+        txtnum.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtnumFocusLost(evt);
+            }
+        });
+
+        cbcambioestauto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cbcambioestauto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btcev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btcev.setText("Cambio Estado del Auto");
 
         javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
         panelTranslucido1.setLayout(panelTranslucido1Layout);
         panelTranslucido1Layout.setHorizontalGroup(
             panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido1Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addComponent(txtnum, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(btnimprimir)
+                .addGap(32, 32, 32)
+                .addComponent(cbcambioestauto, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btcev)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido1Layout.setVerticalGroup(
@@ -336,7 +408,9 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnum)
-                    .addComponent(btnimprimir))
+                    .addComponent(btnimprimir)
+                    .addComponent(cbcambioestauto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btcev))
                 .addGap(18, 18, 18)
                 .addComponent(jsp1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -415,11 +489,17 @@ public class reparacion extends javax.swing.JInternalFrame {
             }
         });
 
+        txtconteorep.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtconteorep.setEnabled(false);
+
+        txtconteototal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtconteototal.setEnabled(false);
+
         javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
         panelTranslucido2.setLayout(panelTranslucido2Layout);
         panelTranslucido2Layout.setHorizontalGroup(
             panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jsp2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(panelTranslucido2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtnumdiag, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -429,6 +509,10 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addComponent(cbestadorep, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnrep)
+                .addGap(29, 29, 29)
+                .addComponent(txtconteorep, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtconteototal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido2Layout.setVerticalGroup(
@@ -439,9 +523,12 @@ public class reparacion extends javax.swing.JInternalFrame {
                     .addComponent(txtnumdiag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbestadorep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnrep, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnrep, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtconteorep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtconteototal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
-                .addComponent(jsp2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+                .addComponent(jsp2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                .addGap(38, 38, 38))
         );
 
         javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
@@ -462,7 +549,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -489,6 +576,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         txtnumdiag.setText("");
         txtcd.setText("");
         mostrarnumdiag();
+        CargarConteo();
+        IgualarNumeros();
     }//GEN-LAST:event_tbdiagMouseClicked
 
     private void tbrepMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbrepMouseClicked
@@ -542,9 +631,15 @@ public class reparacion extends javax.swing.JInternalFrame {
         // Arreglarlo con el combobox la weaita 
     }//GEN-LAST:event_cbestadorepActionPerformed
 
+    private void txtnumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnumFocusLost
+
+    }//GEN-LAST:event_txtnumFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btcev;
     private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnrep;
+    private javax.swing.JComboBox cbcambioestauto;
     private javax.swing.JComboBox cbestadorep;
     private javax.swing.JScrollPane jsp1;
     private javax.swing.JScrollPane jsp2;
@@ -554,6 +649,8 @@ public class reparacion extends javax.swing.JInternalFrame {
     private javax.swing.JTable tbdiag;
     private javax.swing.JTable tbrep;
     private javax.swing.JTextField txtcd;
+    private javax.swing.JTextField txtconteorep;
+    private javax.swing.JTextField txtconteototal;
     private javax.swing.JTextField txtnum;
     private javax.swing.JTextField txtnumdiag;
     // End of variables declaration//GEN-END:variables

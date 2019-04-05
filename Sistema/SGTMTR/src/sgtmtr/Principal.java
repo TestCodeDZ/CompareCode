@@ -6,6 +6,7 @@
 package sgtmtr;
 
 import static claseConectar.ConexionConBaseDatos.conexion;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
@@ -123,7 +124,6 @@ public class Principal extends javax.swing.JFrame {
     vehiculos v = new vehiculos(); //crear el nuevo formulario
     Desperfectos d = new Desperfectos(); //crear el nuevo formulario
     diagnostico diag = new diagnostico(); //crear el nuevo formulario
-    reparacion rep = new reparacion(); //crear el nuevo formulario
     ComprobanteVta cvta = new ComprobanteVta(); //crear el nuevo formulario
 
     private void deshabilitarmenu() {
@@ -1021,6 +1021,8 @@ public class Principal extends javax.swing.JFrame {
                     mostrar = false;
                 } else {
                     System.out.println("Comprobante: No lo es, puede mostrarse");
+                    ComprobanteVta.txtvendedor.setText(""+Login.Nombres+" "+Login.Apellidos);
+                    ComprobanteVta.txtvendedor.setDisabledTextColor(Color.blue);    
                 }
             }
             if (mostrar) {
@@ -1033,7 +1035,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnvtainsActionPerformed
 
     private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
-        if (!rep.isVisible()) {
+           reparacion rep = new reparacion(); //crear el nuevo formulario
             boolean mostrar = true;
             for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
                 if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
@@ -1047,9 +1049,11 @@ public class Principal extends javax.swing.JFrame {
                 jdpescritorio.add(rep);
             }
             rep.show();
-        } else {
-            System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-        }
+//        jdpescritorio.removeAll();
+//        jdpescritorio.updateUI();
+//        reparacion ventana = reparacion.getInstancia();
+//        jdpescritorio.add(ventana);
+//        ventana.show();
     }//GEN-LAST:event_btnreparacionesActionPerformed
 
     private void btndiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndiagnosticoActionPerformed
@@ -1061,6 +1065,8 @@ public class Principal extends javax.swing.JFrame {
                     mostrar = false;
                 } else {
                     System.out.println("Diagnóstico: No lo es, puede mostrarse");
+                    diagnostico.txtmecanico.setText(""+Login.Nombres+" "+Login.Apellidos);
+                    diagnostico.txtmecanico.setDisabledTextColor(Color.blue);
                 }
             }
             if (mostrar) {

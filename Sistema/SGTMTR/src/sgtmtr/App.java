@@ -14,6 +14,7 @@ package sgtmtr;
 public class App {
 
     public static String pwd;
-
+    static String Nombres;
+    static String Apellidos;
 
 }
