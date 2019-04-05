@@ -66,7 +66,7 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" pref="134" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" pref="17" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" pref="21" max="32767" attributes="0"/>
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>

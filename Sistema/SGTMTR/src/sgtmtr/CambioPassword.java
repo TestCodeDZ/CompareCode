@@ -32,7 +32,6 @@ public class CambioPassword extends javax.swing.JDialog {
         //centrar la pantalla
         setLocationRelativeTo(null);
         setTitle("Cambio de Contraseña");
-        CargarPWD();
     }
 
     private String getValorClaveUsuario(int usuario) {
@@ -81,27 +80,6 @@ public class CambioPassword extends javax.swing.JDialog {
         return salida;
     }
     
-    private void CargarPWD() {
-        //Carga de Combo
-        try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            //Crear Consulta
-            Statement st1 = conexion.createStatement();
-            String sql1 = "SELECT Password FROM usuarios WHERE IDTB = " + ClassUtils.USUARIO_CONECTADO;
-            //Ejecutar consulta
-            ResultSet rs1 = st1.executeQuery(sql1);
-            //Recorremos los registros traidos
-            while (rs1.next()) {
-                //Agregamos elemento al text
-                txtmpass.setText(rs1.getObject("Password").toString());
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-        }
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,7 +98,6 @@ public class CambioPassword extends javax.swing.JDialog {
         pfca = new javax.swing.JPasswordField();
         pfcn = new javax.swing.JPasswordField();
         pfccn = new javax.swing.JPasswordField();
-        txtmpass = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -195,8 +172,6 @@ public class CambioPassword extends javax.swing.JDialog {
             }
         });
 
-        txtmpass.setEnabled(false);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -216,7 +191,6 @@ public class CambioPassword extends javax.swing.JDialog {
                         .addContainerGap(46, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtmpass, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pfcn, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pfca, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pfccn))
@@ -244,9 +218,7 @@ public class CambioPassword extends javax.swing.JDialog {
                             .addComponent(pfccn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btcambiarpass)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtmpass, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -347,9 +319,11 @@ public class CambioPassword extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "¡Confirmación de contraseña nueva no corresponde!");
             return;
         }
-        /*if (pfcn.getText() == txtmpass.getText()){
+        //JOptionPane.showMessageDialog(this, App.pwd);
+        if (pfcn.getText().equals(App.pwd)) {
             JOptionPane.showMessageDialog(this, "¡Ud. no puede volver a poner la misma contraseña que tiene actualmente!");
-        }*/
+            return;
+        }
         if (actualizarClave(ClassUtils.USUARIO_CONECTADO, pfcn.getText().trim())) {
             //se actualizó la clave
             JOptionPane.showMessageDialog(this, "¡Contraseña actualizada con éxito!");
@@ -417,6 +391,5 @@ public class CambioPassword extends javax.swing.JDialog {
     private javax.swing.JPasswordField pfca;
     private javax.swing.JPasswordField pfccn;
     private javax.swing.JPasswordField pfcn;
-    private javax.swing.JTextField txtmpass;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -44,12 +45,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         txtnum.setDisabledTextColor(Color.red);
         txtnumdiag.setDisabledTextColor(Color.red);
         txtcd.setDisabledTextColor(Color.red);
-        txter.setText("En Reparación");
-        txter.setEnabled(false);
-        txter.setVisible(false);
-        txtrep.setText("Reparado");
-        txtrep.setEnabled(false);
-        txtrep.setVisible(false);
+        CargarComboER();
+        
     }
 
     public static String fechaactual() {
@@ -110,9 +107,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         modelo2.addColumn("Precio Total");
         modelo2.addColumn("Estado");
         String sql1 = "";
-        sql1 = "SELECT *"
-                + " FROM detallediag INNER JOIN controldiag ON detallediag.ID_Diag = controldiag.ID_Diagnostico"
-                + " WHERE Estado <> 'Reparado' AND ID_Diag =" + iddetalle;
+        sql1 = "SELECT ID_Diag,Cod_Desp,Desc_Desperfecto,Cantidad,PrecioDesp,Ptotal,Estado FROM detallediag INNER JOIN controldiag ON detallediag.ID_Diag = controldiag.ID_Diagnostico "
+                + "WHERE Estado <> 'Reparado' AND ID_Diag =" + iddetalle;
         String[] datos2 = new String[7];
         try {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
@@ -131,7 +127,7 @@ public class reparacion extends javax.swing.JInternalFrame {
             tbrep.setModel(modelo2);
 
         } catch (SQLException ex) {
-            System.out.printf(ex.getMessage());
+            //System.out.println(ex);
             //Logger.getLogger(reparacion.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
@@ -146,9 +142,11 @@ public class reparacion extends javax.swing.JInternalFrame {
         } else {
             String nd = tbrep.getValueAt(filaseleccionada, 0).toString();
             String cd = tbrep.getValueAt(filaseleccionada, 1).toString();
-            //String er = tbrep.getValueAt(filaseleccionada, 6).toString();
+            String er = tbrep.getValueAt(filaseleccionada, 6).toString();
             txtnumdiag.setText(nd);
             txtcd.setText(cd);
+            cbestadorep.setSelectedItem(er);
+            //if(){}
         }
 
     }
@@ -162,7 +160,31 @@ public class reparacion extends javax.swing.JInternalFrame {
             txtnum.setText(nd);
         }
     }
-
+    
+    private void CargarComboER() {
+        //Carga de Combo
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            //Crear Consulta
+            Statement st = conexion.createStatement();
+            String sql = "SELECT EstadoReparacion FROM estadoreparacion";
+            //Ejecutar consulta
+            ResultSet rs = st.executeQuery(sql);
+            //Limpiamos el Combo
+            cbestadorep.setModel(new DefaultComboBoxModel());
+            cbestadorep.addItem("Seleccione Estado de la Reparación");
+            //Recorremos los registros traidos
+            while (rs.next()) {
+                //Agregamos elemento al combo
+                cbestadorep.addItem(rs.getObject(1));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        }
+    }
+    
     void anchocolumnas() {
         tbdiag.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
@@ -216,6 +238,11 @@ public class reparacion extends javax.swing.JInternalFrame {
         if (txtcd.getText().equals("")) {
             errores += "seleccione la condición Código de Desperfecto \n";
         }
+        Integer indice = cbestadorep.getSelectedIndex();
+        if (indice.equals(0))
+        {
+            errores += "Seleccione Estado de Reparación \n";
+        }
         return errores;
     }
 
@@ -228,25 +255,19 @@ public class reparacion extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         panelImage1 = new elaprendiz.gui.panel.PanelImage();
         panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jsp1 = new javax.swing.JScrollPane();
         tbdiag = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnimprimir = new javax.swing.JButton();
         txtnum = new javax.swing.JTextField();
-        txter = new javax.swing.JTextField();
-        txtrep = new javax.swing.JTextField();
         panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
         txtnumdiag = new javax.swing.JTextField();
         txtcd = new javax.swing.JTextField();
         jsp2 = new javax.swing.JScrollPane();
         tbrep = new javax.swing.JTable();
         btnrep = new javax.swing.JButton();
-        rbtner = new javax.swing.JRadioButton();
-        rbtnrep = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        cbestadorep = new javax.swing.JComboBox();
 
         setClosable(true);
 
@@ -285,11 +306,12 @@ public class reparacion extends javax.swing.JInternalFrame {
         });
         jsp1.setViewportView(tbdiag);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
-        jButton1.setText("Imprimir");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnimprimir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
+        btnimprimir.setText("Imprimir");
+        btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnimprimirActionPerformed(evt);
             }
         });
 
@@ -300,16 +322,12 @@ public class reparacion extends javax.swing.JInternalFrame {
         panelTranslucido1.setLayout(panelTranslucido1Layout);
         panelTranslucido1Layout.setHorizontalGroup(
             panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido1Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addComponent(txtnum, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButton1)
-                .addGap(46, 46, 46)
-                .addComponent(txter, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtrep, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnimprimir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido1Layout.setVerticalGroup(
@@ -318,9 +336,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnum)
-                    .addComponent(jButton1)
-                    .addComponent(txter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtrep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnimprimir))
                 .addGap(18, 18, 18)
                 .addComponent(jsp1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -348,9 +364,24 @@ public class reparacion extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-
+                "Núm. Diagnóstico", "Código del Desperfecto", "Descripción Desperfecto", "Cantidad", "Precio Unitario", "Precio Total", "Estado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbrep.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbrep.getTableHeader().setResizingAllowed(false);
         tbrep.getTableHeader().setReorderingAllowed(false);
@@ -360,6 +391,14 @@ public class reparacion extends javax.swing.JInternalFrame {
             }
         });
         jsp2.setViewportView(tbrep);
+        if (tbrep.getColumnModel().getColumnCount() > 0) {
+            tbrep.getColumnModel().getColumn(0).setResizable(false);
+            tbrep.getColumnModel().getColumn(1).setResizable(false);
+            tbrep.getColumnModel().getColumn(2).setResizable(false);
+            tbrep.getColumnModel().getColumn(3).setResizable(false);
+            tbrep.getColumnModel().getColumn(4).setResizable(false);
+            tbrep.getColumnModel().getColumn(6).setResizable(false);
+        }
 
         btnrep.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnrep.setText("Cambiar Estado");
@@ -369,33 +408,10 @@ public class reparacion extends javax.swing.JInternalFrame {
             }
         });
 
-        buttonGroup1.add(rbtner);
-        rbtner.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        rbtner.setSelected(true);
-        rbtner.setText("En Reparación");
-        rbtner.addActionListener(new java.awt.event.ActionListener() {
+        cbestadorep.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbestadorep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnerActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(rbtnrep);
-        rbtnrep.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        rbtnrep.setText("Reparado");
-        rbtnrep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnrepActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jRadioButton1.setText("En Taller");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbestadorepActionPerformed(evt);
             }
         });
 
@@ -409,40 +425,22 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addComponent(txtnumdiag, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(rbtner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rbtnrep, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jRadioButton1))
-                .addGap(13, 13, 13)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbestadorep, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnrep)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido2Layout.setVerticalGroup(
             panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtnumdiag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnrep, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rbtner)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rbtnrep)
-                        .addGap(5, 5, 5)))
+                .addGap(22, 22, 22)
+                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtnumdiag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbestadorep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnrep, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
                 .addComponent(jsp2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
         );
 
@@ -464,7 +462,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -497,7 +495,7 @@ public class reparacion extends javax.swing.JInternalFrame {
         mostrarcoddiag();
     }//GEN-LAST:event_tbrepMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
         String errores = validarnumdiag();
         if (errores.equals("")) {
             try {
@@ -516,10 +514,54 @@ public class reparacion extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnimprimirActionPerformed
 
     private void btnrepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepActionPerformed
-        if (rbtner.isSelected() == true) {
+        String errores = validartxtrep();
+        if (errores.equals("")) {
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = conexion.prepareStatement("UPDATE detallediag SET Estado='"
+                        + cbestadorep.getSelectedItem() + "' WHERE ID_Diag='" + txtnumdiag.getText() + "' AND Cod_Desp='" + txtcd.getText() + "'");
+                pst.executeUpdate();
+                //UPDATE `detallediag` SET `Estado`= 'En Reparación' WHERE ID_Diag= 00000001 AND Cod_Desp = 'CD0001'
+                JOptionPane.showMessageDialog(this, "Estado Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
+                mostrardatos();
+                anchocolumnas();
+            } catch (Exception e) {
+                //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnrepActionPerformed
+
+    private void cbestadorepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbestadorepActionPerformed
+        // Arreglarlo con el combobox la weaita 
+    }//GEN-LAST:event_cbestadorepActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnimprimir;
+    private javax.swing.JButton btnrep;
+    private javax.swing.JComboBox cbestadorep;
+    private javax.swing.JScrollPane jsp1;
+    private javax.swing.JScrollPane jsp2;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
+    private javax.swing.JTable tbdiag;
+    private javax.swing.JTable tbrep;
+    private javax.swing.JTextField txtcd;
+    private javax.swing.JTextField txtnum;
+    private javax.swing.JTextField txtnumdiag;
+    // End of variables declaration//GEN-END:variables
+}
+/*
+radiobuttons
+
+if (rbtner.isSelected() == true) {
             String errores = validartxtrep();
             if (errores.equals("")) {
                 try {
@@ -561,39 +603,6 @@ public class reparacion extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_btnrepActionPerformed
 
-    private void rbtnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnerActionPerformed
 
-    }//GEN-LAST:event_rbtnerActionPerformed
-
-    private void rbtnrepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnrepActionPerformed
-
-    }//GEN-LAST:event_rbtnrepActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // Arreglarlo con el combobox la weaita 
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnrep;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JScrollPane jsp1;
-    private javax.swing.JScrollPane jsp2;
-    private elaprendiz.gui.panel.PanelImage panelImage1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
-    private javax.swing.JRadioButton rbtner;
-    private javax.swing.JRadioButton rbtnrep;
-    private javax.swing.JTable tbdiag;
-    private javax.swing.JTable tbrep;
-    private javax.swing.JTextField txtcd;
-    private javax.swing.JTextField txter;
-    private javax.swing.JTextField txtnum;
-    private javax.swing.JTextField txtnumdiag;
-    private javax.swing.JTextField txtrep;
-    // End of variables declaration//GEN-END:variables
-}
+*/
