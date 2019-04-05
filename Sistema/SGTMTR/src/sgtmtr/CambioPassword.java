@@ -320,7 +320,7 @@ public class CambioPassword extends javax.swing.JDialog {
             return;
         }
         //JOptionPane.showMessageDialog(this, App.pwd);
-        if (pfcn.getText().equals(App.pwd)) {
+        if (pfcn.getText().equals(Login.pwd)) {
             JOptionPane.showMessageDialog(this, "¡Ud. no puede volver a poner la misma contraseña que tiene actualmente!");
             return;
         }
