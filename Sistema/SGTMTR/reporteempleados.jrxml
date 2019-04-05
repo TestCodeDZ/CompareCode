@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteempleados" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="51dba097-60f4-4ddb-8d29-c5aaa0b1eb6a">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="131"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -75,42 +75,42 @@ WHERE
 			<staticText>
 				<reportElement style="Column header" x="0" y="0" width="132" height="18" forecolor="#000000" uuid="3a02a85f-e1cb-47c3-9ae5-30b5bac91dc7"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[ID Empleado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="132" y="0" width="132" height="18" forecolor="#000000" uuid="713fee4a-e131-4176-a7e0-0421049ff61e"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Nombres]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="264" y="0" width="132" height="18" forecolor="#000000" uuid="2fa60adf-72c2-4116-aee9-cea30a646f06"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Apellidos]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="396" y="0" width="132" height="18" forecolor="#000000" uuid="cb4e04e3-9224-4d41-9c62-3f77be98366e"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Tipo de Usuario]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="528" y="0" width="132" height="18" forecolor="#000000" uuid="ba103866-3505-4307-bb37-363ab1fa3cad"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Nombre de Sucursal]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="660" y="0" width="132" height="18" forecolor="#000000" uuid="cee590c4-2314-453f-b534-5b84d44eab3d"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Usuario]]></text>
 			</staticText>
@@ -123,42 +123,42 @@ WHERE
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="0" y="0" width="132" height="18" uuid="dee869e9-3f9e-49df-915b-cd8146732aa8"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{u_ID}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="132" y="0" width="132" height="18" uuid="9a6a594a-ac52-4335-91b9-747957e80826"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{u_Nombres}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="264" y="0" width="132" height="18" uuid="5207ac2b-0d6f-4cf9-b909-62cb220ce7f2"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{u_Apellidos}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="396" y="0" width="132" height="18" uuid="e31e965e-b840-4eda-8119-6bc5c7bc4185"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{tu_TipoUser}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="528" y="0" width="132" height="18" uuid="f560b1a5-fed7-43aa-9f4f-08aa373c41d7"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{s_NombreSucursal}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="660" y="0" width="132" height="18" uuid="a4db199b-6cbb-4adf-b422-080e1871f62f"/>
 					<textElement>
-						<font fontName="Arial" size="12" isBold="false"/>
+						<font fontName="Arial" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{u_Usuario}]]></textFieldExpression>
 				</textField>

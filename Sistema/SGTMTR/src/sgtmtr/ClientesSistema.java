@@ -6,12 +6,7 @@
 package sgtmtr;
 
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -29,77 +24,6 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         initComponents();
         this.setLocation(150,15 );
         setTitle("Mantenedor de Clientes");
-        mostrardatos("");
-        anchocolumnas();
-    }
-    
-    
-    void mostrardatos(String valor) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        String rut=txtrut.getText();
-        String dv=txtdv.getText();
-        String union=rut+"-"+dv;
-        modelo.addColumn("RUT");
-        modelo.addColumn("Nombres");
-        modelo.addColumn("Apellidos");
-        modelo.addColumn("Fono");
-        modelo.addColumn("Dirección");
-        modelo.addColumn("E-mail");
-        tbclientes.setModel(modelo);
-        String sql = "";
-        if (valor.equals("")) {
-            sql = "SELECT * FROM clientes ";
-        } else {
-            sql = "SELECT * FROM clientes WHERE RUT='" + union + "'";
-        }
-
-        String[] datos = new String[6];
-        try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                datos[0] = rs.getString(1);
-                datos[1] = rs.getString(2);
-                datos[2] = rs.getString(3);
-                datos[3] = rs.getString(4);
-                datos[4] = rs.getString(5);
-                datos[5] = rs.getString(6);
-                modelo.addRow(datos);
-            }
-            tbclientes.setModel(modelo);
-            tbclientes.setEnabled(false);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        }
-    }
-
-    void anchocolumnas() {
-        tbclientes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-
-        tbclientes.getColumnModel().getColumn(0).setWidth(40);
-        tbclientes.getColumnModel().getColumn(0).setMaxWidth(40);
-        tbclientes.getColumnModel().getColumn(0).setMinWidth(40);
-        
-        tbclientes.getColumnModel().getColumn(1).setWidth(100);
-        tbclientes.getColumnModel().getColumn(1).setMaxWidth(100);
-        tbclientes.getColumnModel().getColumn(1).setMinWidth(100);
-
-        tbclientes.getColumnModel().getColumn(2).setWidth(100);
-        tbclientes.getColumnModel().getColumn(2).setMaxWidth(100);
-        tbclientes.getColumnModel().getColumn(2).setMinWidth(100);
-
-        tbclientes.getColumnModel().getColumn(3).setWidth(120);
-        tbclientes.getColumnModel().getColumn(3).setMaxWidth(120);
-        tbclientes.getColumnModel().getColumn(3).setMinWidth(120);
-
-        tbclientes.getColumnModel().getColumn(4).setWidth(90);
-        tbclientes.getColumnModel().getColumn(4).setMaxWidth(90);
-        tbclientes.getColumnModel().getColumn(4).setMinWidth(90);
-
-        tbclientes.getColumnModel().getColumn(5).setWidth(90);
-        tbclientes.getColumnModel().getColumn(5).setMaxWidth(90);
-        tbclientes.getColumnModel().getColumn(5).setMinWidth(90);
     }
 
     /**
@@ -140,6 +64,23 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos de Clientes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -461,6 +402,12 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
        
     }//GEN-LAST:event_txtemailFocusLost
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        if (Login.tipoUsuario==2) {
+            btborrar.setVisible(false);
+        }  
+    }//GEN-LAST:event_formInternalFrameOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;

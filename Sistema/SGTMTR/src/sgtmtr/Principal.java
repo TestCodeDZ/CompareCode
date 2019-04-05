@@ -6,6 +6,8 @@
 package sgtmtr;
 
 import claseConectar.conectar;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,6 +73,8 @@ Thread Hilo;
     
     public Principal() {
         super("Sistema de Gestión de Taller Mecánico");
+        //Abrir ventana de validacion de usuarios
+        new Login(this, true).setVisible(true);
         initComponents();
         Iniciar();
         lbfecha.setText(fechaActual());
@@ -78,6 +82,53 @@ Thread Hilo;
         setLocationRelativeTo(null);
         this.setSize(1000, 768);
         //this.setLocation(600,150);
+         this.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+               
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+              
+            int rpt=JOptionPane.showConfirmDialog(null,"¿Seguro que desea salir del sistema?","¡Advertencia!",JOptionPane.YES_NO_OPTION);
+            if(rpt==JOptionPane.YES_OPTION){
+            System.exit(0);
+            }
+             
+           
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+             
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                
+            }
+
+        });
+         //Mostramos el nombre de Usuario
+        lblusuario.setText("Usuario Conectado: " + Login.nomUsuario);
+        lbnombres.setText("Nombres: " + Login.Nombres);
+        lbapellidos.setText("Apellidos: " + Login.Apellidos);
+        lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
     }
     private void deshabilitarmenu(){
         this.mniproceso.setVisible(false);
@@ -90,6 +141,7 @@ Thread Hilo;
         lblimg.setIcon(iconoDesconectado);   
         lblusuario.setText(" Usuario Desconectado ");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,6 +163,9 @@ Thread Hilo;
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
         lbhora = new javax.swing.JLabel();
+        lbnombres = new javax.swing.JLabel();
+        lbapellidos = new javax.swing.JLabel();
+        lbtipouser = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
@@ -156,7 +211,12 @@ Thread Hilo;
 
         jMenuItem5.setText("jMenuItem5");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jdpescritorio.setBackground(new java.awt.Color(25, 153, 153));
 
@@ -168,31 +228,49 @@ Thread Hilo;
         lblusuario.setForeground(new java.awt.Color(255, 255, 255));
         lblusuario.setText("Usuario Conectado: ");
         jdpescritorio.add(lblusuario);
-        lblusuario.setBounds(60, 10, 170, 17);
+        lblusuario.setBounds(60, 10, 260, 17);
 
         lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblhora.setForeground(new java.awt.Color(255, 255, 255));
         lblhora.setText("Hora:");
         jdpescritorio.add(lblhora);
-        lblhora.setBounds(540, 10, 50, 17);
+        lblhora.setBounds(580, 10, 50, 17);
 
         lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblfecha.setForeground(new java.awt.Color(255, 255, 255));
         lblfecha.setText("Fecha:");
         jdpescritorio.add(lblfecha);
-        lblfecha.setBounds(330, 10, 60, 17);
+        lblfecha.setBounds(350, 10, 60, 17);
 
         lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbfecha.setForeground(new java.awt.Color(255, 255, 255));
         lbfecha.setText("jLabel1");
         jdpescritorio.add(lbfecha);
-        lbfecha.setBounds(400, 10, 80, 17);
+        lbfecha.setBounds(420, 10, 80, 17);
 
         lbhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbhora.setForeground(new java.awt.Color(255, 255, 255));
         lbhora.setText("hola");
         jdpescritorio.add(lbhora);
-        lbhora.setBounds(610, 10, 80, 14);
+        lbhora.setBounds(650, 10, 80, 14);
+
+        lbnombres.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbnombres.setForeground(new java.awt.Color(255, 255, 255));
+        lbnombres.setText("jLabel1");
+        jdpescritorio.add(lbnombres);
+        lbnombres.setBounds(80, 330, 170, 17);
+
+        lbapellidos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbapellidos.setForeground(new java.awt.Color(255, 255, 255));
+        lbapellidos.setText("jLabel2");
+        jdpescritorio.add(lbapellidos);
+        lbapellidos.setBounds(350, 330, 170, 17);
+
+        lbtipouser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbtipouser.setForeground(new java.awt.Color(255, 255, 255));
+        lbtipouser.setText("jLabel3");
+        jdpescritorio.add(lbtipouser);
+        lbtipouser.setBounds(580, 330, 170, 17);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -380,6 +458,11 @@ Thread Hilo;
         mniusers.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mniusers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group_key.png"))); // NOI18N
         mniusers.setText("Usuarios");
+        mniusers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniusersActionPerformed(evt);
+            }
+        });
         mnireportes.add(mniusers);
         mnireportes.add(jSeparator2);
 
@@ -392,6 +475,11 @@ Thread Hilo;
         mnirepmarcas.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
         mnirepmarcas.setText("Marcas");
+        mnirepmarcas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnirepmarcasActionPerformed(evt);
+            }
+        });
         mnireportes.add(mnirepmarcas);
 
         mnirepdesperfectos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -452,7 +540,9 @@ Thread Hilo;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -489,8 +579,14 @@ Thread Hilo;
     }//GEN-LAST:event_mniclientesActionPerformed
 
     private void mnicerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicerrarsesionActionPerformed
-        deshabilitarmenu();
+        this.dispose();
         JOptionPane.showMessageDialog(this, "Has salido del sistema");
+        
+        Login log = new Login(null, true);
+        log.setVisible(true);
+      
+        
+        
     }//GEN-LAST:event_mnicerrarsesionActionPerformed
 
     private void mnicerrarsesionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_mnicerrarsesionItemStateChanged
@@ -542,6 +638,58 @@ Thread Hilo;
             System.out.printf(e.getMessage());
         }
     }//GEN-LAST:event_mnirepdesperfectosActionPerformed
+
+    private void mnirepmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepmarcasActionPerformed
+        try {
+            conectar cc= new conectar();
+            
+            JasperReport reportes=JasperCompileManager.compileReport("reportemarcas.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperViewer.viewReport(print,false);
+            
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }//GEN-LAST:event_mnirepmarcasActionPerformed
+
+    private void mniusersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusersActionPerformed
+        try {
+            conectar cc= new conectar();
+            
+            JasperReport reportes=JasperCompileManager.compileReport("reporteempleados.jrxml");
+            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
+            JasperViewer.viewReport(print,false);
+            
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }//GEN-LAST:event_mniusersActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        //Privilegios del sistema
+         if (Login.tipoUsuario==1){
+            mniproceso.setVisible(false);
+        }
+        if (Login.tipoUsuario==2) {
+            mnibd.setVisible(false);
+            mnireportes.setVisible(false);
+            mniprincipal.setVisible(false);
+        }       
+        
+        if (Login.tipoUsuario==3) {
+            mnidatos.setVisible(false);
+            mnireportes.setVisible(false);
+            mniaverias.setVisible(false);
+            mnisistema.setVisible(false);
+            mniconsultas.setVisible(false);
+            mnireportes.setVisible(false);
+        }
+        if (Login.tipoUsuario==4) {
+            mnisistema.setVisible(false);
+            mniproceso.setVisible(false);
+            mniconsultas.setVisible(false);
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -595,12 +743,15 @@ Thread Hilo;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     public static javax.swing.JDesktopPane jdpescritorio;
+    private javax.swing.JLabel lbapellidos;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lbhora;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblhora;
     private javax.swing.JLabel lblimg;
     private javax.swing.JLabel lblusuario;
+    private javax.swing.JLabel lbnombres;
+    private javax.swing.JLabel lbtipouser;
     private javax.swing.JMenuItem mniacercade;
     private javax.swing.JMenu mniaverias;
     private javax.swing.JMenu mniayuda;
