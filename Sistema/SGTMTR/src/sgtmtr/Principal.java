@@ -126,9 +126,9 @@ Thread Hilo;
         });
          //Mostramos el nombre de Usuario
         lblusuario.setText("Usuario Conectado: " + Login.nomUsuario);
-        lbnombres.setText("Nombres: " + Login.Nombres);
-        lbapellidos.setText("Apellidos: " + Login.Apellidos);
-        lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
+        //lbnombres.setText("Nombres: " + Login.Nombres);
+        //lbapellidos.setText("Apellidos: " + Login.Apellidos);
+        //lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
     }
     private void deshabilitarmenu(){
         this.mniproceso.setVisible(false);
@@ -163,9 +163,6 @@ Thread Hilo;
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
         lbhora = new javax.swing.JLabel();
-        lbnombres = new javax.swing.JLabel();
-        lbapellidos = new javax.swing.JLabel();
-        lbtipouser = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
@@ -253,24 +250,6 @@ Thread Hilo;
         lbhora.setText("hola");
         jdpescritorio.add(lbhora);
         lbhora.setBounds(650, 10, 80, 14);
-
-        lbnombres.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbnombres.setForeground(new java.awt.Color(255, 255, 255));
-        lbnombres.setText("jLabel1");
-        jdpescritorio.add(lbnombres);
-        lbnombres.setBounds(80, 330, 170, 17);
-
-        lbapellidos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbapellidos.setForeground(new java.awt.Color(255, 255, 255));
-        lbapellidos.setText("jLabel2");
-        jdpescritorio.add(lbapellidos);
-        lbapellidos.setBounds(350, 330, 170, 17);
-
-        lbtipouser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbtipouser.setForeground(new java.awt.Color(255, 255, 255));
-        lbtipouser.setText("jLabel3");
-        jdpescritorio.add(lbtipouser);
-        lbtipouser.setBounds(580, 330, 170, 17);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -423,6 +402,11 @@ Thread Hilo;
 
         mnidiag.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnidiag.setText("Diagnóstico");
+        mnidiag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnidiagActionPerformed(evt);
+            }
+        });
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -536,12 +520,12 @@ Thread Hilo;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+            .addComponent(jdpescritorio, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                .addComponent(jdpescritorio, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -691,6 +675,12 @@ Thread Hilo;
         }
     }//GEN-LAST:event_formWindowOpened
 
+    private void mnidiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidiagActionPerformed
+        diagnostico diag=new diagnostico();
+        jdpescritorio.add(diag);
+        diag.show();
+    }//GEN-LAST:event_mnidiagActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -742,16 +732,13 @@ Thread Hilo;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
-    public static javax.swing.JDesktopPane jdpescritorio;
-    private javax.swing.JLabel lbapellidos;
+    private javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
     private javax.swing.JLabel lbhora;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblhora;
     private javax.swing.JLabel lblimg;
     private javax.swing.JLabel lblusuario;
-    private javax.swing.JLabel lbnombres;
-    private javax.swing.JLabel lbtipouser;
     private javax.swing.JMenuItem mniacercade;
     private javax.swing.JMenu mniaverias;
     private javax.swing.JMenu mniayuda;
