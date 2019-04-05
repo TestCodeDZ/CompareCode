@@ -12,12 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static sgtmtr.ComprobanteVta.tbvprod;
 
 /**
  *
  * @author ZuluCorp
  */
 public class SeleccionProducto extends javax.swing.JDialog {
+    CalculaPrecioTB calcula = new CalculaPrecioTB();
     /**
      * Creates new form SeleccionProducto
      */
@@ -187,9 +189,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
         try {
             DefaultTableModel tabladet = (DefaultTableModel) ComprobanteVta.tbvprod.getModel();
             String[] dato = new String[5];
-
             int fila = tbprod.getSelectedRow();
-
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "No  ha seleccionado ningun registro");
             } else {
@@ -199,6 +199,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 int c = 0;
                 int j = 0;
                 String cant = JOptionPane.showInputDialog("Ingrese Cantidad a Vender");
+                //validar que no sea menor que 0 o sea -1 etc menos letras... o cambiar tema aca
                 if ((cant.equals("")) || (cant.equals("0"))) {
                     JOptionPane.showMessageDialog(this, "Debe ingresar algun valor mayor que 0");
                 } else {
@@ -220,10 +221,9 @@ public class SeleccionProducto extends javax.swing.JDialog {
                             dato[1] = desc;
                             dato[2] = cant;
                             dato[3] = preunit;
-
                             tabladet.addRow(dato);
-
                             ComprobanteVta.tbvprod.setModel(tabladet);
+                            calcula.calcular();
                             this.dispose();
                         }
                     }
