@@ -8,6 +8,7 @@ package sgtmtr;
 import claseConectar.conectar;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 /**
@@ -23,46 +25,45 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 
 public class Principal extends javax.swing.JFrame implements Runnable{
-    private String horas, minutos, segundos;
-private boolean Estado;
-Thread Hilo;
+    String hora, minutos, segundos, ampm;
+    Calendar calendario;
+    Thread h1;
 
-    public void run(){
-        while (Estado ==true) {
-        Calendar fecha = new GregorianCalendar();
-        int h= fecha.get(Calendar.HOUR_OF_DAY);
-        int m = fecha.get(Calendar.MINUTE);
-        int s = fecha.get(Calendar.SECOND);
-
-        horas = Integer.toString(h);
-        minutos = Integer.toString(m);
-        segundos = Integer.toString(s);
-
-        lbhora.setText(horas+" : "+minutos+" : "+segundos);
-
-            try{
+    public void run() {
+        Thread ct = Thread.currentThread();
+        while (ct == h1) {
+            calcula();
+            lbhora.setText(hora + ":" + minutos + ":" + segundos);
+            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
+            try {
                 Thread.sleep(1000);
-            }catch (InterruptedException ex){
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException e) {
             }
-    }
+        }
+}
+   
+    //Metodo calcular hora     
+    public void calcula() {
+        Calendar calendario = new GregorianCalendar();
+        Date fechaHoraActual = new Date();
+        calendario.setTime(fechaHoraActual);
+        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+
+        if (ampm.equals("PM")) {
+            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
+            hora = h > 9 ? "" + h : "0" + h;
+        } else {
+            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
+        }
+        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
+        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
     }
 
-    public void Iniciar(){
-        Hilo=new Thread(this);
-        Estado = true;
-        Hilo.start();
-
-    }
-
-    public void stop(){
-    Estado = false;
-    }
-    
-    public static String fechaActual(){ 
-    Date fecha=new Date();
-    SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/YYYY"); 
-    return formatoFecha.format(fecha);
+    //calcular fecha
+    public static String fechaActual() {
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+        return formatoFecha.format(fecha);
     }
     
     /**
@@ -76,7 +77,8 @@ Thread Hilo;
         //Abrir ventana de validacion de usuarios
         new Login(this, true).setVisible(true);
         initComponents();
-        Iniciar();
+        h1 = new Thread(this);
+        h1.start();
         lbfecha.setText(fechaActual());
         //centrar la pantalla
         setLocationRelativeTo(null);
@@ -794,3 +796,43 @@ Thread Hilo;
     private javax.swing.JMenuItem mnivehiculos;
     // End of variables declaration//GEN-END:variables
 }
+/*ñeeee
+        private String horas, minutos, segundos;
+        private boolean Estado;
+        Thread Hilo;
+
+        public void run(){
+        while (Estado ==true) {
+        Calendar fecha = new GregorianCalendar();
+        int h= fecha.get(Calendar.HOUR_OF_DAY);
+        int m = fecha.get(Calendar.MINUTE);
+        int s = fecha.get(Calendar.SECOND);
+
+        horas = Integer.toString(h);
+        minutos = Integer.toString(m);
+        segundos = Integer.toString(s);
+
+        lbhora.setText(horas+" : "+minutos+" : "+segundos);
+
+        try{
+        Thread.sleep(1000);
+        }catch (InterruptedException ex){
+        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        }
+
+        public void Iniciar(){
+        Hilo=new Thread(this);
+        Estado = true;
+        Hilo.start();
+
+        }
+
+        public void stop(){
+        Estado = false;
+        }
+
+        
+
+*/

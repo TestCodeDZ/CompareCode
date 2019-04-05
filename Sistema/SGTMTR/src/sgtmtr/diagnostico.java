@@ -602,13 +602,13 @@ public class diagnostico extends javax.swing.JInternalFrame {
 
     private void btejecutartbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutartbActionPerformed
         try {
-            bcliente bc= new bcliente();
+            bcliente bc = new bcliente();
             Principal.jdpescritorio.add(bc);
             bc.toFront();
             bc.setVisible(true);
 
-            } catch (Exception e) {
-            }
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_btejecutartbActionPerformed
 
     private void btingresodiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresodiagActionPerformed

@@ -7,6 +7,7 @@ package sgtmtr;
 
 import java.awt.Toolkit;
 import java.sql.Connection;
+import java.awt.Color;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class ClientesSistema extends javax.swing.JInternalFrame {
-
+    ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form ClientesSistema
      */
@@ -69,7 +70,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbclientes.setModel(modelo);
-            tbclientes.setEnabled(false);
+            //tbclientes.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
@@ -267,17 +268,45 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         jLabel7.setText("-");
 
         txtnombres.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtnombres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnombresKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnombresKeyTyped(evt);
+            }
+        });
 
         txtapellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtapellidos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtapellidosKeyTyped(evt);
+            }
+        });
 
         txtfono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtfono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtfonoKeyTyped(evt);
+            }
+        });
 
         txtdireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtdireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtdireccionKeyTyped(evt);
+            }
+        });
 
         txtemail.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtemail.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtemailFocusLost(evt);
+            }
+        });
+        txtemail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtemailKeyTyped(evt);
             }
         });
 
@@ -441,6 +470,15 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Clientes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbclientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        //Deshabilitar edicion de tabla
+        tbclientes = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        //cambiar color de fila
+        tbclientes.setSelectionBackground(Color.LIGHT_GRAY);
+        tbclientes.setSelectionForeground(Color.blue);
         tbclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -548,13 +586,8 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtrutFocusLost
 
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
+        validarLetras.soloNumeros(evt);
         if(txtrut.getText().length()>=8){
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-
-        char TipoDeTecla = evt.getKeyChar();
-        if(!Character.isDigit(TipoDeTecla)){
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
         }
@@ -735,6 +768,50 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, error);
         }     
     }//GEN-LAST:event_btborrarActionPerformed
+
+    private void txtnombresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnombresKeyPressed
+
+    private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
+        validarLetras.soloLetras(evt);
+        if (txtnombres.getText().length() == 50) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtnombresKeyTyped
+
+    private void txtapellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtapellidosKeyTyped
+        validarLetras.soloLetras(evt);
+        if (txtapellidos.getText().length() == 50) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtapellidosKeyTyped
+
+    private void txtemailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtemailKeyTyped
+        validarLetras.mail(evt);
+        if (txtemail.getText().length() == 40) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtemailKeyTyped
+
+    private void txtfonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfonoKeyTyped
+        validarLetras.soloNumeros(evt);
+        if (txtfono.getText().length() == 15) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtfonoKeyTyped
+
+    private void txtdireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtdireccionKeyTyped
+        validarLetras.LNE(evt);
+        if (txtdireccion.getText().length() == 30) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtdireccionKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;

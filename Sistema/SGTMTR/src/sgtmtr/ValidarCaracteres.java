@@ -1,6 +1,5 @@
 package sgtmtr;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -51,10 +50,6 @@ public class ValidarCaracteres {
             evt.consume();
         }
     } 
-
-    String soloNumeros(ActionEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
 /*codigo antiguo usado por mi xD
     

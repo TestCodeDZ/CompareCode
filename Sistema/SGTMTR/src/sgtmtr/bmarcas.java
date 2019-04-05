@@ -71,12 +71,22 @@ void mostrarvehiculos(String valor)
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnienviar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
         tbmarca = new javax.swing.JTable();
-        btnenviar = new javax.swing.JButton();
+
+        mnienviar.setText("Enviar Datos");
+        mnienviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnienviarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnienviar);
 
         setClosable(true);
+        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione Marca", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -90,7 +100,6 @@ void mostrarvehiculos(String valor)
         //cambiar color de fila
         tbmarca.setSelectionBackground(Color.LIGHT_GRAY);
         tbmarca.setSelectionForeground(Color.blue);
-        tbmarca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbmarca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -102,16 +111,8 @@ void mostrarvehiculos(String valor)
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbmarca.getTableHeader().setResizingAllowed(false);
-        tbmarca.getTableHeader().setReorderingAllowed(false);
+        tbmarca.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbmarca);
-
-        btnenviar.setText("Enviar");
-        btnenviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnenviarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,18 +121,13 @@ void mostrarvehiculos(String valor)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnenviar)
-                .addGap(121, 121, 121))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(btnenviar))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -154,7 +150,7 @@ void mostrarvehiculos(String valor)
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnenviarActionPerformed
+    private void mnienviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnienviarActionPerformed
         String IDm = "", nombremarca = "";
         int fila = tbmarca.getSelectedRow();
         try {
@@ -170,13 +166,14 @@ void mostrarvehiculos(String valor)
             }
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_btnenviarActionPerformed
+    }//GEN-LAST:event_mnienviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnenviar;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnienviar;
     private javax.swing.JTable tbmarca;
     // End of variables declaration//GEN-END:variables
     conectar cc= new conectar();
