@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.sql.*;
 import java.util.logging.Level;
@@ -21,9 +21,7 @@ import static sgtmtr.ComprobanteVta.tbvprod;
  * @author ZuluCorp
  */
 public class SeleccionProducto extends javax.swing.JDialog {
-
     CalculaPrecioTB calcula = new CalculaPrecioTB();
-
     /**
      * Creates new form SeleccionProducto
      */
@@ -35,10 +33,9 @@ public class SeleccionProducto extends javax.swing.JDialog {
         mostrardatos("");
         anchocolumnas();
     }
-
     void mostrardatos(String valor) {
         /*String id=txtidmarca.getText();
-         String NM=txtmn.getText();*/
+        String NM=txtmn.getText();*/
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Código");
         modelo.addColumn("Descripción");
@@ -54,8 +51,8 @@ public class SeleccionProducto extends javax.swing.JDialog {
 
         String[] datos = new String[4];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -65,39 +62,36 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 modelo.addRow(datos);
             }
             tbprod.setModel(modelo);
-            //tbmarcas.setEnabled(false);
+           //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
+    
     void anchocolumnas() {
         tbprod.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
         tbprod.getColumnModel().getColumn(0).setWidth(100);
         tbprod.getColumnModel().getColumn(0).setMaxWidth(100);
         tbprod.getColumnModel().getColumn(0).setMinWidth(100);
-
+        
         tbprod.getColumnModel().getColumn(1).setWidth(200);
         tbprod.getColumnModel().getColumn(1).setMaxWidth(200);
         tbprod.getColumnModel().getColumn(1).setMinWidth(200);
-
+        
         tbprod.getColumnModel().getColumn(0).setWidth(100);
         tbprod.getColumnModel().getColumn(0).setMaxWidth(100);
         tbprod.getColumnModel().getColumn(0).setMinWidth(100);
-
+        
         tbprod.getColumnModel().getColumn(1).setWidth(100);
         tbprod.getColumnModel().getColumn(1).setMaxWidth(100);
         tbprod.getColumnModel().getColumn(1).setMinWidth(100);
     }
-
+    
     String comparar(String cod) {
         String option = "";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM insumos WHERE Codigo='" + cod + "'");
             while (rs.next()) {
                 option = rs.getString(4);
@@ -105,13 +99,10 @@ public class SeleccionProducto extends javax.swing.JDialog {
 
         } catch (SQLException ex) {
             Logger.getLogger(SeleccionProducto.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
         return option;
 
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,8 +112,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelImage1 = new elaprendiz.gui.panel.PanelImage();
-        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
+        jPanel1 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
         tbprod = new javax.swing.JTable();
 
@@ -134,9 +124,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
             }
         });
 
-        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
-
-        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione el producto que se venderá", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione Producto a Vender", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbprod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         //Deshabilitar edicion de tabla
@@ -159,7 +147,6 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbprod.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbprod.getTableHeader().setResizingAllowed(false);
         tbprod.getTableHeader().setReorderingAllowed(false);
         tbprod.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -169,31 +156,20 @@ public class SeleccionProducto extends javax.swing.JDialog {
         });
         jsp.setViewportView(tbprod);
 
-        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
-        panelTranslucido1.setLayout(panelTranslucido1Layout);
-        panelTranslucido1Layout.setHorizontalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-        );
-        panelTranslucido1Layout.setVerticalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
-        panelImage1.setLayout(panelImage1Layout);
-        panelImage1Layout.setHorizontalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        panelImage1Layout.setVerticalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -201,79 +177,95 @@ public class SeleccionProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void tbprodMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbprodMousePressed
         /*SeleccionaCantidad sc = new SeleccionaCantidad(null, true);
-         sc.setVisible(true);*/
+        sc.setVisible(true);*/
         SpinnerNumberModel numerito = new SpinnerNumberModel(0, 0, 999, 1);
         JSpinner spinner = new JSpinner(numerito);
         int option = JOptionPane.showOptionDialog(null, spinner, "Seleccione o Ingrese Cantidad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (option == JOptionPane.CANCEL_OPTION) {
-            // user hit cancel
+    // user hit cancel
         } else if (option == JOptionPane.OK_OPTION) {
             try {
-                DefaultTableModel tabladet = (DefaultTableModel) ComprobanteVta.tbvprod.getModel();
-                String[] dato = new String[5];
-                int fila = SeleccionProducto.tbprod.getSelectedRow();
-                if (fila == -1) {
-                    JOptionPane.showMessageDialog(null, "No ha seleccionado ningún registro");
-                } else {
-                    String cod = SeleccionProducto.tbprod.getValueAt(fila, 0).toString();
-                    String desc = SeleccionProducto.tbprod.getValueAt(fila, 1).toString();
-                    String preunit = SeleccionProducto.tbprod.getValueAt(fila, 2).toString();
-                    int c = 0;
-                    int j = 0;
+            DefaultTableModel tabladet = (DefaultTableModel) ComprobanteVta.tbvprod.getModel();
+            String[] dato = new String[5];
+            int fila = SeleccionProducto.tbprod.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
+            } else {
+                String cod = SeleccionProducto.tbprod.getValueAt(fila, 0).toString();
+                String desc = SeleccionProducto.tbprod.getValueAt(fila, 1).toString();
+                String preunit = SeleccionProducto.tbprod.getValueAt(fila, 2).toString();
+                int c = 0;
+                int j = 0;
                 //SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
-                    //JSpinner spinner = new JSpinner(sModel);
-                    String cant = numerito.getValue().toString();
-                    //validar que no sea menor que 0 o sea -1 etc menos letras... o cambiar tema aca
-                    if ((cant.equals("0"))) {
-                        JOptionPane.showMessageDialog(this, "Debe ingresar un valor mayor que 0");
+                //JSpinner spinner = new JSpinner(sModel);
+                String cant = numerito.getValue().toString();
+                //validar que no sea menor que 0 o sea -1 etc menos letras... o cambiar tema aca
+                if ((cant.equals("0"))) {
+                    JOptionPane.showMessageDialog(this, "Debe ingresar algun valor mayor que 0");
+                } else {
+                    int canting = Integer.parseInt(cant);
+                    int comp = Integer.parseInt(comparar(cod));
+                    if (canting > comp) {
+                        JOptionPane.showMessageDialog(this, "Ud. no cuenta con el stock apropiado");
                     } else {
-                        int canting = Integer.parseInt(cant);
-                        int comp = Integer.parseInt(comparar(cod));
-                        if (canting > comp) {
-                            JOptionPane.showMessageDialog(this, "No se cuenta con el stock suficiente");
-                        } else {
-                            if (canting > 0) {
-                                for (int i = 0; i < ComprobanteVta.tbvprod.getRowCount(); i++) {
-                                    Object com = ComprobanteVta.tbvprod.getValueAt(i, 0);
-                                    if (cod.equals(com)) {
-                                        j = i;
-                                        ComprobanteVta.tbvprod.setValueAt(canting, i, 2);
-                                        c = c + 1;
-                                        calcula.calcular();
-                                    }
-                                    this.dispose();
+                        if (canting > 0) {
+                            for (int i = 0; i < ComprobanteVta.tbvprod.getRowCount(); i++) {
+                                Object com = ComprobanteVta.tbvprod.getValueAt(i, 0);
+                                if (cod.equals(com)) {
+                                    j = i;
+                                    ComprobanteVta.tbvprod.setValueAt(canting, i, 2);
+                                    c = c + 1;
+                                    calcula.calcular();
                                 }
-                            } else {
-                            }
-                            if (c == 0) {
-                                dato[0] = cod;
-                                dato[1] = desc;
-                                dato[2] = cant;
-                                dato[3] = preunit;
-                                tabladet.addRow(dato);
-                                ComprobanteVta.tbvprod.setModel(tabladet);
-                                calcula.calcular();
                                 this.dispose();
                             }
+                        } else {
+                            /*JOptionPane.showMessageDialog(this, "Debe ingresar algun valor mayor que 0");
+                            DefaultTableModel model = (DefaultTableModel) ComprobanteVta.tbvprod.getModel();
+                            //int fila = ComprobanteVta.tbvprod.getSelectedRow();
+                            if (fila < 0) {
+                                model.removeRow(fila);
+                                calcula.calcular();
+                                ComprobanteVta.txtmtotal.setText("");
+                                model.removeRow(fila);
+                                calcula.calcular();
+                            }*/
+                        }
+                        if (c == 0) {
+                            dato[0] = cod;
+                            dato[1] = desc;
+                            dato[2] = cant;
+                            dato[3] = preunit;
+                            tabladet.addRow(dato);
+                            ComprobanteVta.tbvprod.setModel(tabladet);
+                            calcula.calcular();
+                            this.dispose();
                         }
                     }
                 }
-            } catch (Exception e) {
             }
+        } catch (Exception e) {
         }
-
+        }
+        
     }//GEN-LAST:event_tbprodMousePressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -323,9 +315,10 @@ public class SeleccionProducto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jsp;
-    private elaprendiz.gui.panel.PanelImage panelImage1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     public static javax.swing.JTable tbprod;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }

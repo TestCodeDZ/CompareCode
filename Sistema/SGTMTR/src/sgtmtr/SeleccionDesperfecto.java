@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.sql.*;
 import java.util.logging.Level;
@@ -31,7 +31,7 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setTitle("Seleccione el o los desperfectos");
         mostrardatos("");
-        anchocolumnas();    
+        anchocolumnas();
     }
     void mostrardatos(String valor) {
         /*String id=txtidmarca.getText();
@@ -40,7 +40,7 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
         modelo.addColumn("Código");
         modelo.addColumn("Descripción");
         modelo.addColumn("Precio");
-        tbdesp.setModel(modelo);
+        tbins.setModel(modelo);
         String sql = "";
         if (valor.equals("")) {
             sql = "SELECT * FROM desperfectos";
@@ -50,8 +50,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
 
         String[] datos = new String[3];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -59,29 +59,27 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
                 datos[2] = rs.getString(3);
                 modelo.addRow(datos);
             }
-            tbdesp.setModel(modelo);
+            tbins.setModel(modelo);
            //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
     
     void anchocolumnas() {
-        tbdesp.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tbins.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
-        tbdesp.getColumnModel().getColumn(0).setWidth(100);
-        tbdesp.getColumnModel().getColumn(0).setMaxWidth(100);
-        tbdesp.getColumnModel().getColumn(0).setMinWidth(100);
+        tbins.getColumnModel().getColumn(0).setWidth(100);
+        tbins.getColumnModel().getColumn(0).setMaxWidth(100);
+        tbins.getColumnModel().getColumn(0).setMinWidth(100);
         
-        tbdesp.getColumnModel().getColumn(1).setWidth(200);
-        tbdesp.getColumnModel().getColumn(1).setMaxWidth(200);
-        tbdesp.getColumnModel().getColumn(1).setMinWidth(200);
+        tbins.getColumnModel().getColumn(1).setWidth(200);
+        tbins.getColumnModel().getColumn(1).setMaxWidth(200);
+        tbins.getColumnModel().getColumn(1).setMinWidth(200);
         
-        tbdesp.getColumnModel().getColumn(0).setWidth(100);
-        tbdesp.getColumnModel().getColumn(0).setMaxWidth(100);
-        tbdesp.getColumnModel().getColumn(0).setMinWidth(100);
+        tbins.getColumnModel().getColumn(0).setWidth(100);
+        tbins.getColumnModel().getColumn(0).setMaxWidth(100);
+        tbins.getColumnModel().getColumn(0).setMinWidth(100);
         
     }
     
@@ -96,7 +94,7 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
-        tbdesp = new javax.swing.JTable();
+        tbins = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -108,17 +106,17 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione los desperfectos del vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
-        tbdesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tbins.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         //Deshabilitar edicion de tabla
-        tbdesp = new javax.swing.JTable(){
+        tbins = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Disallow the editing of any cell
             }
         };
         //cambiar color de fila
-        tbdesp.setSelectionBackground(Color.LIGHT_GRAY);
-        tbdesp.setSelectionForeground(Color.blue);
-        tbdesp.setModel(new javax.swing.table.DefaultTableModel(
+        tbins.setSelectionBackground(Color.LIGHT_GRAY);
+        tbins.setSelectionForeground(Color.blue);
+        tbins.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -129,15 +127,14 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbdesp.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbdesp.getTableHeader().setResizingAllowed(false);
-        tbdesp.getTableHeader().setReorderingAllowed(false);
-        tbdesp.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbins.getTableHeader().setResizingAllowed(false);
+        tbins.getTableHeader().setReorderingAllowed(false);
+        tbins.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbdespMousePressed(evt);
+                tbinsMousePressed(evt);
             }
         });
-        jsp.setViewportView(tbdesp);
+        jsp.setViewportView(tbins);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -176,63 +173,44 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void tbdespMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdespMousePressed
-        SpinnerNumberModel numerito = new SpinnerNumberModel(1, 0, 10, 1);
-        JSpinner spinner = new JSpinner(numerito);
-        int option = JOptionPane.showOptionDialog(null, spinner, "Seleccione o Ingrese Cantidad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (option == JOptionPane.CANCEL_OPTION) {
-    // user hit cancel
-        } else if (option == JOptionPane.OK_OPTION) {
-            try {
+    private void tbinsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbinsMousePressed
+        try {
             DefaultTableModel tabladet = (DefaultTableModel) diagnostico.tbdiag.getModel();
-            String[] dato = new String[5];
-            int fila = SeleccionDesperfecto.tbdesp.getSelectedRow();
+            String[] dato = new String[4];
+            int fila = SeleccionDesperfecto.tbins.getSelectedRow();
             if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "No ha seleccionado ningún registro");
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             } else {
-                String cod = SeleccionDesperfecto.tbdesp.getValueAt(fila, 0).toString();
-                String desc = SeleccionDesperfecto.tbdesp.getValueAt(fila, 1).toString();
-                String preunit = SeleccionDesperfecto.tbdesp.getValueAt(fila, 2).toString();
+                String cod = SeleccionDesperfecto.tbins.getValueAt(fila, 0).toString();
+                String desc = SeleccionDesperfecto.tbins.getValueAt(fila, 1).toString();
+                String precio = SeleccionDesperfecto.tbins.getValueAt(fila, 2).toString();
+                String Estado = "En Taller";
                 int c = 0;
                 int j = 0;
-                //SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
-                //JSpinner spinner = new JSpinner(sModel);
-                String cant = numerito.getValue().toString();
-                //validar que no sea menor que 0 o sea -1 etc menos letras... o cambiar tema aca
-                if ((cant.equals("0"))) {
-                    JOptionPane.showMessageDialog(this, "Debe ingresar un valor mayor que 0");
-                } else {
-                    int canting = Integer.parseInt(cant);
-                        if (canting > 0) {
-                            for (int i = 0; i < diagnostico.tbdiag.getRowCount(); i++) {
-                                Object com = diagnostico.tbdiag.getValueAt(i, 0);
-                                if (cod.equals(com)) {
-                                    j = i;
-                                    diagnostico.tbdiag.setValueAt(canting, i, 2);
-                                    c = c + 1;
-                                    calcula.calcularRep();
-                                }
-                                this.dispose();
-                            }
+                    for (int i = 0; i < diagnostico.tbdiag.getRowCount(); i++) {
+                        Object com = diagnostico.tbdiag.getValueAt(i, 0);
+                        if (cod.equals(com)) {
+                            j = i;
+                            diagnostico.tbdiag.setValueAt(Estado, i, 3);
+                            c = c + 1;
+                           // calcula.calcularRep();
                         }
-                        if (c == 0) {
-                            dato[0] = cod;
-                            dato[1] = desc;
-                            dato[2] = cant;
-                            dato[3] = preunit;
-//                            dato[4] = presubtotal;
-//                            dato[5] = Estado;
-                            tabladet.addRow(dato);
-                            diagnostico.tbdiag.setModel(tabladet);
-                            calcula.calcularRep();
-                            this.dispose();
-                        }
+                        this.setVisible(false);
+                    }
+                if (c == 0) {
+                    dato[0] = cod;
+                    dato[1] = desc;
+                    dato[2] = precio;
+                    dato[3] = Estado;
+                    tabladet.addRow(dato);
+                    ComprobanteVta.tbvprod.setModel(tabladet);
+                   // calcula.calcularRep();
+                    this.setVisible(false);
                 }
             }
         } catch (Exception e) {
         }
-        }
-    }//GEN-LAST:event_tbdespMousePressed
+    }//GEN-LAST:event_tbinsMousePressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -284,6 +262,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jsp;
-    public static javax.swing.JTable tbdesp;
+    public static javax.swing.JTable tbins;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }

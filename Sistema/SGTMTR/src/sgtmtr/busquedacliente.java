@@ -17,8 +17,7 @@ public class busquedacliente extends javax.swing.JInternalFrame {
      */
     public busquedacliente() {
         initComponents();
-        this.setTitle("Seleccione al dueño del vehículo");
-        this.setLocation(280,200);
+        this.setTitle("Clientes");
     }
 
     /**
@@ -75,7 +74,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbclienntes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbclienntes.getTableHeader().setResizingAllowed(false);
         tbclienntes.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbclienntes);

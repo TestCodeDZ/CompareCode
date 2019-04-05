@@ -5,7 +5,6 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.awt.Color;
@@ -21,28 +20,27 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class ClientesSistema extends javax.swing.JInternalFrame {
-
     ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form ClientesSistema
      */
-    javax.swing.ImageIcon icono = new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Aprobado.png"));
-    javax.swing.ImageIcon iconoNo = new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"));
-
+    javax.swing.ImageIcon icono= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Aprobado.png"));
+    javax.swing.ImageIcon iconoNo= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"));
+    
     public ClientesSistema() {
         initComponents();
-        this.setLocation(280, 15);
+        this.setLocation(150,15 );
         setTitle("Mantenedor de Clientes");
         mostrardatos("");
         anchocolumnas();
         bloquear();
     }
-
-    void mostrardatos(String valor) {
+    
+     void mostrardatos(String valor) {
         DefaultTableModel modelo = new DefaultTableModel();
-        String rut = txtrut.getText();
-        String dv = txtdv.getText();
-        String union = rut + "-" + dv;
+        String rut=txtrut.getText();
+        String dv=txtdv.getText();
+        String union=rut+"-"+dv;
         modelo.addColumn("RUT");
         modelo.addColumn("Nombres");
         modelo.addColumn("Apellidos");
@@ -59,8 +57,8 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
 
         String[] datos = new String[6];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -75,8 +73,6 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
             //tbclientes.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
 
@@ -86,7 +82,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         tbclientes.getColumnModel().getColumn(0).setWidth(100);
         tbclientes.getColumnModel().getColumn(0).setMaxWidth(100);
         tbclientes.getColumnModel().getColumn(0).setMinWidth(100);
-
+        
         tbclientes.getColumnModel().getColumn(1).setWidth(100);
         tbclientes.getColumnModel().getColumn(1).setMaxWidth(100);
         tbclientes.getColumnModel().getColumn(1).setMinWidth(100);
@@ -109,51 +105,47 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }
 
     private String validarVacios() {
-
-        String errores = "";
-
-        if (txtrut.getText().equals("")) {
-            errores += "Por favor digite el RUT \n";
+        
+        String errores="";
+        
+        if(txtrut.getText().equals("")){
+            errores+="Por favor digite el RUT \n";
         }
-        if (txtdv.getText().equals("")) {
-            errores += "Por favor genere el dígito verificador \n";
+        if(txtdv.getText().equals("")){
+            errores+="Por favor genere el dígito verificador \n";
         }
-        if (txtapellidos.getText().trim().isEmpty()) {
-            errores += "El campo nombre está vacio \n";
+        if(txtapellidos.getText().trim().isEmpty()){
+            errores+="El campo nombre está vacio \n";
         }
-        if (txtnombres.getText().trim().isEmpty()) {
-            errores += "Por favor escriba el nombre \n";
+        if(txtnombres.getText().trim().isEmpty()){
+            errores+="Por favor escriba el nombre \n";
         }
-        if (txtapellidos.getText().trim().isEmpty()) {
-            errores += "Por favor escriba el apellido \n";
+        if(txtapellidos.getText().trim().isEmpty()){
+            errores+="Por favor escriba el apellido \n";
         }
-        if (txtfono.getText().trim().isEmpty()) {
-            errores += "Escriba el número de contacto \n";
+        if(txtfono.getText().trim().isEmpty()){
+            errores+="Escriba el número de contacto \n";
         }
-        if (txtdireccion.getText().trim().isEmpty()) {
-            errores += "Por favor escriba la dirección \n";
+        if(txtdireccion.getText().trim().isEmpty()){
+            errores+="Por favor escriba la dirección \n";
         }
-        if (txtemail.getText().trim().isEmpty()) {
-            errores += "Por favor escriba el correo electrónico \n";
+        if(txtemail.getText().trim().isEmpty()){
+            errores+="Por favor escriba el correo electrónico \n";
         }
-        if (!ValidarCaracteres.emailCorrecto(txtemail.getText())) {
-            errores += "El email no tiene el formato correcto\n";
-        }
-        return errores;
+        return errores;       
     }
-
-    private String validarRUTVacio() {
-        String errores = "";
-        if (txtrut.getText().equals("")) {
-            errores += "Por favor digite el RUT \n";
+    
+      private String validarRUTVacio() {
+        String errores="";
+        if(txtrut.getText().equals("")){
+            errores+="Por favor digite el RUT \n";
         }
-        if (txtdv.getText().equals("")) {
-            errores += "Por favor genere el dígito verificador \n";
+        if(txtdv.getText().equals("")){
+            errores+="Por favor genere el dígito verificador \n";
         }
-        return errores;
+        return errores;       
     }
-
-    void desbloquear() {
+       void desbloquear(){
         txtrut.setEnabled(true);
         txtnombres.setEnabled(true);
         txtapellidos.setEnabled(true);
@@ -167,8 +159,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         btlimpiar.setEnabled(true);
         txtrut.requestFocus();
     }
-
-    void bloquear() {
+      void bloquear(){
         txtrut.setEnabled(false);
         txtnombres.setEnabled(false);
         txtapellidos.setEnabled(false);
@@ -182,10 +173,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         btlimpiar.setEnabled(false);
         txtrut.requestFocus();
     }
-    private void corterut() {
-        String rut = txtrut.getText().substring(0, 8);
-        String dv = txtdv.getText().substring(9, 10);
-    }
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -501,14 +489,8 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbclientes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbclientes.getTableHeader().setResizingAllowed(false);
         tbclientes.getTableHeader().setReorderingAllowed(false);
-        tbclientes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbclientesMouseClicked(evt);
-            }
-        });
         jsp.setViewportView(tbclientes);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -519,7 +501,7 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -528,22 +510,21 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap(18, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(18, Short.MAX_VALUE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -568,45 +549,51 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
 
     private void txtrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtrutFocusLost
         String codigo;
-        int multiplo = 2;
-        int cont = 0;
-        for (int x = 0; x < txtrut.getText().length(); x++) {
-            cont = cont + (Integer.parseInt(txtrut.getText().substring(txtrut.getText().length() - x - 1, txtrut.getText().length() - x)) * multiplo);
+        int multiplo=2;
+        int cont=0;
+        for (int x=0;x<txtrut.getText().length();x++){
+            cont=cont+(Integer.parseInt(txtrut.getText().substring(txtrut.getText().length()-x-1, txtrut.getText().length()-x))*multiplo);
             multiplo++;
-            if (multiplo == 8) {
-                multiplo = 2;
+            if(multiplo==8){
+                multiplo=2;
             }
 
         }
-        cont = 11 - (cont % 11);
-        if (cont <= 9) {
-            codigo = "" + cont;
-        } else if (cont == 11) {
-            codigo = "0";
-        } else {
-            codigo = "K";
+        cont=11-(cont%11);
+        if(cont<=9){
+            codigo=""+cont;
+        }else if(cont==11){
+            codigo="0";
+        }else{
+            codigo="K";
         }
-        if (codigo != null) {
+        if(codigo!=null){
             txtdv.setText(codigo);
         }
-        if (txtrut.getText().length() >= 7) {
+        if(txtrut.getText().length()>=7){
             lblimg.setIcon(icono);
-        } else {
+        }else{
             lblimg.setIcon(iconoNo);
             JOptionPane.showMessageDialog(null, "El RUT ingresado no contiene los caracteres necesarios para ser validado");
             txtrut.setText("");
             txtdv.setText("");
         }
+        
+        //int numrut;
+       // numrut=Integer.parseInt(txtrut.getText());
+        //if((numrut==00000000) && (numrut<01000000)){
+        //JOptionPane.showMessageDialog(null, "El RUT ingresado no puede ser validado");
+        //}
     }//GEN-LAST:event_txtrutFocusLost
 
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
         validarLetras.soloNumeros(evt);
-        if (txtrut.getText().length() >= 8) {
+        if(txtrut.getText().length()>=8){
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
         }
     }//GEN-LAST:event_txtrutKeyTyped
-    void limpiar() {
+    void limpiar(){
         txtrut.setText("");
         txtdv.setText("");
         txtnombres.setText("");
@@ -616,168 +603,171 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
         txtemail.setText("");
     }
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            try {
-                String rut = txtrut.getText();
-                String dv = txtdv.getText();
-                String union = rut + "-" + dv;
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+        String errores=validarVacios();
+        if(errores.equals("")){
+             try {
+                    String rut=txtrut.getText();
+                    String dv=txtdv.getText();
+                    String union=rut+"-"+dv;
+            //Cargar driver de conexión
+                Class.forName("com.mysql.jdbc.Driver");
+                //Crear conexión
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
                 //Crear consulta
-                Statement st = conexion.createStatement();
+                Statement st = con.createStatement();
                 String sql = "INSERT INTO clientes (RUT,Nombres,Apellidos,Contacto,Direccion,Correo)"
                         + "VALUES('" + union + "','" + txtnombres.getText() + "','" + txtapellidos.getText() + "',"
                         + "'" + txtfono.getText() + "','" + txtdireccion.getText() + "',"
                         + "'" + txtemail.getText() + "')";
                 //Ejecutar la consulta
                 st.executeUpdate(sql);
-                if (String.valueOf(txtrut.getText()).compareTo("") == 0
-                        && String.valueOf(txtemail.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Cliente Ingresado","Ingreso", JOptionPane.INFORMATION_MESSAGE);
-                    txtrut.requestFocus();
+                //Cerrar conexion
+                con.close();
+                    if (String.valueOf(txtrut.getText()).compareTo("") == 0
+                    && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+                    validarVacios(); 
+                    }else{
+                    JOptionPane.showMessageDialog(this, "Cliente Ingresado");
                     mostrardatos("");
                     //Limpiar
-                    limpiar();
+                    limpiar(); 
                     anchocolumnas();
-                }
+                    }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El RUT del cliente ya existe","RUT existente", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-            }
-        } else {
+                JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
+            }  
+        }else{
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }    
     }//GEN-LAST:event_btingresarActionPerformed
-
+    
     private void txtemailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemailFocusLost
-
+       
     }//GEN-LAST:event_txtemailFocusLost
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        if (Login.tipoUsuario == 2) {
+        if (Login.tipoUsuario==2) {
             btborrar.setVisible(false);
-        }
+        }  
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
-        String error = validarRUTVacio();
-        if (error.equals("")) {
-            // Buscar registro en la base de datos
-            try {
-                String rut = txtrut.getText();
-                String dv = txtdv.getText();
-                String union = rut + "-" + dv;
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = sql = "SELECT * FROM clientes WHERE RUT='" + union + "'";
-                //Ejecutar la consulta
-                ResultSet rs = st.executeQuery(sql);
-                mostrardatos(sql);
-                if (rs.next()) {
-                    //existe
-                    txtnombres.setText(rs.getObject("Nombres").toString());
-                    txtapellidos.setText(rs.getObject("Apellidos").toString());
-                    txtfono.setText(rs.getObject("Contacto").toString());
-                    txtdireccion.setText(rs.getObject("Direccion").toString());
-                    txtemail.setText(rs.getObject("Correo").toString());
-                    btborrar.setEnabled(true);
-                    btmodificar.setEnabled(true);
-                    txtrut.setEnabled(false);
-                } else {
-                    //no existe
-                    if (String.valueOf(txtrut.getText()).compareTo("") == 0) {
-                        validarVacios();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "El cliente no existe","Inexistente", JOptionPane.ERROR_MESSAGE);
-                        btborrar.setEnabled(false);
-                        btmodificar.setEnabled(false);
-                        txtrut.setEnabled(true);
-                        txtrut.requestFocus();
-                        limpiar();
-                        anchocolumnas();
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String error=validarRUTVacio();
+        if(error.equals("")){
+        // Buscar registro en la base de datos
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = sql = "SELECT * FROM clientes WHERE RUT='" + union + "'";
+            //Ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql);
+            mostrardatos(sql);
+            if (rs.next()) {
+                //existe
+                txtnombres.setText(rs.getObject("Nombres").toString());
+                txtapellidos.setText(rs.getObject("Apellidos").toString());
+                txtfono.setText(rs.getObject("Contacto").toString());
+                txtdireccion.setText(rs.getObject("Direccion").toString());
+                txtemail.setText(rs.getObject("Correo").toString());
+                btborrar.setEnabled(true);
+                btmodificar.setEnabled(true);
+                txtrut.setEnabled(false);
+            } else {
+                //no existe
+                if (String.valueOf(txtrut.getText()).compareTo("") == 0) {
+                    validarVacios();
+                }else {
+                JOptionPane.showMessageDialog(this, "El cliente no existe");
+                btborrar.setEnabled(false);
+                btmodificar.setEnabled(false);
+                txtrut.setEnabled(true);
+                txtrut.requestFocus();
+                limpiar();
             }
-
-        } else {
+            }
+            //Cerrar conexion
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
+        anchocolumnas();
+        }else{
             JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            try {
-                String rut = txtrut.getText();
-                String dv = txtdv.getText();
-                String union = rut + "-" + dv;
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE clientes SET Nombres='" + txtnombres.getText() + "',Apellidos='" + txtapellidos.getText()
-                        + "',Contacto='" + txtfono.getText() + "',Direccion='" + txtdireccion.getText()
-                        + "',Correo='" + txtemail.getText()
-                        + "' WHERE RUT='" + union + "'");
-
-                pst.executeUpdate();
-                if (String.valueOf(txtrut.getText()).compareTo("") == 0
-                        && String.valueOf(txtemail.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Datos del cliente actualizados", "Datos Cliente ", JOptionPane.INFORMATION_MESSAGE);
-                    btingresar.setEnabled(true);
-                    //limpiar textfields
-                    limpiar();
-                    mostrardatos("");
-                    anchocolumnas();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El RUT del cliente ya existe","RUT existente", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String errores=validarVacios();
+        if(errores.equals("")){
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            if (String.valueOf(txtrut.getText()).compareTo("") == 0
+                    && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Clientes Actualizado");
             }
-        } else {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE clientes SET Nombres='" + txtnombres.getText() + "',Apellidos='" + txtapellidos.getText()
+                    + "',Contacto='" + txtfono.getText() + "',Direccion='" + txtdireccion.getText()
+                    + "',Correo='" + txtemail.getText()
+                    + "' WHERE RUT='" + union + "'");
+            
+            pst.executeUpdate();
+            //cerrar conexion
+            con.close();
+            btingresar.setEnabled(true);
+            //limpiar textfields
+            limpiar();
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
+        }
+            anchocolumnas();
+        }else{
             JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btmodificarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-        String error = validarRUTVacio();
-        if (error.equals("")) {
-            try {
-                String rut = txtrut.getText();
-                String dv = txtdv.getText();
-                String union = rut + "-" + dv;
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM clientes WHERE RUT='" + union + "'");
-                pst.executeUpdate();
-                if (String.valueOf(txtrut.getText()).compareTo("") == 0
-                        && String.valueOf(txtemail.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Cliente Eliminado del sistema","Eliminación", JOptionPane.INFORMATION_MESSAGE);
-                    btmodificar.setEnabled(false);
-                    btborrar.setEnabled(false);
-                    anchocolumnas();
-                    btingresar.setEnabled(true);
-                    limpiar();
-                    mostrardatos("");
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String error=validarRUTVacio();
+        if(error.equals("")){
+        try {
+            String rut=txtrut.getText();
+            String dv=txtdv.getText();
+            String union=rut+"-"+dv;
+            if (String.valueOf(txtrut.getText()).compareTo("") == 0
+            && String.valueOf(txtemail.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Cliente Eliminado");
+            btmodificar.setEnabled(false);
+            btborrar.setEnabled(false);
             }
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM clientes WHERE RUT='" + union + "'");
+            pst.executeUpdate();
+            limpiar();
+            con.close();
             
-        } else {
-            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
+        anchocolumnas();
+        btingresar.setEnabled(true);
+        }else{
+            JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }     
     }//GEN-LAST:event_btborrarActionPerformed
 
     private void txtnombresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyPressed
@@ -823,10 +813,6 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
             Toolkit.getDefaultToolkit().beep();
         }
     }//GEN-LAST:event_txtdireccionKeyTyped
-
-    private void tbclientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbclientesMouseClicked
-       
-    }//GEN-LAST:event_tbclientesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;

@@ -5,8 +5,7 @@
  */
 package sgtmtr;
 
-
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,8 +35,7 @@ public class SeleccionaCantidad extends javax.swing.JDialog {
     String comparar(String cod) {
         String option = "";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM insumos WHERE Codigo='" + cod + "'");
             while (rs.next()) {
                 option = rs.getString(4);
@@ -45,8 +43,6 @@ public class SeleccionaCantidad extends javax.swing.JDialog {
 
         } catch (SQLException ex) {
             Logger.getLogger(SeleccionProducto.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
         return option;
 
@@ -242,4 +238,6 @@ public class SeleccionaCantidad extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner numerito;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }

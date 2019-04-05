@@ -37,18 +37,18 @@ public class start extends javax.swing.JFrame implements Runnable {
         jLabel3.setText("Cargando...");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 170, -1, -1));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/bg_landing original.jpg"))); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 620));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/bg_landing.jpg"))); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     public void run() {
         try {
-
+            
             this.setVisible(true);
             t.sleep(6500);
-            this.dispose();
+           this.dispose();
             Principal s = new Principal();
             s.setLocationRelativeTo(null);
             s.setVisible(true);
