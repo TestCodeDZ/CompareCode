@@ -28,6 +28,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 
 public class Principal extends javax.swing.JFrame{
+    UsuariosSistema us = new UsuariosSistema(); //crear el nuevo formulario
     //calcular fecha
     public static String fechaActual() {
         Date fecha = new Date();
@@ -143,19 +144,25 @@ public class Principal extends javax.swing.JFrame{
         lbfecha = new javax.swing.JLabel();
         lblhora = new javax.swing.JLabel();
         clockDigital1 = new elaprendiz.gui.varios.ClockDigital();
-        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
+        paneldueño = new elaprendiz.gui.panel.PanelTranslucido();
         btnusuarios = new javax.swing.JButton();
         btninsumos = new javax.swing.JButton();
         btnbd = new javax.swing.JButton();
+        btncvi = new javax.swing.JButton();
+        lbltipo = new javax.swing.JLabel();
+        paneljefe = new elaprendiz.gui.panel.PanelTranslucido();
         btnclientes = new javax.swing.JButton();
         btnmarcas = new javax.swing.JButton();
         btnvehiculos = new javax.swing.JButton();
         btndesperfectos = new javax.swing.JButton();
+        btnusuarios1 = new javax.swing.JButton();
+        panelmecanico = new elaprendiz.gui.panel.PanelTranslucido();
         btndiagnostico = new javax.swing.JButton();
         btnreparaciones = new javax.swing.JButton();
+        panelsecretaria = new elaprendiz.gui.panel.PanelTranslucido();
         btnvtains = new javax.swing.JButton();
-        btncvi = new javax.swing.JButton();
-        lbltipo = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
@@ -263,6 +270,47 @@ public class Principal extends javax.swing.JFrame{
             }
         });
 
+        btncvi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btncvi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
+        btncvi.setText("Consulta de Ventas");
+        btncvi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncviActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout paneldueñoLayout = new javax.swing.GroupLayout(paneldueño);
+        paneldueño.setLayout(paneldueñoLayout);
+        paneldueñoLayout.setHorizontalGroup(
+            paneldueñoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneldueñoLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(paneldueñoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btncvi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnbd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btninsumos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnusuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+        paneldueñoLayout.setVerticalGroup(
+            paneldueñoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneldueñoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnusuarios)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btninsumos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnbd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btncvi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lbltipo.setBackground(new java.awt.Color(0, 153, 153));
+        lbltipo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbltipo.setForeground(new java.awt.Color(0, 102, 102));
+        lbltipo.setText("Tipo:");
+
         btnclientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
         btnclientes.setText("Clientes");
@@ -299,6 +347,46 @@ public class Principal extends javax.swing.JFrame{
             }
         });
 
+        btnusuarios1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnusuarios1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/agente.png"))); // NOI18N
+        btnusuarios1.setText("Usuarios");
+        btnusuarios1.setOpaque(false);
+        btnusuarios1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnusuarios1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout paneljefeLayout = new javax.swing.GroupLayout(paneljefe);
+        paneljefe.setLayout(paneljefeLayout);
+        paneljefeLayout.setHorizontalGroup(
+            paneljefeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneljefeLayout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addGroup(paneljefeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnusuarios1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btndesperfectos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnvehiculos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnmarcas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnclientes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
+        );
+        paneljefeLayout.setVerticalGroup(
+            paneljefeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneljefeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnusuarios1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnclientes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnmarcas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnvehiculos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btndesperfectos)
+                .addContainerGap())
+        );
+
         btndiagnostico.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btndiagnostico.setText("Diagnóstico");
         btndiagnostico.addActionListener(new java.awt.event.ActionListener() {
@@ -315,6 +403,27 @@ public class Principal extends javax.swing.JFrame{
             }
         });
 
+        javax.swing.GroupLayout panelmecanicoLayout = new javax.swing.GroupLayout(panelmecanico);
+        panelmecanico.setLayout(panelmecanicoLayout);
+        panelmecanicoLayout.setHorizontalGroup(
+            panelmecanicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelmecanicoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelmecanicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnreparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btndiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
+        );
+        panelmecanicoLayout.setVerticalGroup(
+            panelmecanicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelmecanicoLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(btndiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnreparaciones)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         btnvtains.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnvtains.setText("Venta de Insumos");
         btnvtains.addActionListener(new java.awt.event.ActionListener() {
@@ -323,91 +432,71 @@ public class Principal extends javax.swing.JFrame{
             }
         });
 
-        btncvi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btncvi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
-        btncvi.setText("Consulta de Ventas");
-        btncvi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btncviActionPerformed(evt);
-            }
-        });
+        jButton1.setText("Actualización Estado Reparación");
 
-        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
-        panelTranslucido1.setLayout(panelTranslucido1Layout);
-        panelTranslucido1Layout.setHorizontalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btncvi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnvtains, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnreparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btndiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btndesperfectos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnvehiculos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnmarcas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnclientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnbd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btninsumos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnusuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(39, Short.MAX_VALUE))
-        );
-        panelTranslucido1Layout.setVerticalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+        jButton2.setText("Pago de Reparaciones");
+
+        javax.swing.GroupLayout panelsecretariaLayout = new javax.swing.GroupLayout(panelsecretaria);
+        panelsecretaria.setLayout(panelsecretariaLayout);
+        panelsecretariaLayout.setHorizontalGroup(
+            panelsecretariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelsecretariaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnusuarios)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btninsumos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnbd)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnclientes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnmarcas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnvehiculos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btndesperfectos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btndiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnreparaciones)
-                .addGap(4, 4, 4)
-                .addComponent(btnvtains)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btncvi)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelsecretariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnvtains, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelsecretariaLayout.createSequentialGroup()
+                        .addGroup(panelsecretariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-
-        lbltipo.setBackground(new java.awt.Color(0, 153, 153));
-        lbltipo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbltipo.setForeground(new java.awt.Color(0, 102, 102));
-        lbltipo.setText("Tipo:");
+        panelsecretariaLayout.setVerticalGroup(
+            panelsecretariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelsecretariaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnvtains)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
         panelCurves1.setLayout(panelCurves1Layout);
         panelCurves1Layout.setHorizontalGroup(
             panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCurves1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblimg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblusuario)
-                .addGap(79, 79, 79)
-                .addComponent(lbltipo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblfecha)
-                .addGap(18, 18, 18)
-                .addComponent(lbfecha)
-                .addGap(37, 37, 37)
-                .addComponent(lblhora)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCurves1Layout.createSequentialGroup()
+                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelCurves1Layout.createSequentialGroup()
+                        .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(paneldueño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(paneljefe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 312, Short.MAX_VALUE))
+                    .addGroup(panelCurves1Layout.createSequentialGroup()
+                        .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelCurves1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblimg)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblusuario)
+                                .addGap(79, 79, 79)
+                                .addComponent(lbltipo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblfecha)
+                                .addGap(18, 18, 18)
+                                .addComponent(lbfecha))
+                            .addComponent(panelmecanico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addComponent(lblhora)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addGap(87, 87, 87))
             .addGroup(panelCurves1Layout.createSequentialGroup()
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 459, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(panelsecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCurves1Layout.setVerticalGroup(
             panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -425,8 +514,14 @@ public class Principal extends javax.swing.JFrame{
                         .addComponent(lbltipo))
                     .addComponent(lblimg))
                 .addGap(18, 18, 18)
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(paneldueño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(paneljefe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelmecanico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelsecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelImagenLayout = new javax.swing.GroupLayout(panelImagen);
@@ -806,9 +901,13 @@ public class Principal extends javax.swing.JFrame{
             mniconsultas.setVisible(false);
             mnireportes.setVisible(false);
             lblimg.setIcon(iconoDesconectado);
-            panelTranslucido1.setVisible(false);
+            paneldueño.setVisible(false);
             lblusuario.setText("Usuario Desconectado");
             lbltipo.setVisible(false);
+            paneldueño.setVisible(false);
+            paneljefe.setVisible(false);
+            panelmecanico.setVisible(false);
+            panelsecretaria.setVisible(false);
             JOptionPane.showMessageDialog(this, "Has cerrado correctamente la sesión");
             //System.exit(0);
             this.dispose();
@@ -906,7 +1005,11 @@ public class Principal extends javax.swing.JFrame{
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         //Privilegios del sistema
          if (Login.tipoUsuario==1){
-            btnclientes.setVisible(false);
+            paneldueño.setVisible(true);
+            paneljefe.setVisible(false);
+            panelmecanico.setVisible(false);
+            panelsecretaria.setVisible(false);
+            /*btnclientes.setVisible(false);
             btnmarcas.setVisible(false);
             btnvehiculos.setVisible(false);
             btndesperfectos.setVisible(false);
@@ -918,10 +1021,14 @@ public class Principal extends javax.swing.JFrame{
             mniproceso.setVisible(false);
             mniconsultas.setVisible(false);
             mnidiag.setVisible(false);
-            mnirep.setVisible(false);
+            mnirep.setVisible(false);*/
         }
         if (Login.tipoUsuario==2) {
-            btnbd.setVisible(false);
+            paneldueño.setVisible(false);
+            paneljefe.setVisible(true);
+            panelmecanico.setVisible(false);
+            panelsecretaria.setVisible(false);
+            /*btnbd.setVisible(false);
             mnireportes.setVisible(false);
             btndiagnostico.setVisible(false);
             btnreparaciones.setVisible(false);
@@ -934,11 +1041,15 @@ public class Principal extends javax.swing.JFrame{
             mniproceso.setVisible(false);
             mniconsultas.setVisible(false);
             mnidiag.setVisible(false);
-            mnirep.setVisible(false);
+            mnirep.setVisible(false);*/
         }       
         
         if (Login.tipoUsuario==3) {
-            btnclientes.setVisible(false);
+            paneldueño.setVisible(false);
+            paneljefe.setVisible(false);
+            panelmecanico.setVisible(true);
+            panelsecretaria.setVisible(false);
+            /*btnclientes.setVisible(false);
             btnmarcas.setVisible(false);
             btnvehiculos.setVisible(false);
             btndesperfectos.setVisible(false);
@@ -954,10 +1065,14 @@ public class Principal extends javax.swing.JFrame{
             mniproceso.setVisible(false);
             mniconsultas.setVisible(false);
             mnireportes.setVisible(false);
-            mnivi.setVisible(false);
+            mnivi.setVisible(false);*/
         }
         if (Login.tipoUsuario==4) {
-            btnusuarios.setVisible(false);
+            paneldueño.setVisible(false);
+            paneljefe.setVisible(false);
+            panelmecanico.setVisible(false);
+            panelsecretaria.setVisible(true);
+            /*btnusuarios.setVisible(false);
             btninsumos.setVisible(false);
             btnbd.setVisible(false);
             btnclientes.setVisible(false);
@@ -974,7 +1089,7 @@ public class Principal extends javax.swing.JFrame{
             mniconsultas.setVisible(false);
             mnidiag.setVisible(false);
             mnirep.setVisible(false);
-            mniconsultas.setVisible(false);
+            mniconsultas.setVisible(false);*/
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -1034,20 +1149,23 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_btnbdActionPerformed
 
     private void btnusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuariosActionPerformed
-        UsuariosSistema us = new UsuariosSistema(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (us.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Usuarios: No lo es, puede mostrarse");
+        if (!us.isVisible()){
+            boolean mostrar = true;
+            for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+                if (us.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                    System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                    mostrar = false;
+                } else {
+                    System.out.println("Usuarios: No lo es, puede mostrarse");
+                }
             }
+            if (mostrar) {
+                jdpescritorio.add(us);
+            }
+            us.setVisible(true);
+        } else {
+            System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
         }
-        if (mostrar) {
-            jdpescritorio.add(us);
-        }
-        us.show();
     }//GEN-LAST:event_btnusuariosActionPerformed
 
     private void btninsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsumosActionPerformed
@@ -1066,125 +1184,6 @@ public class Principal extends javax.swing.JFrame{
         }
         in.show();
     }//GEN-LAST:event_btninsumosActionPerformed
-
-    private void btnclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclientesActionPerformed
-        ClientesSistema cs = new ClientesSistema(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (cs.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Clientes: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Clientes: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(cs);
-        }
-        cs.show();
-    }//GEN-LAST:event_btnclientesActionPerformed
-
-    private void btnmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmarcasActionPerformed
-        MarcaVehiculo mv = new MarcaVehiculo(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (mv.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Marcas: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Marcas: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(mv);
-        }
-        mv.show();
-    }//GEN-LAST:event_btnmarcasActionPerformed
-
-    private void btnvehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvehiculosActionPerformed
-        vehiculos v = new vehiculos(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (v.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Vehículos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Vehículos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(v);
-        }
-        v.show();
-    }//GEN-LAST:event_btnvehiculosActionPerformed
-
-    private void btndesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesperfectosActionPerformed
-        Desperfectos d = new Desperfectos(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (d.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Desperfectos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(d);
-        }
-        d.show();
-    }//GEN-LAST:event_btndesperfectosActionPerformed
-
-    private void btndiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndiagnosticoActionPerformed
-        diagnostico diag = new diagnostico(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (diag.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Diagnóstico: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Diagnóstico: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(diag);
-        }
-        diag.show();
-    }//GEN-LAST:event_btndiagnosticoActionPerformed
-
-    private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
-        reparacion rep= new reparacion(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Reparación: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(rep);
-        }
-        rep.show();
-    }//GEN-LAST:event_btnreparacionesActionPerformed
-
-    private void btnvtainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvtainsActionPerformed
-        ComprobanteVta cvta = new ComprobanteVta(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (cvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Comprobante: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(cvta);
-        }
-        cvta.show();
-    }//GEN-LAST:event_btnvtainsActionPerformed
 
     private void btncviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncviActionPerformed
         ConsultaComprobantes ccvta = new ConsultaComprobantes(); //crear el nuevo formulario
@@ -1225,6 +1224,142 @@ public class Principal extends javax.swing.JFrame{
         Correito correo = new Correito(null, true);
         correo.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void btnvtainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvtainsActionPerformed
+        ComprobanteVta cvta = new ComprobanteVta(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (cvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Comprobante: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(cvta);
+        }
+        cvta.show();
+    }//GEN-LAST:event_btnvtainsActionPerformed
+
+    private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
+        reparacion rep= new reparacion(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Reparación: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(rep);
+        }
+        rep.show();
+    }//GEN-LAST:event_btnreparacionesActionPerformed
+
+    private void btndiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndiagnosticoActionPerformed
+        diagnostico diag = new diagnostico(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (diag.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Diagnóstico: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Diagnóstico: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(diag);
+        }
+        diag.show();
+    }//GEN-LAST:event_btndiagnosticoActionPerformed
+
+    private void btndesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesperfectosActionPerformed
+        Desperfectos d = new Desperfectos(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (d.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Desperfectos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(d);
+        }
+        d.show();
+    }//GEN-LAST:event_btndesperfectosActionPerformed
+
+    private void btnvehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvehiculosActionPerformed
+        vehiculos v = new vehiculos(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (v.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Vehículos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Vehículos: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(v);
+        }
+        v.show();
+    }//GEN-LAST:event_btnvehiculosActionPerformed
+
+    private void btnmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmarcasActionPerformed
+        MarcaVehiculo mv = new MarcaVehiculo(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (mv.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Marcas: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Marcas: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(mv);
+        }
+        mv.show();
+    }//GEN-LAST:event_btnmarcasActionPerformed
+
+    private void btnclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclientesActionPerformed
+        ClientesSistema cs = new ClientesSistema(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (cs.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Clientes: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Clientes: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(cs);
+        }
+        cs.show();
+    }//GEN-LAST:event_btnclientesActionPerformed
+
+    private void btnusuarios1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuarios1ActionPerformed
+        UsuariosSistema us = new UsuariosSistema(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (us.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Usuarios: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(us);
+        }
+        us.show();
+    }//GEN-LAST:event_btnusuarios1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1272,9 +1407,12 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JButton btnmarcas;
     private javax.swing.JButton btnreparaciones;
     private javax.swing.JButton btnusuarios;
+    private javax.swing.JButton btnusuarios1;
     private javax.swing.JButton btnvehiculos;
     private javax.swing.JButton btnvtains;
     private elaprendiz.gui.varios.ClockDigital clockDigital1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1322,6 +1460,9 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mnivi;
     private elaprendiz.gui.panel.PanelCurves panelCurves1;
     private elaprendiz.gui.panel.PanelImage panelImagen;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
+    private elaprendiz.gui.panel.PanelTranslucido paneldueño;
+    private elaprendiz.gui.panel.PanelTranslucido paneljefe;
+    private elaprendiz.gui.panel.PanelTranslucido panelmecanico;
+    private elaprendiz.gui.panel.PanelTranslucido panelsecretaria;
     // End of variables declaration//GEN-END:variables
 }   

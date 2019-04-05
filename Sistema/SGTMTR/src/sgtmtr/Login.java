@@ -31,6 +31,7 @@ public class Login extends javax.swing.JDialog {
     static String Nombres;
     static String Apellidos;
     static String Cargo;
+    static String Password;
 
     ValidarCaracteres validarLetras = new ValidarCaracteres();
 
@@ -320,6 +321,7 @@ public class Login extends javax.swing.JDialog {
                 Login.Nombres = rs.getString("Nombres");
                 Login.Apellidos = rs.getString("Apellidos");
                 Login.Cargo = rs.getString("TipoUser");
+                App.pwd = rs.getString("Password");
                 JOptionPane.showMessageDialog(null, "Bienvenido al sistema: " + Login.Nombres + " " + Login.Apellidos + ".");
                 dispose();
             } else {

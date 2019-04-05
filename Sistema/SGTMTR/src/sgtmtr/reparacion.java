@@ -145,7 +145,8 @@ public class reparacion extends javax.swing.JInternalFrame {
             String er = tbrep.getValueAt(filaseleccionada, 6).toString();
             txtnumdiag.setText(nd);
             txtcd.setText(cd);
-            cbestadorep.setSelectedItem(er);;
+            cbestadorep.setSelectedItem(er);
+            //if(){}
         }
 
     }
