@@ -46,7 +46,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jdcfed.getDateEditor().setEnabled(false);
         txtmecanico.setText("" + Login.nomUsuario);
         txtmecanico.setDisabledTextColor(Color.blue);
-        
         //jdatechooser vacio
         /*if(jdcfed.getDate()==null){
         }*/
@@ -111,7 +110,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
         }
     }
     
-    void controldiag(){
+    /*void controldiag(){
         for(int i=0;i<tbdiag.getRowCount();i++)
         {
         String InsertarSQL="INSERT INTO controldiag(ID_Diagnostico,Patente,RUTCliente,Mecanico,F_Ing_Diagnostico,F_Ent_Diag,Repuestos,Cotizacion,Estado_Diag VALUES (?,?,?,?,?,?,?,?,?)";
@@ -169,7 +168,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(diagnostico.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }}
+    }}*/
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -195,7 +195,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtrepuestos = new javax.swing.JTextArea();
         btejecutartbvehiculo = new javax.swing.JButton();
-        btejecutartb = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtnumrep = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -241,24 +240,29 @@ public class diagnostico extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Mecánico Asignado");
 
-        txtfecha.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtfecha.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtfecha.setEnabled(false);
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel14.setText("Patente");
 
-        txtpatentediag.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtpatentediag.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtpatentediag.setEnabled(false);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel15.setText("RUT Cliente");
 
-        txtrutcliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtrutcliente.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtrutcliente.setEnabled(false);
 
         jdcfed.setForeground(java.awt.Color.blue);
         jdcfed.setDateFormatString("dd-MM-yyyy");
         jdcfed.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jdcfed.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jdcfedFocusLost(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel16.setText("Repuestos");
@@ -272,13 +276,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         btejecutartbvehiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btejecutartbvehiculoActionPerformed(evt);
-            }
-        });
-
-        btejecutartb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/eject.png"))); // NOI18N
-        btejecutartb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btejecutartbActionPerformed(evt);
             }
         });
 
@@ -339,12 +336,12 @@ public class diagnostico extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel14))
                                 .addGap(80, 80, 80)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(txtpatentediag, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btejecutartbvehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtfecha))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
@@ -354,14 +351,11 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(txtrutcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btejecutartb, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtrutcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(txtnumrep, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btejecutarcotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +383,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btejecutartb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(0, 15, Short.MAX_VALUE))
@@ -498,17 +491,6 @@ public class diagnostico extends javax.swing.JInternalFrame {
         }*/
     }//GEN-LAST:event_cmbedItemStateChanged
 
-    private void btejecutartbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutartbActionPerformed
-        try {
-            bcliente bc = new bcliente();
-            Principal.jdpescritorio.add(bc);
-            bc.toFront();
-            bc.setVisible(true);
-
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btejecutartbActionPerformed
-
     private void btingresodiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresodiagActionPerformed
         if ((txtpatentediag.getText().equals("")) || (txtrutcliente.getText().equals(""))) {
             JOptionPane.showMessageDialog(this, "Ingrese patente, RUT o realice operacion");
@@ -521,7 +503,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             //descontarstock(capcod, capcan);
 
             //}
-            controldiag();
+            //controldiag();
             //detalleboleta();
             txtpatentediag.setText("");
             txtrutcliente.setText("");
@@ -544,10 +526,13 @@ public class diagnostico extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btejecutarcotizacionActionPerformed
 
+    private void jdcfedFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jdcfedFocusLost
+        
+    }//GEN-LAST:event_jdcfedFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btejecutarcotizacion;
-    private javax.swing.JButton btejecutartb;
     private javax.swing.JButton btejecutartbvehiculo;
     private javax.swing.JButton btingresodiag;
     private javax.swing.JComboBox cmbed;

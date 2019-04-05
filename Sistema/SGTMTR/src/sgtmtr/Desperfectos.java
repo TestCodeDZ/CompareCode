@@ -49,10 +49,9 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         String sql = "";
         if (valor.equals("")) {
             sql = "SELECT * FROM desperfectos";
-        } else {
+        }else{
             sql = "SELECT * FROM desperfectos WHERE ID='" + id + "'";
         }
-
         String[] datos = new String[3];
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");

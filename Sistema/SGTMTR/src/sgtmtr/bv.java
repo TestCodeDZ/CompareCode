@@ -175,6 +175,9 @@ void mostrarvehiculos(String valor)
 
                 diagnostico.txtpatentediag.setDisabledTextColor(Color.blue);
                 diagnostico.txtpatentediag.setText(patente);
+                diagnostico.txtrutcliente.setDisabledTextColor(Color.blue);
+                diagnostico.txtrutcliente.setText(dueño);
+                //campos de datos del cliente agregar (nombre, apellido, fono, correo).
                 this.dispose();
             }
         } catch (Exception e) {

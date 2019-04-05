@@ -10,22 +10,33 @@ import java.awt.Color;
 import java.awt.Font;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
  * @author ZuluCorp
  */
-public class ComprobanteVta extends javax.swing.JInternalFrame {
+public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnable{
 CalculaPrecioTB calcula = new CalculaPrecioTB();
     /**
      * Creates new form ComprobanteVta
      */
+    String hora, minutos, segundos, ampm;
+    Calendar calendario;
+    Thread h1;
+
     public ComprobanteVta() {
         initComponents();
         setTitle("Comprobante de Venta de Insumos");
@@ -43,7 +54,39 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
         txtvendedor.setDisabledTextColor(Color.blue);
         txtmtotal.setDisabledTextColor(Color.red);
         numeros();
+        h1 = new Thread(this);
+        h1.start();
     }
+
+    public void run() {
+        Thread ct = Thread.currentThread();
+        while (ct == h1) {
+            calcula();
+            LbHora.setText(hora + ":" + minutos + ":" + segundos + " " + ampm);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    public void calcula() {
+        Calendar calendario = new GregorianCalendar();
+        Date fechaHoraActual = new Date();
+
+        calendario.setTime(fechaHoraActual);
+        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+
+        if (ampm.equals("PM")) {
+            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
+            hora = h > 9 ? "" + h : "0" + h;
+        } else {
+            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
+        }
+        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
+        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
+    }
+
     void numeros() {
         String c = "";
         String SQL = "select max(NumComp) from detallecomprobante";
@@ -96,11 +139,12 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
         }
     }
     void comprobantevta() {
-        String InsertarSQL = "INSERT INTO comprobante(Numero,Cliente,Total,Fecha,Vendedor,Sucursal) VALUES (?,?,?,?,?,?)";
+        String InsertarSQL = "INSERT INTO comprobante(Numero,Cliente,Total,Fecha,Hora,Vendedor,Sucursal) VALUES (?,?,?,?,?,?,?)";
         String numcomp = txtnumcomp.getText();
         String rutcli = txtrut.getText();
         String total = txtmtotal.getText();
         String fecha = txtfecha.getText();
+        String hora = LbHora.getText();
         String vendedor = txtvendedor.getText();
         String sucursal = txtsucursal.getText();
         try {
@@ -109,8 +153,9 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
             pst.setString(2, rutcli);
             pst.setString(3, total);
             pst.setString(4, fecha);
-            pst.setString(5, vendedor);
-            pst.setString(6, sucursal);
+            pst.setString(5, hora);
+            pst.setString(6, vendedor);
+            pst.setString(7, sucursal);
             int n = pst.executeUpdate();
             if (n > 0) {
                 JOptionPane.showMessageDialog(null, "Se ha generado el comprobante de venta número "+numcomp);
@@ -186,18 +231,17 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtsucursal = new javax.swing.JTextField();
-        btcalculo = new javax.swing.JButton();
         btanular = new javax.swing.JButton();
         btvender = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         txtvendedor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txthora = new elaprendiz.gui.varios.ClockDigital();
+        LbHora = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Cliente", 0, 0, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("RUT");
@@ -423,7 +467,7 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtmtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                         .addComponent(jLabel12))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -431,16 +475,8 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
                 .addContainerGap())
         );
 
-        btcalculo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btcalculo.setText("Calcular Precios");
-        btcalculo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btcalculoActionPerformed(evt);
-            }
-        });
-
         btanular.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btanular.setText("Anular Venta");
+        btanular.setText("Eliminar Producto");
         btanular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btanularActionPerformed(evt);
@@ -464,7 +500,8 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Hora");
 
-        txthora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        LbHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        LbHora.setText("Relojito");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -490,13 +527,12 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
                                 .addComponent(txtvendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txthora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(LbHora))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btcalculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btanular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btvender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -506,16 +542,15 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txthora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel9)
-                        .addComponent(txtfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10)
-                        .addComponent(txtvendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtvendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(LbHora))
                 .addGap(14, 14, 14)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -524,9 +559,7 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(btcalculo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(43, 43, 43)
                         .addComponent(btanular)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btvender)
@@ -552,14 +585,6 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
         sp.setVisible(true);
     }//GEN-LAST:event_btbuscarActionPerformed
 
-    private void btcalculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcalculoActionPerformed
-        if (tbvprod.getRowCount() < 1) {
-            JOptionPane.showMessageDialog(this, "Ingrese algún producto");
-        } else {
-            calcula.calcular();
-        }
-    }//GEN-LAST:event_btcalculoActionPerformed
-
     private void btanularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btanularActionPerformed
         DefaultTableModel model = (DefaultTableModel) tbvprod.getModel();
         int fila = tbvprod.getSelectedRow();
@@ -583,6 +608,15 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
             }
             comprobantevta();
             detallecomprobante();
+            try {
+                conectar cc = new conectar();
+                JasperReport reportes = JasperCompileManager.compileReport("RepVtaIns.jrxml");
+                JasperPrint print = JasperFillManager.fillReport(reportes, null, cc.conexion());
+                JasperViewer.viewReport(print, false);
+                JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos,espere porfavor", "Estamos Generando el Reporte", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception e) {
+                System.out.printf(e.getMessage());
+            }
             txtrut.setText("");
             txtnombrecomp.setText("");
             txtfono.setText("");
@@ -602,9 +636,9 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LbHora;
     private javax.swing.JButton btanular;
     private javax.swing.JButton btbuscar;
-    private javax.swing.JButton btcalculo;
     private javax.swing.JButton btejecuta;
     private javax.swing.JButton btvender;
     private javax.swing.JLabel jLabel1;
@@ -627,7 +661,6 @@ CalculaPrecioTB calcula = new CalculaPrecioTB();
     public static javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtfecha;
     public static javax.swing.JTextField txtfono;
-    private elaprendiz.gui.varios.ClockDigital txthora;
     public static javax.swing.JTextField txtmtotal;
     public static javax.swing.JTextField txtnombrecomp;
     private javax.swing.JTextField txtnumcomp;

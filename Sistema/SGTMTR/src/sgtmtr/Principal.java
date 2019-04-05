@@ -6,6 +6,8 @@
 package sgtmtr;
 
 import claseConectar.conectar;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.DecimalFormat;
@@ -58,6 +60,9 @@ public class Principal extends javax.swing.JFrame{
         //maximizar pantalla por defecto al abrir el form
         this.setExtendedState(MAXIMIZED_BOTH);
         //this.setLocation(600,150);
+        //icono
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/business_logo.png")); 
+        setIconImage(icon);
          this.addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -113,8 +118,6 @@ public class Principal extends javax.swing.JFrame{
         this.mnibd.setVisible(false);
         this.mnicambiarpass.setVisible(false);
         this.mnicerrarsesion.setVisible(false);
-        lblimg.setIcon(iconoDesconectado);   
-        lblusuario.setText(" Usuario Desconectado ");
     }
 
     /**
@@ -147,11 +150,6 @@ public class Principal extends javax.swing.JFrame{
         mniusuarios = new javax.swing.JMenuItem();
         mniinsumos = new javax.swing.JMenuItem();
         mnibd = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        mnif1 = new javax.swing.JMenuItem();
-        mnif2 = new javax.swing.JMenuItem();
-        mnif3 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
         mniproceso = new javax.swing.JMenu();
         mnidatos = new javax.swing.JMenu();
         mniclientes = new javax.swing.JMenuItem();
@@ -165,6 +163,7 @@ public class Principal extends javax.swing.JFrame{
         mnirep = new javax.swing.JMenuItem();
         mnivi = new javax.swing.JMenuItem();
         mniconsultas = new javax.swing.JMenu();
+        mnicompvta = new javax.swing.JMenuItem();
         mnireportes = new javax.swing.JMenu();
         mniusers = new javax.swing.JMenuItem();
         mnirepclientes = new javax.swing.JMenuItem();
@@ -354,47 +353,6 @@ public class Principal extends javax.swing.JFrame{
 
         jMenuBar1.add(mnisistema);
 
-        jMenu1.setText("Fondo");
-        jMenu1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-
-        mnif1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnif1.setText("Fondo 1");
-        mnif1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnif1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnif1);
-
-        mnif2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnif2.setText("Fondo 2");
-        mnif2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnif2ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnif2);
-
-        mnif3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnif3.setText("Fondo 3");
-        mnif3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnif3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnif3);
-
-        jMenuItem7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jMenuItem7.setText("Fondo 4");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem7);
-
-        jMenuBar1.add(jMenu1);
-
         mniproceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/procesos.png"))); // NOI18N
         mniproceso.setText("Proceso");
         mniproceso.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -506,6 +464,15 @@ public class Principal extends javax.swing.JFrame{
         mniconsultas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mniconsultas.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         mniconsultas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        mnicompvta.setText("Comprobante de Ventas");
+        mnicompvta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnicompvtaActionPerformed(evt);
+            }
+        });
+        mniconsultas.add(mnicompvta);
+
         jMenuBar1.add(mniconsultas);
 
         mnireportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
@@ -642,6 +609,14 @@ public class Principal extends javax.swing.JFrame{
         int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la aplicación?","Cerrando programa",0,3);
         if(salir==JOptionPane.OK_OPTION)
         {
+            //deshabilitar menu, imagen y label de usuario
+            mnipersonal.setVisible(false);
+            mnisistema.setVisible(false);
+            mniproceso.setVisible(false);
+            mniconsultas.setVisible(false);
+            mnireportes.setVisible(false);
+            lblimg.setIcon(iconoDesconectado);
+            lblusuario.setText("Usuario Desconectado");
             JOptionPane.showMessageDialog(this, "Has salido del sistema");
             System.exit(0);
         }
@@ -687,11 +662,13 @@ public class Principal extends javax.swing.JFrame{
     private void mnirepdesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepdesperfectosActionPerformed
        try {
             conectar cc= new conectar();
-            
             JasperReport reportes=JasperCompileManager.compileReport("reportesdesp.jrxml");
             JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer.viewReport(print,false);
-            
+            JasperViewer view = new JasperViewer(print,false);
+            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
+            view.setTitle("Reporte de Desperfectos");
+            view.setExtendedState(this.MAXIMIZED_BOTH);
+            view.setVisible(true);
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
@@ -700,11 +677,13 @@ public class Principal extends javax.swing.JFrame{
     private void mnirepmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepmarcasActionPerformed
         try {
             conectar cc= new conectar();
-            
             JasperReport reportes=JasperCompileManager.compileReport("reportemarcas.jrxml");
             JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer.viewReport(print,false);
-            
+            JasperViewer view = new JasperViewer(print,false);
+            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
+            view.setTitle("Reporte de Marcas");
+            view.setExtendedState(this.MAXIMIZED_BOTH);
+            view.setVisible(true);
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
@@ -713,11 +692,13 @@ public class Principal extends javax.swing.JFrame{
     private void mniusersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusersActionPerformed
         try {
             conectar cc= new conectar();
-            
             JasperReport reportes=JasperCompileManager.compileReport("reporteempleados.jrxml");
             JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer.viewReport(print,false);
-            
+            JasperViewer view = new JasperViewer(print,false);
+            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
+            view.setTitle("Reporte de Usuarios del Sistema");
+            view.setExtendedState(this.MAXIMIZED_BOTH);
+            view.setVisible(true);
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
@@ -741,10 +722,14 @@ public class Principal extends javax.swing.JFrame{
             mnisistema.setVisible(false);
             mniconsultas.setVisible(false);
             mnireportes.setVisible(false);
+            mnivi.setVisible(false);
         }
         if (Login.tipoUsuario==4) {
             mnisistema.setVisible(false);
-            mniproceso.setVisible(false);
+            mnidatos.setVisible(false);
+            mniaverias.setVisible(false);
+            mnidiag.setVisible(false);
+            mnirep.setVisible(false);
             mniconsultas.setVisible(false);
         }
     }//GEN-LAST:event_formWindowOpened
@@ -760,8 +745,11 @@ public class Principal extends javax.swing.JFrame{
             conectar cc= new conectar();
             JasperReport reportes=JasperCompileManager.compileReport("reporteclientes.jrxml");
             JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer.viewReport(print,false);
-            
+            JasperViewer view = new JasperViewer(print,false);
+            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
+            view.setTitle("Reporte de Clientes");
+            view.setExtendedState(this.MAXIMIZED_BOTH);
+            view.setVisible(true);
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
@@ -780,36 +768,17 @@ public class Principal extends javax.swing.JFrame{
         in.show();
     }//GEN-LAST:event_mniinsumosActionPerformed
 
-    private void mnif1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif1ActionPerformed
-        /*fondo1.setVisible(true);
-        fondo2.setVisible(false);
-        fondo3.setVisible(false);
-        fondo4.setVisible(false);*/
-        SeleccionaInsumo si= new  SeleccionaInsumo();
-        jdpescritorio.add(si);
-        si.show();
-    }//GEN-LAST:event_mnif1ActionPerformed
-
-    private void mnif2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif2ActionPerformed
-        /*fondo1.setVisible(false);
-        fondo2.setVisible(true);
-        fondo3.setVisible(false);
-        fondo4.setVisible(false);*/
-    }//GEN-LAST:event_mnif2ActionPerformed
-
-    private void mnif3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnif3ActionPerformed
-        
-    }//GEN-LAST:event_mnif3ActionPerformed
-
     private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
         ComprobanteVta cvta= new  ComprobanteVta();
         jdpescritorio.add(cvta);
         cvta.show();
     }//GEN-LAST:event_mniviActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    private void mnicompvtaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicompvtaActionPerformed
+        ConsultaComprobantes Comp = new ConsultaComprobantes();
+        jdpescritorio.add(Comp);
+        Comp.show();
+    }//GEN-LAST:event_mnicompvtaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -848,7 +817,6 @@ public class Principal extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private elaprendiz.gui.varios.ClockDigital clockDigital1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -856,7 +824,6 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
@@ -871,14 +838,12 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mnicambiarpass;
     private javax.swing.JMenuItem mnicerrarsesion;
     private javax.swing.JMenuItem mniclientes;
+    private javax.swing.JMenuItem mnicompvta;
     private javax.swing.JMenu mniconsultas;
     private javax.swing.JMenuItem mnicpd;
     private javax.swing.JMenu mnidatos;
     private javax.swing.JMenuItem mnidesperfectos;
     private javax.swing.JMenuItem mnidiag;
-    private javax.swing.JMenuItem mnif1;
-    private javax.swing.JMenuItem mnif2;
-    private javax.swing.JMenuItem mnif3;
     private javax.swing.JMenuItem mniinsumos;
     private javax.swing.JMenuItem mnimarca;
     private javax.swing.JMenu mnipersonal;

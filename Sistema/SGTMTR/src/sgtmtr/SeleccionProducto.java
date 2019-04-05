@@ -94,19 +94,10 @@ public class SeleccionProducto extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mniagregar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
         tbprod = new javax.swing.JTable();
-
-        mniagregar.setText("Agregar");
-        mniagregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniagregarActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mniagregar);
+        btnenviar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -131,7 +122,6 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbprod.setComponentPopupMenu(jPopupMenu1);
         jsp.setViewportView(tbprod);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -151,6 +141,13 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        btnenviar.setText("Agregar");
+        btnenviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnenviarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,13 +156,19 @@ public class SeleccionProducto extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(163, 163, 163)
+                .addComponent(btnenviar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnenviar)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,7 +188,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
         return cant;
 
     }
-    private void mniagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniagregarActionPerformed
+    private void btnenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnenviarActionPerformed
         try {
             DefaultTableModel tabladet = (DefaultTableModel) ComprobanteVta.tbvprod.getModel();
             String[] dato = new String[5];
@@ -231,7 +234,7 @@ public class SeleccionProducto extends javax.swing.JDialog {
             }
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_mniagregarActionPerformed
+    }//GEN-LAST:event_btnenviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -276,10 +279,9 @@ public class SeleccionProducto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnenviar;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
-    private javax.swing.JMenuItem mniagregar;
     private javax.swing.JTable tbprod;
     // End of variables declaration//GEN-END:variables
     conectar cc= new conectar();
