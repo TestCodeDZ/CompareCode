@@ -5,7 +5,6 @@
  */
 package sgtmtr;
 
-import java.awt.Color;
 /**
  *
  * @author ZuluCorp
@@ -42,7 +41,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
         lblimg = new javax.swing.JLabel();
         btmt = new javax.swing.JButton();
         btnuevo = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         jPopupMenu1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -50,19 +48,8 @@ public class busquedacliente extends javax.swing.JInternalFrame {
         mnienviar.setText("Enviar Datos");
         jPopupMenu1.add(mnienviar);
 
-        setClosable(true);
-
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Formulario de Búsqueda de clientes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
-        //Deshabilitar edicion de tabla
-        tbclienntes = new javax.swing.JTable() {
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        //cambiar color de fila
-        tbclienntes.setSelectionBackground(Color.LIGHT_GRAY);
-        tbclienntes.setSelectionForeground(Color.blue);
         tbclienntes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -74,8 +61,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbclienntes.getTableHeader().setResizingAllowed(false);
-        tbclienntes.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbclienntes);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -141,8 +126,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,19 +134,13 @@ public class busquedacliente extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(232, 232, 232))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -173,7 +150,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btmt;
     private javax.swing.JButton btnuevo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

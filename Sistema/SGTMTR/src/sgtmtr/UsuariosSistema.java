@@ -10,7 +10,6 @@ package sgtmtr;
  * @author ZuluCorp
  */
 import claseConectar.conectar;
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,12 +19,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.*;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class UsuariosSistema extends javax.swing.JInternalFrame {
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form UsuariosSistema
      */
@@ -73,7 +71,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }
     void desbloquear(){
         txtnombres.setEnabled(true);
-        //txtapellidos.setEnabled(true);
+        txtapellidos.setEnabled(true);
         //ver combos index
         btbuscar.setEnabled(true);
         btingresar.setEnabled(true);
@@ -113,6 +111,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbusuarios.setModel(modelo);
+            tbusuarios.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
@@ -299,8 +298,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mnimod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -331,16 +328,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbusuarios = new javax.swing.JTable();
 
-        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        mnimod.setText("Modificar");
-        mnimod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnimodActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mnimod);
-
         setClosable(true);
+        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Usuario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
         jPanel1.setLayout(null);
@@ -381,11 +370,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jLabel7.setBounds(20, 280, 55, 17);
 
         txtid.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtid.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtidKeyTyped(evt);
-            }
-        });
         jPanel1.add(txtid);
         txtid.setBounds(160, 30, 60, 30);
 
@@ -393,11 +377,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         txtnombres.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtnombresFocusLost(evt);
-            }
-        });
-        txtnombres.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtnombresActionPerformed(evt);
             }
         });
         txtnombres.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -409,11 +388,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         txtnombres.setBounds(160, 70, 170, 30);
 
         txtapellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtapellidos.setEnabled(false);
         txtapellidos.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtapellidosFocusGained(evt);
-            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtapellidosFocusLost(evt);
             }
@@ -568,16 +543,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación de la tabla Usuarios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
-        tbusuarios.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        //Deshabilitar edicion de tabla
-        tbusuarios = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        //cambiar color de fila
-        tbusuarios.setSelectionBackground(Color.LIGHT_GRAY);
-        tbusuarios.setSelectionForeground(Color.blue);
+        tbusuarios.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbusuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -589,9 +555,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbusuarios.setComponentPopupMenu(jPopupMenu1);
-        tbusuarios.getTableHeader().setResizingAllowed(false);
-        tbusuarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbusuarios);
 
         jsp.add(jScrollPane1);
@@ -706,15 +669,13 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     //}
     
     private void txtapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusLost
-       if(txtapellidos.getText().length() < 3) {
+       if((txtnombres.getText().length() <= 2) || (txtapellidos.getText().length() <= 3)) {
            btgenerar.setEnabled(false);
-           JOptionPane.showMessageDialog(this, "¡El Apellido debe contener al menos 3 caracteres para generar nick!");
-           txtapellidos.requestFocus();
-       }
-       else
-       {
+           JOptionPane.showMessageDialog(this, "¡El nombre debe contener al menos 3 caracteres para generar nick!");
+        }else
+        if ((txtnombres.getText().length() >= 3) || (txtapellidos.getText().length() >= 4)){
             btgenerar.setEnabled(true);
-       }
+        }
     }//GEN-LAST:event_txtapellidosFocusLost
 
     private void btgenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btgenerarActionPerformed
@@ -722,14 +683,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btgenerarActionPerformed
 
     private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
-        validarLetras.soloLetras(evt);
-        if (txtnombres.getText().length() < 4){
-            txtapellidos.setEnabled(false);
-                   
-        }else{
-            txtapellidos.setEnabled(true);
-        }
-        
         if (txtnombres.getText().length() == 50) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -737,7 +690,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtnombresKeyTyped
 
     private void txtapellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtapellidosKeyTyped
-        validarLetras.soloLetras(evt);
         if (txtapellidos.getText().length() == 50) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -745,10 +697,12 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtapellidosKeyTyped
 
     private void txtnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnombresFocusLost
-        if(txtnombres.getText().length() < 4) {
+        if((txtnombres.getText().length() <= 2) || (txtapellidos.getText().length() <= 3)) {
            btgenerar.setEnabled(false);
-           JOptionPane.showMessageDialog(this, "¡El Nombre debe contener al menos 4 caracteres para generar nick!");
-           txtnombres.requestFocus();
+           JOptionPane.showMessageDialog(this, "¡El apellido debe contener al menos 4 caracteres para generar nick!");
+        }else
+        if ((txtnombres.getText().length() >= 3) || (txtapellidos.getText().length() >= 4)){
+            btgenerar.setEnabled(true);
         }
     }//GEN-LAST:event_txtnombresFocusLost
      
@@ -923,50 +877,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btmodificarActionPerformed
 
-    private void txtnombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombresActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtnombresActionPerformed
-
-    private void txtapellidosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusGained
-        // TODO add your handling code here:
-        if(txtnombres.getText().length() < 4) {
-           btgenerar.setEnabled(false);
-           txtnombres.requestFocus();
-        }   
-    }//GEN-LAST:event_txtapellidosFocusGained
-
-    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
-        //al momento de hacer click derecho aparecerá el menu modificar
-        //que se irá directamente con los valores de la BD a sus respectivos 
-        //textfields para hacer las respectivas modificaciones
-        int fila = tbusuarios.getSelectedRow();
-        txtid.setEnabled(false);
-        btingresar.setEnabled(false);
-
-        if (fila >= 0) {
-            txtid.setText(tbusuarios.getValueAt(fila, 0).toString());
-            txtnombres.setText(tbusuarios.getValueAt(fila, 1).toString());
-            txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());     
-            //cbtu.getSelectedItem(tbusuarios.getCellEditor(fila,3));    
-            txtusuario.setText(tbusuarios.getValueAt(fila, 4).toString());
-            //txtpass.setText(tbusuarios.getValueAt(fila, 5).toString());
-            //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());
-            btmodificar.setEnabled(true);
-            btborrar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_mnimodActionPerformed
-
-    private void txtidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
-        //limite de caracteres
-        if (txtid.getText().length() == 4) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }//GEN-LAST:event_txtidKeyTyped
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
     private javax.swing.JButton btbuscar;
@@ -987,11 +897,9 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.ScrollPane jsp;
-    private javax.swing.JMenuItem mnimod;
-    public static javax.swing.JTable tbusuarios;
+    private javax.swing.JTable tbusuarios;
     private javax.swing.JTextField txtapellidos;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnombres;

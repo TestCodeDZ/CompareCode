@@ -6,11 +6,7 @@
 package sgtmtr;
 
 import CapaDatos.Class_Conectar;
-import java.awt.Color;
-import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -31,7 +27,7 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author ZuluCorp
  */
 public class CPD extends javax.swing.JInternalFrame {
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form CPD
      */
@@ -179,6 +175,7 @@ public class CPD extends javax.swing.JInternalFrame {
         tbdesperfectos = new javax.swing.JTable();
 
         setClosable(true);
+        setIconifiable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cambio de Precios de Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
@@ -203,14 +200,6 @@ public class CPD extends javax.swing.JInternalFrame {
         });
 
         txtprecio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtprecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtprecioKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtprecioKeyTyped(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Precio");
@@ -275,18 +264,6 @@ public class CPD extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Vista de Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
-        jsp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        //Deshabilitar edicion de tabla
-        tbdesperfectos = new javax.swing.JTable() {
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        //cambiar color de fila
-        tbdesperfectos.setSelectionBackground(Color.LIGHT_GRAY);
-        tbdesperfectos.setSelectionForeground(Color.blue);
-        tbdesperfectos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbdesperfectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -298,8 +275,6 @@ public class CPD extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbdesperfectos.getTableHeader().setResizingAllowed(false);
-        tbdesperfectos.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbdesperfectos);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -379,19 +354,6 @@ public class CPD extends javax.swing.JInternalFrame {
             Cargartextfield();
         }
     }//GEN-LAST:event_cbdesperfectoItemStateChanged
-
-    private void txtprecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyPressed
-    
-    }//GEN-LAST:event_txtprecioKeyPressed
-
-    private void txtprecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyTyped
-        validarLetras.soloNumeros(evt);
-        //limite de caracteres
-        if (txtprecio.getText().length() == 7) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }//GEN-LAST:event_txtprecioKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

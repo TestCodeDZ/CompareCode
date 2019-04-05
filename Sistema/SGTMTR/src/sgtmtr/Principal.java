@@ -6,11 +6,6 @@
 package sgtmtr;
 
 import claseConectar.conectar;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +13,6 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 /**
@@ -26,12 +20,47 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author ZuluCorp
  */
 
-public class Principal extends javax.swing.JFrame{
-    //calcular fecha
-    public static String fechaActual() {
-        Date fecha = new Date();
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
-        return formatoFecha.format(fecha);
+public class Principal extends javax.swing.JFrame implements Runnable{
+    private String horas, minutos, segundos;
+private boolean Estado;
+Thread Hilo;
+
+    public void run(){
+        while (Estado ==true) {
+        Calendar fecha = new GregorianCalendar();
+        int h= fecha.get(Calendar.HOUR_OF_DAY);
+        int m = fecha.get(Calendar.MINUTE);
+        int s = fecha.get(Calendar.SECOND);
+
+        horas = Integer.toString(h);
+        minutos = Integer.toString(m);
+        segundos = Integer.toString(s);
+
+        lbhora.setText(horas+" : "+minutos+" : "+segundos);
+
+            try{
+                Thread.sleep(1000);
+            }catch (InterruptedException ex){
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    }
+
+    public void Iniciar(){
+        Hilo=new Thread(this);
+        Estado = true;
+        Hilo.start();
+
+    }
+
+    public void stop(){
+    Estado = false;
+    }
+    
+    public static String fechaActual(){ 
+    Date fecha=new Date();
+    SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/YYYY"); 
+    return formatoFecha.format(fecha);
     }
     
     /**
@@ -39,81 +68,17 @@ public class Principal extends javax.swing.JFrame{
      */
     javax.swing.ImageIcon iconoConectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"));
     javax.swing.ImageIcon iconoDesconectado= new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_offline.png"));
-    /*javax.swing.ImageIcon fondo1= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"));
-    javax.swing.ImageIcon fondo2= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/fondoapp.jpg"));
-    javax.swing.ImageIcon fondo3= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/status_offline.png"));
-    javax.swing.ImageIcon fondo4= new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-a3-coupe-wallpaper-1920x1080-1011076-002.jpg"));*/
     
     public Principal() {
         super("Sistema de Gestión de Taller Mecánico");
-        //Abrir ventana de validacion de usuarios
-        new Login(this, true).setVisible(true);
         initComponents();
-        clockDigital1.show();
+        Iniciar();
         lbfecha.setText(fechaActual());
         //centrar la pantalla
-        //setLocationRelativeTo(null);
-        //fondos
-        panelImagen.setVisible(true);
-        //fondo1.setVisible(false);
-        //this.setSize(1000, 768);
-        //maximizar pantalla por defecto al abrir el form
-        this.setExtendedState(MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
+        this.setSize(1000, 768);
         //this.setLocation(600,150);
-        //icono
-        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/business_logo.png")); 
-        setIconImage(icon);
-         this.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-               
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-              
-            int rpt=JOptionPane.showConfirmDialog(null,"¿Seguro que desea salir del sistema?","¡Advertencia!",JOptionPane.YES_NO_OPTION);
-            if(rpt==JOptionPane.YES_OPTION){
-            System.exit(0);
-            }
-             
-           
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-             
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-                }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-                
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-                
-            }
-
-        });
-        //Mostramos el nombre de Usuario
-        lblusuario.setText("Usuario Conectado: " + Login.nomUsuario);
-        //lbnombres.setText("Nombres: " + Login.Nombres);
-        // lbapellidos.setText("Apellidos: " + Login.Apellidos);
-        //lbtipouser.setText("Tipo de Usuario: " + Login.tipoUsuario);
-        /*btnusuarios.setOpaque(false);
-        .setContentAreaFilled(false);
-        btnusuarios.setBorderPainted(false);*/
     }
-
     private void deshabilitarmenu(){
         this.mniproceso.setVisible(false);
         this.mniconsultas.setVisible(false);
@@ -122,8 +87,9 @@ public class Principal extends javax.swing.JFrame{
         this.mnibd.setVisible(false);
         this.mnicambiarpass.setVisible(false);
         this.mnicerrarsesion.setVisible(false);
+        lblimg.setIcon(iconoDesconectado);   
+        lblusuario.setText(" Usuario Desconectado ");
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -137,57 +103,48 @@ public class Principal extends javax.swing.JFrame{
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JSeparator();
         jdpescritorio = new javax.swing.JDesktopPane();
-        panelImagen = new elaprendiz.gui.panel.PanelImage();
-        panelCurves1 = new elaprendiz.gui.panel.PanelCurves();
         lblimg = new javax.swing.JLabel();
         lblusuario = new javax.swing.JLabel();
+        lblhora = new javax.swing.JLabel();
         lblfecha = new javax.swing.JLabel();
         lbfecha = new javax.swing.JLabel();
-        lblhora = new javax.swing.JLabel();
-        clockDigital1 = new elaprendiz.gui.varios.ClockDigital();
-        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
-        btnusuarios = new javax.swing.JButton();
-        btninsumos = new javax.swing.JButton();
-        btnbd = new javax.swing.JButton();
-        btnclientes = new javax.swing.JButton();
-        btnmarcas = new javax.swing.JButton();
-        btnvehiculos = new javax.swing.JButton();
-        btndesperfectos = new javax.swing.JButton();
-        btndiagnostico = new javax.swing.JButton();
-        btnreparaciones = new javax.swing.JButton();
-        btnvtains = new javax.swing.JButton();
-        btncvi = new javax.swing.JButton();
+        lbhora = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnipersonal = new javax.swing.JMenu();
         mnicambiarpass = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnicerrarsesion = new javax.swing.JMenuItem();
+        mnisalir = new javax.swing.JMenuItem();
         mnisistema = new javax.swing.JMenu();
         mniusuarios = new javax.swing.JMenuItem();
-        mniinsumos = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         mnibd = new javax.swing.JMenuItem();
         mniproceso = new javax.swing.JMenu();
         mnidatos = new javax.swing.JMenu();
         mniclientes = new javax.swing.JMenuItem();
         mnimarca = new javax.swing.JMenuItem();
         mnivehiculos = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mniaverias = new javax.swing.JMenu();
         mnidesperfectos = new javax.swing.JMenuItem();
         mnicpd = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mniprincipal = new javax.swing.JMenu();
         mnidiag = new javax.swing.JMenuItem();
         mnirep = new javax.swing.JMenuItem();
-        mnivi = new javax.swing.JMenuItem();
         mniconsultas = new javax.swing.JMenu();
-        mnicompvta = new javax.swing.JMenuItem();
         mnireportes = new javax.swing.JMenu();
         mniusers = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnirepclientes = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnirepmarcas = new javax.swing.JMenuItem();
         mnirepdesperfectos = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
         mniayuda = new javax.swing.JMenu();
         mniacercade = new javax.swing.JMenuItem();
 
@@ -199,249 +156,43 @@ public class Principal extends javax.swing.JFrame{
 
         jMenuItem5.setText("jMenuItem5");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jdpescritorio.setBackground(new java.awt.Color(25, 153, 153));
 
-        panelImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImageVentana/audi-rs5-en-carretera-2125_3.jpg"))); // NOI18N
-
         lblimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"))); // NOI18N
+        jdpescritorio.add(lblimg);
+        lblimg.setBounds(10, 10, 40, 30);
 
-        lblusuario.setBackground(new java.awt.Color(0, 153, 153));
         lblusuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblusuario.setForeground(new java.awt.Color(0, 102, 102));
+        lblusuario.setForeground(new java.awt.Color(255, 255, 255));
         lblusuario.setText("Usuario Conectado: ");
+        jdpescritorio.add(lblusuario);
+        lblusuario.setBounds(60, 10, 170, 17);
 
-        lblfecha.setBackground(new java.awt.Color(0, 153, 153));
-        lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblfecha.setForeground(new java.awt.Color(0, 102, 102));
-        lblfecha.setText("Fecha:");
-
-        lbfecha.setBackground(new java.awt.Color(0, 153, 153));
-        lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbfecha.setForeground(new java.awt.Color(0, 102, 102));
-        lbfecha.setText("jLabel1");
-
-        lblhora.setBackground(new java.awt.Color(0, 153, 153));
         lblhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblhora.setForeground(new java.awt.Color(0, 102, 102));
+        lblhora.setForeground(new java.awt.Color(255, 255, 255));
         lblhora.setText("Hora:");
+        jdpescritorio.add(lblhora);
+        lblhora.setBounds(540, 10, 50, 17);
 
-        clockDigital1.setBackground(new java.awt.Color(0, 153, 153));
-        clockDigital1.setForeground(new java.awt.Color(0, 102, 102));
-        clockDigital1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lblfecha.setText("Fecha:");
+        jdpescritorio.add(lblfecha);
+        lblfecha.setBounds(330, 10, 60, 17);
 
-        btnusuarios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnusuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/agente.png"))); // NOI18N
-        btnusuarios.setText("Usuarios");
-        btnusuarios.setOpaque(false);
-        btnusuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnusuariosActionPerformed(evt);
-            }
-        });
+        lbfecha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbfecha.setForeground(new java.awt.Color(255, 255, 255));
+        lbfecha.setText("jLabel1");
+        jdpescritorio.add(lbfecha);
+        lbfecha.setBounds(400, 10, 80, 17);
 
-        btninsumos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btninsumos.setText("Insumos");
-        btninsumos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btninsumosActionPerformed(evt);
-            }
-        });
-
-        btnbd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnbd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/copia-seguridad.png"))); // NOI18N
-        btnbd.setText("Base de Datos");
-        btnbd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbdActionPerformed(evt);
-            }
-        });
-
-        btnclientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
-        btnclientes.setText("Clientes");
-        btnclientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnclientesActionPerformed(evt);
-            }
-        });
-
-        btnmarcas.setBackground(new java.awt.Color(255, 255, 255));
-        btnmarcas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
-        btnmarcas.setText("Marcas");
-        btnmarcas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnmarcasActionPerformed(evt);
-            }
-        });
-
-        btnvehiculos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnvehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92341_steering_wheel-512.png"))); // NOI18N
-        btnvehiculos.setText("Vehículos");
-        btnvehiculos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnvehiculosActionPerformed(evt);
-            }
-        });
-
-        btndesperfectos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btndesperfectos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/multi.png"))); // NOI18N
-        btndesperfectos.setText("Desperfectos");
-        btndesperfectos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndesperfectosActionPerformed(evt);
-            }
-        });
-
-        btndiagnostico.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btndiagnostico.setText("Diagnóstico");
-        btndiagnostico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btndiagnosticoActionPerformed(evt);
-            }
-        });
-
-        btnreparaciones.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnreparaciones.setText("Reparaciones");
-        btnreparaciones.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnreparacionesActionPerformed(evt);
-            }
-        });
-
-        btnvtains.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnvtains.setText("Venta de Insumos");
-        btnvtains.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnvtainsActionPerformed(evt);
-            }
-        });
-
-        btncvi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btncvi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
-        btncvi.setText("Consulta de Ventas");
-        btncvi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btncviActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
-        panelTranslucido1.setLayout(panelTranslucido1Layout);
-        panelTranslucido1Layout.setHorizontalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btncvi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnvtains, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnreparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btndiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btndesperfectos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnvehiculos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnmarcas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnclientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnbd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btninsumos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnusuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(39, Short.MAX_VALUE))
-        );
-        panelTranslucido1Layout.setVerticalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnusuarios)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btninsumos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnbd)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnclientes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnmarcas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnvehiculos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btndesperfectos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btndiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnreparaciones)
-                .addGap(4, 4, 4)
-                .addComponent(btnvtains)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btncvi)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
-        panelCurves1.setLayout(panelCurves1Layout);
-        panelCurves1Layout.setHorizontalGroup(
-            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCurves1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblimg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblusuario)
-                .addGap(123, 123, 123)
-                .addComponent(lblfecha)
-                .addGap(18, 18, 18)
-                .addComponent(lbfecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblhora)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
-            .addGroup(panelCurves1Layout.createSequentialGroup()
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 459, Short.MAX_VALUE))
-        );
-        panelCurves1Layout.setVerticalGroup(
-            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCurves1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(clockDigital1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblhora)
-                    .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblusuario)
-                        .addComponent(lblfecha)
-                        .addComponent(lbfecha))
-                    .addComponent(lblimg))
-                .addGap(18, 18, 18)
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout panelImagenLayout = new javax.swing.GroupLayout(panelImagen);
-        panelImagen.setLayout(panelImagenLayout);
-        panelImagenLayout.setHorizontalGroup(
-            panelImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        panelImagenLayout.setVerticalGroup(
-            panelImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCurves1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jdpescritorioLayout = new javax.swing.GroupLayout(jdpescritorio);
-        jdpescritorio.setLayout(jdpescritorioLayout);
-        jdpescritorioLayout.setHorizontalGroup(
-            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jdpescritorioLayout.setVerticalGroup(
-            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jdpescritorio.setLayer(panelImagen, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbhora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbhora.setForeground(new java.awt.Color(255, 255, 255));
+        lbhora.setText("hola");
+        jdpescritorio.add(lbhora);
+        lbhora.setBounds(610, 10, 80, 14);
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
@@ -462,6 +213,7 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mnipersonal.add(mnicambiarpass);
+        mnipersonal.add(jSeparator6);
 
         mnicerrarsesion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnicerrarsesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disconnect.png"))); // NOI18N
@@ -477,6 +229,16 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mnipersonal.add(mnicerrarsesion);
+
+        mnisalir.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mnisalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir1.JPG"))); // NOI18N
+        mnisalir.setText("Salir de la Aplicación");
+        mnisalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnisalirActionPerformed(evt);
+            }
+        });
+        mnipersonal.add(mnisalir);
 
         jMenuBar1.add(mnipersonal);
 
@@ -497,15 +259,7 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mnisistema.add(mniusuarios);
-
-        mniinsumos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mniinsumos.setText("Insumos");
-        mniinsumos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniinsumosActionPerformed(evt);
-            }
-        });
-        mnisistema.add(mniinsumos);
+        mnisistema.add(jSeparator5);
 
         mnibd.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnibd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/copia-seguridad.png"))); // NOI18N
@@ -554,14 +308,10 @@ public class Principal extends javax.swing.JFrame{
         mnivehiculos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnivehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92341_steering_wheel-512.png"))); // NOI18N
         mnivehiculos.setText("Vehículos");
-        mnivehiculos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnivehiculosActionPerformed(evt);
-            }
-        });
         mnidatos.add(mnivehiculos);
 
         mniproceso.add(mnidatos);
+        mniproceso.add(jSeparator7);
 
         mniaverias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/multi.png"))); // NOI18N
         mniaverias.setText("Averías");
@@ -588,36 +338,23 @@ public class Principal extends javax.swing.JFrame{
         mniaverias.add(mnicpd);
 
         mniproceso.add(mniaverias);
+        mniproceso.add(jSeparator1);
 
         mniprincipal.setText("Principal");
         mniprincipal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
         mnidiag.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnidiag.setText("Diagnóstico");
-        mnidiag.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnidiagActionPerformed(evt);
-            }
-        });
         mniprincipal.add(mnidiag);
 
         mnirep.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnirep.setText("Reparaciones");
+        mnirep.setText("Reparación");
         mnirep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnirepActionPerformed(evt);
             }
         });
         mniprincipal.add(mnirep);
-
-        mnivi.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mnivi.setText("Venta Insumos");
-        mnivi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniviActionPerformed(evt);
-            }
-        });
-        mniprincipal.add(mnivi);
 
         mniproceso.add(mniprincipal);
 
@@ -630,15 +367,6 @@ public class Principal extends javax.swing.JFrame{
         mniconsultas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mniconsultas.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         mniconsultas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        mnicompvta.setText("Comprobante de Ventas");
-        mnicompvta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnicompvtaActionPerformed(evt);
-            }
-        });
-        mniconsultas.add(mnicompvta);
-
         jMenuBar1.add(mniconsultas);
 
         mnireportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconopdf.gif"))); // NOI18N
@@ -652,31 +380,18 @@ public class Principal extends javax.swing.JFrame{
         mniusers.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mniusers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group_key.png"))); // NOI18N
         mniusers.setText("Usuarios");
-        mniusers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniusersActionPerformed(evt);
-            }
-        });
         mnireportes.add(mniusers);
+        mnireportes.add(jSeparator2);
 
         mnirepclientes.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepclientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/clientesG-32x32.png"))); // NOI18N
         mnirepclientes.setText("Clientes");
-        mnirepclientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnirepclientesActionPerformed(evt);
-            }
-        });
         mnireportes.add(mnirepclientes);
+        mnireportes.add(jSeparator3);
 
         mnirepmarcas.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         mnirepmarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ico_bmw_0.png"))); // NOI18N
         mnirepmarcas.setText("Marcas");
-        mnirepmarcas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnirepmarcasActionPerformed(evt);
-            }
-        });
         mnireportes.add(mnirepmarcas);
 
         mnirepdesperfectos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -688,6 +403,7 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mnireportes.add(mnirepdesperfectos);
+        mnireportes.add(jSeparator4);
 
         jMenuItem3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
@@ -703,15 +419,6 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mnireportes.add(jMenuItem6);
-
-        jMenuItem8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jMenuItem8.setText("Insumos");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
-            }
-        });
-        mnireportes.add(jMenuItem8);
 
         jMenuBar1.add(mnireportes);
 
@@ -741,11 +448,11 @@ public class Principal extends javax.swing.JFrame{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio)
+            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jdpescritorio)
+            .addComponent(jdpescritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
         );
 
         pack();
@@ -761,35 +468,29 @@ public class Principal extends javax.swing.JFrame{
         acerca.setVisible(true);
     }//GEN-LAST:event_mniacercadeActionPerformed
 
-    private void mniusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusuariosActionPerformed
-        
-    }//GEN-LAST:event_mniusuariosActionPerformed
-
-    private void mniclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniclientesActionPerformed
-        
-    }//GEN-LAST:event_mniclientesActionPerformed
-
-    private void mnicerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicerrarsesionActionPerformed
-        /*this.dispose();
-        Login log = new Login(null, true);
-        log.setVisible(true);*/
+    private void mnisalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnisalirActionPerformed
         int salir = JOptionPane.showConfirmDialog(this, "¿Realmente desea cerrar la aplicación?","Cerrando programa",0,3);
         if(salir==JOptionPane.OK_OPTION)
         {
-            //deshabilitar menu, imagen y label de usuario
-            mnipersonal.setVisible(false);
-            mnisistema.setVisible(false);
-            mniproceso.setVisible(false);
-            mniconsultas.setVisible(false);
-            mnireportes.setVisible(false);
-            lblimg.setIcon(iconoDesconectado);
-            lblusuario.setText("Usuario Desconectado");
-            JOptionPane.showMessageDialog(this, "Has salido del sistema");
-            //System.exit(0);
-            this.dispose();
-            Principal x =new Principal();
-            x.setVisible(true);
+            System.exit(0);
         }
+    }//GEN-LAST:event_mnisalirActionPerformed
+
+    private void mniusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusuariosActionPerformed
+        UsuariosSistema us= new UsuariosSistema();
+        jdpescritorio.add(us);
+        us.show();
+    }//GEN-LAST:event_mniusuariosActionPerformed
+
+    private void mniclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniclientesActionPerformed
+        ClientesSistema cs= new ClientesSistema();
+        jdpescritorio.add(cs);
+        cs.show();
+    }//GEN-LAST:event_mniclientesActionPerformed
+
+    private void mnicerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicerrarsesionActionPerformed
+        deshabilitarmenu();
+        JOptionPane.showMessageDialog(this, "Has salido del sistema");
     }//GEN-LAST:event_mnicerrarsesionActionPerformed
 
     private void mnicerrarsesionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_mnicerrarsesionItemStateChanged
@@ -797,32 +498,26 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mnicerrarsesionItemStateChanged
 
     private void mnibdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnibdActionPerformed
-        
+        BaseDatos base = new BaseDatos(null, true);
+        base.setVisible(true);
     }//GEN-LAST:event_mnibdActionPerformed
 
     private void mnimarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimarcaActionPerformed
-        
+        MarcaVehiculo mv= new  MarcaVehiculo();
+        jdpescritorio.add(mv);
+        mv.show();
     }//GEN-LAST:event_mnimarcaActionPerformed
 
     private void mnidesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidesperfectosActionPerformed
-        
+        Desperfectos d= new  Desperfectos();
+        jdpescritorio.add(d);
+        d.show();
     }//GEN-LAST:event_mnidesperfectosActionPerformed
 
     private void mnicpdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicpdActionPerformed
-        CPD cp = new CPD(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (cp.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Cambio Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Cambio Precios Desperfectos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(cp);
-        }
-        cp.show();
+        CPD cpd=new CPD();
+        jdpescritorio.add(cpd);
+        cpd.show();
     }//GEN-LAST:event_mnicpdActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -830,335 +525,23 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void mnirepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepActionPerformed
-        
+        reparacion rep=new reparacion();
+        jdpescritorio.add(rep);
+        rep.show();
     }//GEN-LAST:event_mnirepActionPerformed
 
     private void mnirepdesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepdesperfectosActionPerformed
        try {
             conectar cc= new conectar();
+            
             JasperReport reportes=JasperCompileManager.compileReport("reportesdesp.jrxml");
             JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer view = new JasperViewer(print,false);
-            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
-            view.setTitle("Reporte de Desperfectos");
-            view.setExtendedState(this.MAXIMIZED_BOTH);
-            view.setVisible(true);
+            JasperViewer.viewReport(print,false);
+            
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
     }//GEN-LAST:event_mnirepdesperfectosActionPerformed
-
-    private void mnirepmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepmarcasActionPerformed
-        try {
-            conectar cc= new conectar();
-            JasperReport reportes=JasperCompileManager.compileReport("reportemarcas.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer view = new JasperViewer(print,false);
-            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
-            view.setTitle("Reporte de Marcas");
-            view.setExtendedState(this.MAXIMIZED_BOTH);
-            view.setVisible(true);
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
-    }//GEN-LAST:event_mnirepmarcasActionPerformed
-
-    private void mniusersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniusersActionPerformed
-        try {
-            conectar cc= new conectar();
-            JasperReport reportes=JasperCompileManager.compileReport("reporteempleados.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer view = new JasperViewer(print,false);
-            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
-            view.setTitle("Reporte de Usuarios del Sistema");
-            view.setExtendedState(this.MAXIMIZED_BOTH);
-            view.setVisible(true);
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
-    }//GEN-LAST:event_mniusersActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        //Privilegios del sistema
-         if (Login.tipoUsuario==1){
-            btnclientes.setVisible(false);
-            btnmarcas.setVisible(false);
-            btnvehiculos.setVisible(false);
-            btndesperfectos.setVisible(false);
-            btndiagnostico.setVisible(false);
-            btnreparaciones.setVisible(false);
-            btnvtains.setVisible(false);
-            //borrar despues
-            mniproceso.setVisible(false);
-        }
-        if (Login.tipoUsuario==2) {
-            btnbd.setVisible(false);
-            mnireportes.setVisible(false);
-            btndiagnostico.setVisible(false);
-            btnreparaciones.setVisible(false);
-            btnvtains.setVisible(false);
-            //borrar despues
-            mnibd.setVisible(false);
-            mniprincipal.setVisible(false);
-        }       
-        
-        if (Login.tipoUsuario==3) {
-            btnclientes.setVisible(false);
-            btnmarcas.setVisible(false);
-            btnvehiculos.setVisible(false);
-            btndesperfectos.setVisible(false);
-            btnusuarios.setVisible(false);
-            btninsumos.setVisible(false);
-            btnbd.setVisible(false);
-            btncvi.setVisible(false);
-            mnireportes.setVisible(false);
-            btnvtains.setVisible(false);
-            //borrar despues
-            mnidatos.setVisible(false);
-            
-            mniaverias.setVisible(false);
-            mnisistema.setVisible(false);
-            mniconsultas.setVisible(false);
-            mnireportes.setVisible(false);
-            mnivi.setVisible(false);
-        }
-        if (Login.tipoUsuario==4) {
-            mnisistema.setVisible(false);
-            mnidatos.setVisible(false);
-            mniaverias.setVisible(false);
-            mnidiag.setVisible(false);
-            mnirep.setVisible(false);
-            mniconsultas.setVisible(false);
-        }
-    }//GEN-LAST:event_formWindowOpened
-
-    private void mnidiagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnidiagActionPerformed
-        
-    }//GEN-LAST:event_mnidiagActionPerformed
-
-    private void mnirepclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnirepclientesActionPerformed
-          try {
-            conectar cc= new conectar();
-            JasperReport reportes=JasperCompileManager.compileReport("reporteclientes.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer view = new JasperViewer(print,false);
-            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
-            view.setTitle("Reporte de Clientes");
-            view.setExtendedState(this.MAXIMIZED_BOTH);
-            view.setVisible(true);
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
-    }//GEN-LAST:event_mnirepclientesActionPerformed
-
-    private void mnivehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnivehiculosActionPerformed
-        
-    }//GEN-LAST:event_mnivehiculosActionPerformed
-
-    private void mniinsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniinsumosActionPerformed
-        
-    }//GEN-LAST:event_mniinsumosActionPerformed
-
-    private void mniviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniviActionPerformed
-        
-    }//GEN-LAST:event_mniviActionPerformed
-
-    private void mnicompvtaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnicompvtaActionPerformed
-        
-    }//GEN-LAST:event_mnicompvtaActionPerformed
-
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        try {
-            conectar cc= new conectar();
-            JasperReport reportes=JasperCompileManager.compileReport("reporteinsumos.jrxml");
-            JasperPrint print=JasperFillManager.fillReport(reportes, null,cc.conexion());
-            JasperViewer view = new JasperViewer(print,false);
-            JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el reporte", JOptionPane.WARNING_MESSAGE);
-            view.setTitle("Reporte de Insumos");
-            view.setExtendedState(this.MAXIMIZED_BOTH);
-            view.setVisible(true);
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
-
-    private void btnbdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbdActionPerformed
-        BaseDatos base = new BaseDatos(null, true);
-        base.setVisible(true);
-    }//GEN-LAST:event_btnbdActionPerformed
-
-    private void btnusuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnusuariosActionPerformed
-        UsuariosSistema us = new UsuariosSistema(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (us.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Usuarios: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Usuarios: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(us);
-        }
-        us.show();
-    }//GEN-LAST:event_btnusuariosActionPerformed
-
-    private void btninsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsumosActionPerformed
-        Insumos in = new Insumos(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (in.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Insumos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Insumos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(in);
-        }
-        in.show();
-    }//GEN-LAST:event_btninsumosActionPerformed
-
-    private void btnclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclientesActionPerformed
-        /*ClientesSistema cs= new ClientesSistema();
-        jdpescritorio.add(cs);
-        cs.show();*/
-        ClientesSistema cs = new ClientesSistema(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (cs.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Clientes: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Clientes: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(cs);
-        }
-        cs.show();
-    }//GEN-LAST:event_btnclientesActionPerformed
-
-    private void btnmarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmarcasActionPerformed
-        MarcaVehiculo mv = new MarcaVehiculo(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (mv.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Marcas: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Marcas: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(mv);
-        }
-        mv.show();
-    }//GEN-LAST:event_btnmarcasActionPerformed
-
-    private void btnvehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvehiculosActionPerformed
-        vehiculos v = new vehiculos(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (v.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Vehículos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Vehículos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(v);
-        }
-        v.show();
-    }//GEN-LAST:event_btnvehiculosActionPerformed
-
-    private void btndesperfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndesperfectosActionPerformed
-        Desperfectos d = new Desperfectos(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (d.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Desperfectos: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(d);
-        }
-        d.show();
-    }//GEN-LAST:event_btndesperfectosActionPerformed
-
-    private void btndiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndiagnosticoActionPerformed
-        diagnostico diag = new diagnostico(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (diag.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Diagnóstico: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Diagnóstico: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(diag);
-        }
-        diag.show();
-    }//GEN-LAST:event_btndiagnosticoActionPerformed
-
-    private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
-        reparacion rep= new reparacion(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Reparación: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(rep);
-        }
-        rep.show();
-    }//GEN-LAST:event_btnreparacionesActionPerformed
-
-    private void btnvtainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvtainsActionPerformed
-        ComprobanteVta cvta = new ComprobanteVta(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (cvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Comprobante: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(cvta);
-        }
-        cvta.show();
-    }//GEN-LAST:event_btnvtainsActionPerformed
-
-    private void btncviActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncviActionPerformed
-        ConsultaComprobantes ccvta = new ConsultaComprobantes(); //crear el nuevo formulario
-        boolean mostrar = true;
-        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-            if (ccvta.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                System.out.println("Consulta Comprobante: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                mostrar = false;
-            } else {
-                System.out.println("Consulta Comprobante: No lo es, puede mostrarse");
-            }
-        }
-        if (mostrar) {
-            jdpescritorio.add(ccvta);
-        }
-        ccvta.show();
-    }//GEN-LAST:event_btncviActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1190,25 +573,12 @@ public class Principal extends javax.swing.JFrame{
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                /*new Principal().setVisible(true);*/
-                new Thread(new start()).start(); 
+                new Principal().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnbd;
-    private javax.swing.JButton btnclientes;
-    private javax.swing.JButton btncvi;
-    private javax.swing.JButton btndesperfectos;
-    private javax.swing.JButton btndiagnostico;
-    private javax.swing.JButton btninsumos;
-    private javax.swing.JButton btnmarcas;
-    private javax.swing.JButton btnreparaciones;
-    private javax.swing.JButton btnusuarios;
-    private javax.swing.JButton btnvehiculos;
-    private javax.swing.JButton btnvtains;
-    private elaprendiz.gui.varios.ClockDigital clockDigital1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1216,9 +586,17 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     public static javax.swing.JDesktopPane jdpescritorio;
     private javax.swing.JLabel lbfecha;
+    private javax.swing.JLabel lbhora;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblhora;
     private javax.swing.JLabel lblimg;
@@ -1230,13 +608,11 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mnicambiarpass;
     private javax.swing.JMenuItem mnicerrarsesion;
     private javax.swing.JMenuItem mniclientes;
-    private javax.swing.JMenuItem mnicompvta;
     private javax.swing.JMenu mniconsultas;
     private javax.swing.JMenuItem mnicpd;
     private javax.swing.JMenu mnidatos;
     private javax.swing.JMenuItem mnidesperfectos;
     private javax.swing.JMenuItem mnidiag;
-    private javax.swing.JMenuItem mniinsumos;
     private javax.swing.JMenuItem mnimarca;
     private javax.swing.JMenu mnipersonal;
     private javax.swing.JMenu mniprincipal;
@@ -1246,85 +622,10 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mnirepdesperfectos;
     private javax.swing.JMenuItem mnirepmarcas;
     private javax.swing.JMenu mnireportes;
+    private javax.swing.JMenuItem mnisalir;
     private javax.swing.JMenu mnisistema;
     private javax.swing.JMenuItem mniusers;
     private javax.swing.JMenuItem mniusuarios;
     private javax.swing.JMenuItem mnivehiculos;
-    private javax.swing.JMenuItem mnivi;
-    private elaprendiz.gui.panel.PanelCurves panelCurves1;
-    private elaprendiz.gui.panel.PanelImage panelImagen;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     // End of variables declaration//GEN-END:variables
 }
-/*ñeeee
-        private String horas, minutos, segundos;
-        private boolean Estado;
-        Thread Hilo;
-
-        public void run(){
-        while (Estado ==true) {
-        Calendar fecha = new GregorianCalendar();
-        int h= fecha.get(Calendar.HOUR_OF_DAY);
-        int m = fecha.get(Calendar.MINUTE);
-        int s = fecha.get(Calendar.SECOND);
-
-        horas = Integer.toString(h);
-        minutos = Integer.toString(m);
-        segundos = Integer.toString(s);
-
-        lbhora.setText(horas+" : "+minutos+" : "+segundos);
-
-        try{
-        Thread.sleep(1000);
-        }catch (InterruptedException ex){
-        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }
-        }
-
-        public void Iniciar(){
-        Hilo=new Thread(this);
-        Estado = true;
-        Hilo.start();
-
-        }
-
-        public void stop(){
-        Estado = false;
-        }
-
-        
-//Metodo calcular hora     
-    public void calcula() {
-        Calendar calendario = new GregorianCalendar();
-        Date fechaHoraActual = new Date();
-        calendario.setTime(fechaHoraActual);
-        ampm = calendario.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-
-        if (ampm.equals("PM")) {
-            int h = calendario.get(Calendar.HOUR_OF_DAY) - 12;
-            hora = h > 9 ? "" + h : "0" + h;
-        } else {
-            hora = calendario.get(Calendar.HOUR_OF_DAY) > 9 ? "" + calendario.get(Calendar.HOUR_OF_DAY) : "0" + calendario.get(Calendar.HOUR_OF_DAY);
-        }
-        minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
-        segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
-    }
-String hora, minutos, segundos, ampm;
-    Calendar calendario;
-    Thread h1;
-h1 = new Thread(this);
-        h1.start();
-public void run() {
-        Thread ct = Thread.currentThread();
-        while (ct == h1) {
-            calcula();
-            lbhora.setText(hora + ":" + minutos + ":" + segundos);
-            //lblHora.setText(hora + ":" + minutos + ":" + segundos + " "+ampm);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-        }
-}
-*/
