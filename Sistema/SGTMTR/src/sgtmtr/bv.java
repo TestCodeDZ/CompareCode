@@ -159,15 +159,10 @@ DefaultTableModel modelo;
 
         panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
 
-        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selección del Dueño", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), java.awt.Color.white)); // NOI18N
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selección del Dueño", 0, 0, new java.awt.Font("Arial", 1, 12), java.awt.Color.white)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton1.setText("+");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         txtrut.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtrut.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -248,7 +243,7 @@ DefaultTableModel modelo;
         jspp.getAccessibleContext().setAccessibleParent(panelTranslucido1);
         jButton2.getAccessibleContext().setAccessibleParent(panelTranslucido1);
 
-        panelTranslucido2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selección de Vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), java.awt.Color.white)); // NOI18N
+        panelTranslucido2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Búsqueda de Vehículo", 0, 0, new java.awt.Font("Arial", 1, 12), java.awt.Color.white)); // NOI18N
         panelTranslucido2.setForeground(new java.awt.Color(255, 255, 255));
 
         tbvehiculo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -286,12 +281,7 @@ DefaultTableModel modelo;
         jButton4.setText("jButton4");
 
         jButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton3.setText("+");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.setText("jButton3");
 
         jTextField1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -455,17 +445,6 @@ DefaultTableModel modelo;
         valorId = (String) target.getValueAt(row, 0); //obtener el valor de la columna ID
         mostrarDV(valorId);
     }//GEN-LAST:event_tbclientesMousePressed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.setVisible(false);
-        IngresoClientesSM icsm = new IngresoClientesSM(null, true);
-        icsm.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        IngresoVehiculoM ivm = new IngresoVehiculoM(null, true);
-        ivm.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

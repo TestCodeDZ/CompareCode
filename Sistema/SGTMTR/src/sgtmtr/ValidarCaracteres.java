@@ -57,9 +57,9 @@ public class ValidarCaracteres {
             evt.consume();
         }
     }
-
+    
+    
     //valida un email
-
     public static boolean emailCorrecto(String email) {
         boolean existe = false;
         if (email.matches("[-\\w\\.]+@\\w+\\.\\w+")) {

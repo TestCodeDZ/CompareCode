@@ -567,55 +567,35 @@ public class ClientesSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void txtrutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtrutFocusLost
-        String rut       = txtrut.getText();
-        long   convierto = 0;
-        try {
-            convierto = Long.parseLong(rut);
-            if (convierto > 30000000) {
-                JOptionPane.showMessageDialog(null, "Lo siento, no puedo validar este RUT");
-                txtrut.setText("");
-                txtdv.setText("");
-                txtrut.requestFocus();
+        String codigo;
+        int multiplo = 2;
+        int cont = 0;
+        for (int x = 0; x < txtrut.getText().length(); x++) {
+            cont = cont + (Integer.parseInt(txtrut.getText().substring(txtrut.getText().length() - x - 1, txtrut.getText().length() - x)) * multiplo);
+            multiplo++;
+            if (multiplo == 8) {
+                multiplo = 2;
             }
-            if (convierto < 2000000) {
-                JOptionPane.showMessageDialog(null, "Lo siento, no puedo validar este RUT");
-                txtrut.setText("");
-                txtdv.setText("");
-                txtrut.requestFocus();
-            } else {
-                String codigo;
-                int multiplo = 2;
-                int cont = 0;
-                for (int x = 0; x < txtrut.getText().length(); x++) {
-                    cont = cont + (Integer.parseInt(txtrut.getText().substring(txtrut.getText().length() - x - 1, txtrut.getText().length() - x)) * multiplo);
-                    multiplo++;
-                    if (multiplo == 8) {
-                        multiplo = 2;
-                    }
 
-                }
-                cont = 11 - (cont % 11);
-                if (cont <= 9) {
-                    codigo = "" + cont;
-                } else if (cont == 11) {
-                    codigo = "0";
-                } else {
-                    codigo = "K";
-                }
-                if (codigo != null) {
-                    txtdv.setText(codigo);
-                }
-                if (txtrut.getText().length() >= 7) {
-                    lblimg.setIcon(icono);
-                } else {
-                    lblimg.setIcon(iconoNo);
-                    JOptionPane.showMessageDialog(null, "El RUT ingresado no contiene los caracteres necesarios para ser validado");
-                    txtrut.setText("");
-                    txtdv.setText("");
-                }
-            }
-        }catch(Exception e){
-            
+        }
+        cont = 11 - (cont % 11);
+        if (cont <= 9) {
+            codigo = "" + cont;
+        } else if (cont == 11) {
+            codigo = "0";
+        } else {
+            codigo = "K";
+        }
+        if (codigo != null) {
+            txtdv.setText(codigo);
+        }
+        if (txtrut.getText().length() >= 7) {
+            lblimg.setIcon(icono);
+        } else {
+            lblimg.setIcon(iconoNo);
+            JOptionPane.showMessageDialog(null, "El RUT ingresado no contiene los caracteres necesarios para ser validado");
+            txtrut.setText("");
+            txtdv.setText("");
         }
     }//GEN-LAST:event_txtrutFocusLost
 
