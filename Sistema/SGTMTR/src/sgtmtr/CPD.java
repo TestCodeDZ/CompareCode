@@ -5,7 +5,8 @@
  */
 package sgtmtr;
 
-import CapaDatos.Class_Conectar;
+import claseConectar.ConexionConBaseDatos;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -31,7 +32,9 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author ZuluCorp
  */
 public class CPD extends javax.swing.JInternalFrame {
+
     ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form CPD
      */
@@ -44,59 +47,52 @@ public class CPD extends javax.swing.JInternalFrame {
         anchocolumnas();
     }
 
-    private void CargarComboDesperfectos(){
+    private void CargarComboDesperfectos() {
         //Carga de Combo
-        try{
-            //Cargar Driver
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear Conexion
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
             //Crear Consulta
-            Statement st = con.createStatement();
+            Statement st = conexion.createStatement();
             String sql = "SELECT ID,Descripcion,Costo FROM desperfectos order by ID asc";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
-            
+
             //Limpiamos el Combo
             cbdesperfecto.setModel(new DefaultComboBoxModel());
-                      
+
             //Recorremos los registros traidos
-            while(rs.next()){
+            while (rs.next()) {
                 //Agregamos elemento al combo
-                cbdesperfecto.addItem(rs.getObject(2));  
+                cbdesperfecto.addItem(rs.getObject(2));
             }
-                       
-            //Cerramos conexión
-            con.close();
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-    
-    private void Cargartextfield(){
+
+    private void Cargartextfield() {
         //Carga de Combo
-        try{
-            //Cargar Driver
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear Conexion
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
+        try {
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
             //Crear Consulta
-            Statement st1 = con.createStatement();  
-            String sql1 = "SELECT Costo FROM desperfectos WHERE Descripcion='"+cbdesperfecto.getSelectedItem()+"'";
+            Statement st1 = conexion.createStatement();
+            String sql1 = "SELECT Costo FROM desperfectos WHERE Descripcion='" + cbdesperfecto.getSelectedItem() + "'";
             //Ejecutar consulta
-            ResultSet rs1= st1.executeQuery(sql1);
+            ResultSet rs1 = st1.executeQuery(sql1);
             //Recorremos los registros traidos
-            while(rs1.next()){
+            while (rs1.next()) {
                 //Agregamos elemento al text
                 txtprecio.setText(rs1.getObject("Costo").toString());
             }
-            //Cerramos conexión
-            con.close();
-        }catch(Exception e){
-             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-    
+
     void mostrardatos(String valor) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
@@ -112,8 +108,8 @@ public class CPD extends javax.swing.JInternalFrame {
 
         String[] datos = new String[3];
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            Statement st = con.createStatement();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -125,8 +121,9 @@ public class CPD extends javax.swing.JInternalFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
-
     }
 
     void anchocolumnas() {
@@ -135,28 +132,29 @@ public class CPD extends javax.swing.JInternalFrame {
         tbdesperfectos.getColumnModel().getColumn(0).setWidth(40);
         tbdesperfectos.getColumnModel().getColumn(0).setMaxWidth(40);
         tbdesperfectos.getColumnModel().getColumn(0).setMinWidth(40);
-        
+
         tbdesperfectos.getColumnModel().getColumn(1).setWidth(300);
         tbdesperfectos.getColumnModel().getColumn(1).setMaxWidth(300);
         tbdesperfectos.getColumnModel().getColumn(1).setMinWidth(300);
-        
+
         tbdesperfectos.getColumnModel().getColumn(2).setWidth(100);
         tbdesperfectos.getColumnModel().getColumn(2).setMaxWidth(100);
         tbdesperfectos.getColumnModel().getColumn(2).setMinWidth(100);
     }
-    
+
     private String validarTarifaVacia() {
-        String error="";
-        if(txtprecio.getText().equals("")){
-            error+="Por favor ingrese el precio a cobrar \n";
+        String error = "";
+        if (txtprecio.getText().equals("")) {
+            error += "Por favor ingrese el precio a cobrar \n";
         }
-        return error;        
+        return error;
     }
-     private void limpiarcampos(){
+
+    private void limpiarcampos() {
         cbdesperfecto.setSelectedIndex(0);
         txtprecio.setText("");
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -298,6 +296,7 @@ public class CPD extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbdesperfectos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbdesperfectos.getTableHeader().setResizingAllowed(false);
         tbdesperfectos.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbdesperfectos);
@@ -341,47 +340,46 @@ public class CPD extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btagregarActionPerformed
-        Desperfectos d= new  Desperfectos();
+        Desperfectos d = new Desperfectos();
         jdpescritorio.add(d);
         d.show();
     }//GEN-LAST:event_btagregarActionPerformed
 
     private void btcambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcambiarActionPerformed
-        String errores=validarTarifaVacia();
-        if(errores.equals("")){
-            String ID=txtprecio.getText();
-        try {
-            if (String.valueOf(txtprecio.getText()).compareTo("") == 0) {
-            
-            }else{
-            JOptionPane.showMessageDialog(this, "Tarifa Actualizada");
+        String errores = validarTarifaVacia();
+        if (errores.equals("")) {
+            String ID = txtprecio.getText();
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE desperfectos SET Costo='" + txtprecio.getText()
+                        + "' WHERE Descripcion='" + cbdesperfecto.getSelectedItem() + "'");
+                pst.executeUpdate();
+                if (String.valueOf(txtprecio.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Tarifa Actualizada");
+                    //limpiar textfields
+                    limpiarcampos();
+                    mostrardatos(""); 
+                    anchocolumnas();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
             }
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE desperfectos SET Costo='" + txtprecio.getText()
-                    + "' WHERE Descripcion='" + cbdesperfecto.getSelectedItem() + "'");
-            pst.executeUpdate();
-            //cerrar conexion
-            con.close();
-            //limpiar textfields
-            limpiarcampos();
-            mostrardatos("");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
-        }
-            anchocolumnas();
-        }else{
+            
+        } else {
             JOptionPane.showMessageDialog(null, errores);
-        }    
+        }
     }//GEN-LAST:event_btcambiarActionPerformed
 
     private void cbdesperfectoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbdesperfectoItemStateChanged
-        if(evt.getStateChange()==ItemEvent.SELECTED /*&& terminado*/){
+        if (evt.getStateChange() == ItemEvent.SELECTED /*&& terminado*/) {
             Cargartextfield();
         }
     }//GEN-LAST:event_cbdesperfectoItemStateChanged
 
     private void txtprecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyPressed
-    
+
     }//GEN-LAST:event_txtprecioKeyPressed
 
     private void txtprecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyTyped

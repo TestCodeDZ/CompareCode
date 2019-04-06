@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -24,22 +24,26 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class MarcaVehiculo extends javax.swing.JInternalFrame {
+
     ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form MarcaVehiculo
      */
     public MarcaVehiculo() {
         initComponents();
         this.setTitle("Mantenedor de Marcas");
-        this.setLocation(280,15);
+        this.setLocation(280, 15);
         mostrardatos("");
         anchocolumnas();
         bloquear();
+        codigomarcas();
+        txtidmarca.setDisabledTextColor(Color.blue);
     }
-    
+
     void mostrardatos(String valor) {
-        String id=txtidmarca.getText();
-        String NM=txtmn.getText();
+        String id = txtidmarca.getText();
+        String NM = txtmn.getText();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Nombre de la Marca");
@@ -53,8 +57,8 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
 
         String[] datos = new String[2];
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            Statement st = con.createStatement();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -62,26 +66,27 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbmarcas.setModel(modelo);
-           //tbmarcas.setEnabled(false);
+            //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-    
+
     void anchocolumnas() {
         tbmarcas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
         tbmarcas.getColumnModel().getColumn(0).setWidth(100);
         tbmarcas.getColumnModel().getColumn(0).setMaxWidth(100);
         tbmarcas.getColumnModel().getColumn(0).setMinWidth(100);
-        
+
         tbmarcas.getColumnModel().getColumn(1).setWidth(300);
         tbmarcas.getColumnModel().getColumn(1).setMaxWidth(300);
         tbmarcas.getColumnModel().getColumn(1).setMinWidth(300);
     }
-    
-    void bloquear(){
-        txtidmarca.setEnabled(false);
+
+    void bloquear() {
         txtmn.setEnabled(false);
         btbuscar.setEnabled(false);
         btingresar.setEnabled(false);
@@ -89,11 +94,13 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btborrar.setEnabled(false);
         btlimpiar.setEnabled(false);
     }
-    void limpiar(){
-        txtidmarca.setText("");
+
+    void limpiar() {
         txtmn.setText("");
+        codigomarcas();
     }
-    void desbloquear(){
+
+    void desbloquear() {
         txtmn.setEnabled(true);
         //ver combos index
         btbuscar.setEnabled(true);
@@ -103,38 +110,40 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btlimpiar.setEnabled(true);
     }
 
-     void codigomarcas(){
-     int j;
-        int cont=1;
-        String num="";
-        String c="";
-         String SQL="select max(ID) from marcas";
+    void codigomarcas() {
+        int j;
+        int cont = 1;
+        String num = "";
+        String c = "";
+        String SQL = "select max(ID) from marcas";
         try {
-            Statement st = cn.createStatement();
-            ResultSet rs=st.executeQuery(SQL);
-            if(rs.next())
-            {              
-                 c=rs.getString(1);
-            }    
-            if(c==null){
-                txtidmarca.setText("M001");
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            if (rs.next()) {
+                c = rs.getString(1);
             }
-            else{
-            char r1=c.charAt(2);
-            char r2=c.charAt(3);
-            
-            String r="";
-            r=""+r1+r2;
-            
-                 j=Integer.parseInt(r);
-                 sgtmtr.GenerarCodigos gen= new sgtmtr.GenerarCodigos();
-                 gen.generar(j);
-                 txtidmarca.setText("M"+gen.serie());
+            if (c == null) {
+                txtidmarca.setText("MV0001");
+            } else {
+                char r1 = c.charAt(2);
+                char r2 = c.charAt(3);
+                char r3 = c.charAt(4);
+                char r4 = c.charAt(5);
+                String r = "";
+                r = "" + r1 + r2 + r3 + r4;
+                j = Integer.parseInt(r);
+                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
+                gen.generar(j);
+                txtidmarca.setText("MV" + gen.serie());
             }
         } catch (SQLException ex) {
-           Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,44 +153,36 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        mnmod = new javax.swing.JMenuItem();
-        jPanel1 = new javax.swing.JPanel();
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txtidmarca = new javax.swing.JTextField();
         txtmn = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jsp = new javax.swing.JScrollPane();
-        tbmarcas = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        btingresar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
+        btbuscar = new javax.swing.JButton();
+        btnuevo = new javax.swing.JButton();
+        btlimpiar = new javax.swing.JButton();
+        panelTranslucido3 = new elaprendiz.gui.panel.PanelTranslucido();
         btborrar = new javax.swing.JButton();
         btmodificar = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        btnuevo = new javax.swing.JButton();
-        btbuscar = new javax.swing.JButton();
-        btlimpiar = new javax.swing.JButton();
-
-        mnmod.setText("Modificar");
-        mnmod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnmodActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(mnmod);
+        btingresar = new javax.swing.JButton();
+        panelTranslucido4 = new elaprendiz.gui.panel.PanelTranslucido();
+        jsp = new javax.swing.JScrollPane();
+        tbmarcas = new javax.swing.JTable();
 
         setClosable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Marcas de Vehículos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
+
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Marcas de Vehículos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Código");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setText("Nombre");
-
-        txtidmarca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtidmarca.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtidmarca.setEnabled(false);
         txtidmarca.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtidmarcaKeyTyped(evt);
@@ -195,38 +196,142 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Nombre");
+
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                        .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 201, Short.MAX_VALUE))
                     .addComponent(txtmn))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtmn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Marcas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512(2).png"))); // NOI18N
+        btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbuscarActionPerformed(evt);
+            }
+        });
+
+        btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
+        btnuevo.setText("Nuevo");
+        btnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnuevoActionPerformed(evt);
+            }
+        });
+
+        btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
+        btlimpiar.setText("Limpiar");
+        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimpiarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
+        panelTranslucido2.setLayout(panelTranslucido2Layout);
+        panelTranslucido2Layout.setHorizontalGroup(
+            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
+                .addContainerGap(11, Short.MAX_VALUE)
+                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        panelTranslucido2Layout.setVerticalGroup(
+            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addComponent(btnuevo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btbuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btlimpiar)
+                .addContainerGap())
+        );
+
+        btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btborrar.setText("Borrar");
+        btborrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btborrarActionPerformed(evt);
+            }
+        });
+
+        btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
+        btmodificar.setText("Modificar");
+        btmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmodificarActionPerformed(evt);
+            }
+        });
+
+        btingresar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
+        btingresar.setText("Ingresar");
+        btingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btingresarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTranslucido3Layout = new javax.swing.GroupLayout(panelTranslucido3);
+        panelTranslucido3.setLayout(panelTranslucido3Layout);
+        panelTranslucido3Layout.setHorizontalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btingresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btmodificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btborrar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelTranslucido3Layout.setVerticalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btingresar)
+                    .addComponent(btmodificar)
+                    .addComponent(btborrar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         tbmarcas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         //Deshabilitar edicion de tabla
@@ -249,178 +354,94 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbmarcas.setComponentPopupMenu(jPopupMenu1);
+        tbmarcas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbmarcas.getTableHeader().setResizingAllowed(false);
         tbmarcas.getTableHeader().setReorderingAllowed(false);
+        tbmarcas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbmarcasMousePressed(evt);
+            }
+        });
         jsp.setViewportView(tbmarcas);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp, javax.swing.GroupLayout.Alignment.TRAILING)
+        javax.swing.GroupLayout panelTranslucido4Layout = new javax.swing.GroupLayout(panelTranslucido4);
+        panelTranslucido4.setLayout(panelTranslucido4Layout);
+        panelTranslucido4Layout.setHorizontalGroup(
+            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        panelTranslucido4Layout.setVerticalGroup(
+            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jsp.getAccessibleContext().setAccessibleDescription("");
+        jsp.getAccessibleContext().setAccessibleParent(panelTranslucido4);
 
-        btingresar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
-        btingresar.setText("Ingresar");
-        btingresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btingresarActionPerformed(evt);
-            }
-        });
-
-        btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        btborrar.setText("Borrar");
-        btborrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btborrarActionPerformed(evt);
-            }
-        });
-
-        btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
-        btmodificar.setText("Modificar");
-        btmodificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmodificarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btingresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btmodificar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btborrar)
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(panelTranslucido4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btingresar)
-                    .addComponent(btborrar)
-                    .addComponent(btmodificar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
-        btnuevo.setText("Nuevo");
-        btnuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnuevoActionPerformed(evt);
-            }
-        });
-
-        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512(2).png"))); // NOI18N
-        btbuscar.setText("Buscar");
-        btbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btbuscarActionPerformed(evt);
-            }
-        });
-
-        btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
-        btlimpiar.setText("Limpiar");
-        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btlimpiarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnuevo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btbuscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btlimpiar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelImage1Layout.createSequentialGroup()
+                        .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(panelTranslucido4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private String validarVacios() {
-        
-        String errores="";
-        
-        if(txtidmarca.getText().equals("")){
-            errores+="Por favor genere el código de marca \n";
+
+        String errores = "";
+
+        if (txtidmarca.getText().equals("")) {
+            errores += "Por favor genere el código de marca \n";
         }
-        if(txtmn.getText().equals("")){
-            errores+="Por favor ingrese el nombre de la marca \n";
+        if (txtmn.getText().equals("")) {
+            errores += "Por favor ingrese el nombre de la marca \n";
         }
-        return errores;       
+        return errores;
     }
-    
+
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
         codigomarcas();
@@ -440,163 +461,145 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores=validarVacios();
-        if(errores.equals("")){
-        // Insertar registro en la base de datos
-        try {
-            //Cargar driver de conexión
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear conexión
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            //Crear consulta
-            Statement st = con.createStatement();
-            String sql = "INSERT INTO marcas (ID,NombreMarca)"
-                    + "VALUES('" + txtidmarca.getText()+"','"+txtmn.getText() + "')";
-            //Ejecutar la consulta
-            st.executeUpdate(sql);
-            //Cerrar conexion
-            con.close();               
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            // Insertar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "INSERT INTO marcas (ID,NombreMarca)"
+                        + "VALUES('" + txtidmarca.getText() + "','" + txtmn.getText() + "')";
+                //Ejecutar la consulta
+                st.executeUpdate(sql);
                 if (String.valueOf(txtmn.getText()).compareTo("") == 0) {
-                validarVacios();
-            } else{
-                JOptionPane.showMessageDialog(this, "Marca Ingresada");
-                mostrardatos("");
-                anchocolumnas();
-                //Limpiar
-                limpiar(); 
-            }  
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
-        }
-        }else{
+                    validarVacios();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Ingresada","Ingresado", JOptionPane.INFORMATION_MESSAGE);
+                    txtmn.requestFocus();
+                    mostrardatos("");
+                    anchocolumnas();
+                    //Limpiar
+                    limpiar();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "La marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            }
+        } else {
             JOptionPane.showMessageDialog(null, errores);
-        }   
+        }
     }//GEN-LAST:event_btingresarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores=validarVacios();
-        if(errores.equals("")){
-            String ID=txtidmarca.getText();
-        try {
-            if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-            
-            }else{
-            JOptionPane.showMessageDialog(this, "Marca Actualizada");
+        String errores = validarVacios();
+        if (errores.equals("")) {
+            String ID = txtidmarca.getText();
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE marcas SET NombreMarca='" + txtmn.getText() + "' WHERE ID='" + ID + "'");
+                pst.executeUpdate();
+
+                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Actualizada","Datos Actualizados", JOptionPane.INFORMATION_MESSAGE);
+                    btingresar.setEnabled(true);
+                    //limpiar textfields
+                    limpiar();
+                    mostrardatos("");
+                    anchocolumnas();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "La Marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE marcas SET NombreMarca='" + txtmn.getText() + "' WHERE ID='" + ID + "'");
-            pst.executeUpdate();
-            //cerrar conexion
-            con.close();
-            btingresar.setEnabled(true);
-            //limpiar textfields
-            limpiar();
-            mostrardatos("");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
-        }
-            anchocolumnas();
-        }else{
+
+        } else {
             JOptionPane.showMessageDialog(null, errores);
-        }    
+        }
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtidmarcas() {
-        String error="";
-        if(txtidmarca.getText().equals("")){
-            error+="Por favor ingrese el ID de la marca a buscar o eliminar\n";
+        String error = "";
+        if (txtidmarca.getText().equals("")) {
+            error += "Por favor ingrese el ID de la marca a buscar o eliminar\n";
         }
         return error;
     }
-    
+
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
-        String error=validartxtidmarcas();
-        if(error.equals("")){
+        String error = validartxtidmarcas();
+        if (error.equals("")) {
         //unir RUT
-        // Buscar registro en la base de datos
-        try {
-            //Cargar driver de conexión
-            Class.forName("com.mysql.jdbc.Driver");
-            //Crear conexión
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            //Crear consulta
-            Statement st = con.createStatement();
-            String sql = "SELECT * FROM marcas WHERE ID='" + txtidmarca.getText() + "'";
-            //Ejecutar la consulta
-            ResultSet rs = st.executeQuery(sql);
-            mostrardatos(txtidmarca.getText());
-            
-            if (rs.next()) {
-                //existe
-                txtidmarca.setText(rs.getObject("ID").toString());
-                txtmn.setText(rs.getObject("NombreMarca").toString());
-                btborrar.setEnabled(true);
-                btmodificar.setEnabled(true);
-            } else {
-                //no existe
-                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-                    validartxtidmarcas();
-                }else {
-                JOptionPane.showMessageDialog(this, "La marca no existe");
-                btborrar.setEnabled(false);
-                btmodificar.setEnabled(false);
-                limpiar();
+            // Buscar registro en la base de datos
+            try {
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Crear consulta
+                Statement st = conexion.createStatement();
+                String sql = "SELECT * FROM marcas WHERE ID='" + txtidmarca.getText() + "'";
+                //Ejecutar la consulta
+                ResultSet rs = st.executeQuery(sql);
+                mostrardatos(txtidmarca.getText());
+
+                if (rs.next()) {
+                    //existe
+                    txtidmarca.setText(rs.getObject("ID").toString());
+                    txtmn.setText(rs.getObject("NombreMarca").toString());
+                    btborrar.setEnabled(true);
+                    btmodificar.setEnabled(true);
+                } else {
+                    //no existe
+                    if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+                        validartxtidmarcas();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La marca no existe","Marca inexistente", JOptionPane.ERROR_MESSAGE);
+                        mostrardatos("");
+                        anchocolumnas();
+                        btborrar.setEnabled(false);
+                        btmodificar.setEnabled(false);
+                        limpiar();
+                        anchocolumnas();
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-            }
-            //Cerrar conexion
-            con.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        }
-        anchocolumnas();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, error);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-         String error=validartxtidmarcas();
-        if(error.equals("")){
+        String error = validartxtidmarcas();
+        if (error.equals("")) {
             try {
-                String ID=txtidmarca.getText();
-                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-                    
-                }else{
-                    JOptionPane.showMessageDialog(this, "Marca Eliminada");
-                }
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-                PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM marcas WHERE ID='" + ID + "'");
+                String ID = txtidmarca.getText();
+                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM marcas WHERE ID='" + ID + "'");
                 pst.executeUpdate();
-                limpiar();
-                con.close();
-                mostrardatos("");
-                bloquear();
+                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Marca Eliminada","Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                    limpiar();
+                    mostrardatos("");
+                    bloquear();
+                    anchocolumnas();
+                    btingresar.setEnabled(true);
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+            } finally {
+                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-            anchocolumnas();
-            btingresar.setEnabled(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, error);
         }
     }//GEN-LAST:event_btborrarActionPerformed
-
-    private void mnmodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnmodActionPerformed
-        //al momento de hacer click derecho aparecerá el menu modificar
-        //que se irá directamente con los valores de la BD a sus respectivos 
-        //textfields para hacer las respectivas modificaciones
-        int fila = tbmarcas.getSelectedRow();
-        txtidmarca.setEnabled(false);
-        btingresar.setEnabled(false);
-
-        if (fila >= 0) {
-            txtidmarca.setText(tbmarcas.getValueAt(fila, 0).toString());
-            txtmn.setText(tbmarcas.getValueAt(fila, 1).toString());
-            btmodificar.setEnabled(true);
-            btborrar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_mnmodActionPerformed
 
     private void txtmnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmnKeyTyped
         validarLetras.soloLetras(evt);
@@ -610,6 +613,25 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtidmarcaKeyTyped
 
+    private void tbmarcasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbmarcasMousePressed
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbmarcas.getSelectedRow();
+        txtidmarca.setEnabled(false);
+        btingresar.setEnabled(false);
+
+        if (fila >= 0) {
+            txtidmarca.setText(tbmarcas.getValueAt(fila, 0).toString());
+            txtmn.setText(tbmarcas.getValueAt(fila, 1).toString());
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+            txtmn.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_tbmarcasMousePressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
@@ -620,17 +642,14 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
-    private javax.swing.JMenuItem mnmod;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido3;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido4;
     private javax.swing.JTable tbmarcas;
     private javax.swing.JTextField txtidmarca;
     private javax.swing.JTextField txtmn;
     // End of variables declaration//GEN-END:variables
-    conectar cc= new conectar();
-    Connection cn= cc.conexion();
 }

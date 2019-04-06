@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -22,41 +22,45 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class bcliente2 extends javax.swing.JInternalFrame {
+
     DefaultTableModel modelo;
     ValidarCaracteres validarLetras = new ValidarCaracteres();
+
     /**
      * Creates new form bv
      */
     public bcliente2() {
         initComponents();
         setTitle("Selección de cliente");
-        this.setLocation(280,200);
+        this.setLocation(280, 200);
         mostrarvehiculos("");
         anchocolumnas();
     }
-void mostrarvehiculos(String valor)
-    {
-        String[]titulos={"RUT","Nombres","Apellidos","Fono","Dirección","E-mail"} ;  
-        String []Registros= new String[6];
-        modelo=new DefaultTableModel(null,titulos);
-        String Sql="SELECT * FROM clientes WHERE CONCAT(RUT,Nombres,Apellidos,Contacto) LIKE '%"+valor+"%'";
-       
+
+    void mostrarvehiculos(String valor) {
+        String[] titulos = {"RUT", "Nombres", "Apellidos", "Fono", "Dirección", "E-mail"};
+        String[] Registros = new String[6];
+        modelo = new DefaultTableModel(null, titulos);
+        String Sql = "SELECT * FROM clientes WHERE CONCAT(RUT,Nombres,Apellidos,Contacto) LIKE '%" + valor + "%'";
+
         try {
-             Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery(Sql);
-             while(rs.next())
-             {
-                 Registros[0]=rs.getString("RUT");  
-                 Registros[1]=rs.getString("Nombres");  
-                 Registros[2]=rs.getString("Apellidos");  
-                 Registros[3]=rs.getString("Contacto");  
-                 Registros[4]=rs.getString("Direccion");  
-                 Registros[5]=rs.getString("Correo"); 
-                 modelo.addRow(Registros);
-             } 
-             tbcliente.setModel(modelo);
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(Sql);
+            while (rs.next()) {
+                Registros[0] = rs.getString("RUT");
+                Registros[1] = rs.getString("Nombres");
+                Registros[2] = rs.getString("Apellidos");
+                Registros[3] = rs.getString("Contacto");
+                Registros[4] = rs.getString("Direccion");
+                Registros[5] = rs.getString("Correo");
+                modelo.addRow(Registros);
+            }
+            tbcliente.setModel(modelo);
         } catch (SQLException ex) {
             Logger.getLogger(bv.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
 
@@ -66,7 +70,7 @@ void mostrarvehiculos(String valor)
         tbcliente.getColumnModel().getColumn(0).setWidth(100);
         tbcliente.getColumnModel().getColumn(0).setMaxWidth(100);
         tbcliente.getColumnModel().getColumn(0).setMinWidth(100);
-        
+
         tbcliente.getColumnModel().getColumn(1).setWidth(100);
         tbcliente.getColumnModel().getColumn(1).setMaxWidth(100);
         tbcliente.getColumnModel().getColumn(1).setMinWidth(100);
@@ -97,17 +101,21 @@ void mostrarvehiculos(String valor)
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jLabel1 = new javax.swing.JLabel();
         txtrut = new javax.swing.JTextField();
         jsp = new javax.swing.JScrollPane();
         tbcliente = new javax.swing.JTable();
-        btnenviar = new javax.swing.JButton();
 
         setClosable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione al cliente comprador", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
 
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione al cliente comprador", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("RUT");
 
         txtrut.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -140,71 +148,73 @@ void mostrarvehiculos(String valor)
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbcliente.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbcliente.getTableHeader().setResizingAllowed(false);
         tbcliente.getTableHeader().setReorderingAllowed(false);
-        jsp.setViewportView(tbcliente);
-
-        btnenviar.setText("Enviar");
-        btnenviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnenviarActionPerformed(evt);
+        tbcliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbclienteMousePressed(evt);
             }
         });
+        jsp.setViewportView(tbcliente);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(54, 54, 54)
-                        .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(189, 189, 189)
-                        .addComponent(btnenviar)))
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(54, 54, 54)
+                .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtrut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addComponent(btnenviar))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtrutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyReleased
-         mostrarvehiculos(txtrut.getText());
+        mostrarvehiculos(txtrut.getText());
     }//GEN-LAST:event_txtrutKeyReleased
 
     private void txtrutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtrutKeyTyped
@@ -216,7 +226,7 @@ void mostrarvehiculos(String valor)
         }
     }//GEN-LAST:event_txtrutKeyTyped
 
-    private void btnenviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnenviarActionPerformed
+    private void tbclienteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbclienteMousePressed
         String rut = "", nom = "", ap = "", cont = "", dire = "", mail = "";
         int fila = tbcliente.getSelectedRow();
         try {
@@ -232,7 +242,7 @@ void mostrarvehiculos(String valor)
                 mail = (String) tbcliente.getValueAt(fila, 5);
 
                 ComprobanteVta.txtrut.setText(rut);
-                ComprobanteVta.txtnombrecomp.setText(nom+" "+ap);
+                ComprobanteVta.txtnombrecomp.setText(nom + " " + ap);
                 ComprobanteVta.txtfono.setText(cont);
                 ComprobanteVta.txtdireccion.setText(dire);
                 ComprobanteVta.txtemail.setText(mail);
@@ -240,17 +250,15 @@ void mostrarvehiculos(String valor)
             }
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_btnenviarActionPerformed
+    }//GEN-LAST:event_tbclienteMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnenviar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jsp;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     private javax.swing.JTable tbcliente;
     private javax.swing.JTextField txtrut;
     // End of variables declaration//GEN-END:variables
-    conectar cc= new conectar();
-    Connection cn = cc.conexion();
 }

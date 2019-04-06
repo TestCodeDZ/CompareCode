@@ -58,6 +58,16 @@ public class ValidarCaracteres {
         }
     }
 
+    //valida un email
+
+    public static boolean emailCorrecto(String email) {
+        boolean existe = false;
+        if (email.matches("[-\\w\\.]+@\\w+\\.\\w+")) {
+            existe = true;
+        }
+        return existe;
+    }
+
     String soloNumeros(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

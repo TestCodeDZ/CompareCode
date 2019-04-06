@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import claseConectar.conectar;
+import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Color;
 import java.sql.*;
 import java.util.logging.Level;
@@ -50,8 +50,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
 
         String[] datos = new String[3];
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
-            Statement st = con.createStatement();
+            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -63,6 +63,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
            //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        } finally {
+            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
     
@@ -92,7 +94,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        panelImage1 = new elaprendiz.gui.panel.PanelImage();
+        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
         jsp = new javax.swing.JScrollPane();
         tbdesp = new javax.swing.JTable();
 
@@ -104,7 +107,9 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione los desperfectos del vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
+
+        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seleccione los Desperfectos del Vehículo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
 
         tbdesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         //Deshabilitar edicion de tabla
@@ -127,6 +132,7 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbdesp.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbdesp.getTableHeader().setResizingAllowed(false);
         tbdesp.getTableHeader().setReorderingAllowed(false);
         tbdesp.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -136,45 +142,50 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
         });
         jsp.setViewportView(tbdesp);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
+        panelTranslucido1.setLayout(panelTranslucido1Layout);
+        panelTranslucido1Layout.setHorizontalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+        );
+        panelTranslucido1Layout.setVerticalGroup(
+            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelImage1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jsp, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     private void tbdespMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdespMousePressed
-        SpinnerNumberModel numerito = new SpinnerNumberModel(1, 0, 1, 1);
+        SpinnerNumberModel numerito = new SpinnerNumberModel(1, 0, 10, 1);
         JSpinner spinner = new JSpinner(numerito);
         int option = JOptionPane.showOptionDialog(null, spinner, "Seleccione o Ingrese Cantidad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (option == JOptionPane.CANCEL_OPTION) {
@@ -279,10 +290,9 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jsp;
+    private elaprendiz.gui.panel.PanelImage panelImage1;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     public static javax.swing.JTable tbdesp;
     // End of variables declaration//GEN-END:variables
-    conectar cc= new conectar();
-    Connection cn = cc.conexion();
 }
