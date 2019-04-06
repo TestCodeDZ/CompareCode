@@ -561,7 +561,7 @@ public class vehiculos extends javax.swing.JInternalFrame {
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
         limpiar();
-
+        
         txtpatente.requestFocus();
     }//GEN-LAST:event_btnuevoActionPerformed
 

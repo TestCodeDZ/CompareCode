@@ -7,7 +7,6 @@ package sgtmtr;
 
 import static sgtmtr.ComprobanteVta.tbvprod;
 import static sgtmtr.ComprobanteVta.txtmtotal;
-import static sgtmtr.PagoReparaciones.tbrep;
 //import static sgtmtr.SeleccionDesperfecto.txtcont;
 import static sgtmtr.diagnostico.tbdiag;
 import static sgtmtr.diagnostico.txtve;
@@ -56,24 +55,5 @@ public class CalculaPrecioTB {
             diagnostico.tbdiag.setValueAt(Estado, i, 5);
         }
         txtve.setText("" + (subtotal));
-    }
-    
-    public void calcularPrecioRep() {
-        String pre;
-        String can;
-        int subtotal = 0;
-        int precio;
-        int cantidad;
-        int stotal = 0;
-        for (int i = 0; i < tbrep.getRowCount(); i++) {
-            can = tbrep.getValueAt(i, 3).toString();
-            pre = tbrep.getValueAt(i, 4).toString();
-            precio = Integer.parseInt(pre);
-            cantidad = Integer.parseInt(can);
-            stotal = precio * cantidad;
-            subtotal = subtotal + stotal;
-            //tbrep.setValueAt((stotal), i, 4);
-        }
-        PagoReparaciones.txtmtotal.setText("" + (subtotal));
     }
 }
