@@ -381,7 +381,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         btndiagnostico.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btndiagnostico.setText("Diagnóstico");
+        btndiagnostico.setText("Diagnósticos");
         btndiagnostico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btndiagnosticoActionPerformed(evt);
@@ -389,6 +389,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         btnreparaciones.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnreparaciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/icon-32-reparacion.png"))); // NOI18N
         btnreparaciones.setText("Reparaciones");
         btnreparaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -425,9 +426,22 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Actualización Estado Reparación");
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setText("Actualización Estado Diagnóstico");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money.png"))); // NOI18N
         jButton2.setText("Pago de Reparaciones");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelsecretariaLayout = new javax.swing.GroupLayout(panelsecretaria);
         panelsecretaria.setLayout(panelsecretariaLayout);
@@ -1021,8 +1035,8 @@ public class Principal extends javax.swing.JFrame {
                     mostrar = false;
                 } else {
                     System.out.println("Comprobante: No lo es, puede mostrarse");
-                    ComprobanteVta.txtvendedor.setText(""+Login.Nombres+" "+Login.Apellidos);
-                    ComprobanteVta.txtvendedor.setDisabledTextColor(Color.blue);    
+                    ComprobanteVta.txtvendedor.setText("" + Login.Nombres + " " + Login.Apellidos);
+                    ComprobanteVta.txtvendedor.setDisabledTextColor(Color.blue);
                 }
             }
             if (mostrar) {
@@ -1035,20 +1049,21 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnvtainsActionPerformed
 
     private void btnreparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreparacionesActionPerformed
-           reparacion rep = new reparacion(); //crear el nuevo formulario
-            boolean mostrar = true;
-            for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
-                if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
-                    System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
-                    mostrar = false;
-                } else {
-                    System.out.println("Reparación: No lo es, puede mostrarse");
-                }
+        reparacion rep = new reparacion(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (rep.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Reparación: No lo es, puede mostrarse");
             }
-            if (mostrar) {
-                jdpescritorio.add(rep);
-            }
-            rep.show();
+        }
+        if (mostrar) {
+            jdpescritorio.add(rep);
+        }
+        rep.show();
+
 //        jdpescritorio.removeAll();
 //        jdpescritorio.updateUI();
 //        reparacion ventana = reparacion.getInstancia();
@@ -1198,6 +1213,40 @@ public class Principal extends javax.swing.JFrame {
         bxfecha bxf = new bxfecha(null, true);
         bxf.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        AceptacionReparaciones Arep = new AceptacionReparaciones(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (Arep.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Reparación: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(Arep);
+        }
+        Arep.show();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        PagoReparaciones Prep = new PagoReparaciones(); //crear el nuevo formulario
+        boolean mostrar = true;
+        for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
+            if (Prep.getClass().isInstance(jdpescritorio.getComponent(a))) {
+                System.out.println("Pago Reparación Precios Desperfectos: Esto no se volverá a mostrar porque ya está abierta la ventana");
+                mostrar = false;
+            } else {
+                System.out.println("Pago Reparación: No lo es, puede mostrarse");
+            }
+        }
+        if (mostrar) {
+            jdpescritorio.add(Prep);
+        }
+        Prep.show();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

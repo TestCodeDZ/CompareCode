@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteevtains" language="groovy" pageWidth="935" pageHeight="612" orientation="Landscape" columnWidth="895" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="02686f05-051f-46d5-b331-d32d23a76594">
-	<property name="ireport.zoom" value="2.5937424601000467"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1103"/>
+	<property name="ireport.zoom" value="1.1000000000000194"/>
+	<property name="ireport.x" value="205"/>
+	<property name="ireport.y" value="166"/>
 	<parameter name="num" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -233,21 +233,21 @@ WHERE
 				<text><![CDATA[E-mail:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="247" y="40" width="177" height="20" uuid="2e7d3f75-d8af-4eb0-823b-ef5b03336db9"/>
+				<reportElement x="247" y="40" width="317" height="20" uuid="2e7d3f75-d8af-4eb0-823b-ef5b03336db9"/>
 				<textElement>
 					<font fontName="Arial" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{clientes_Correo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="429" y="40" width="47" height="20" uuid="4b8633ea-4158-4ff0-b4e9-24c9b6ae6efe"/>
+				<reportElement x="424" y="0" width="47" height="20" uuid="4b8633ea-4158-4ff0-b4e9-24c9b6ae6efe"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[Fono:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="476" y="40" width="94" height="20" uuid="4d13cc10-8ee4-495b-beb9-01415a782c71"/>
+				<reportElement x="471" y="0" width="94" height="20" uuid="4d13cc10-8ee4-495b-beb9-01415a782c71"/>
 				<textElement>
 					<font fontName="Arial" size="14"/>
 				</textElement>
@@ -419,7 +419,7 @@ WHERE
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="36" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="cc4e8713-fa8e-4cd5-8970-6f499dc91c04"/>
 				<textElement textAlignment="Center">
@@ -436,7 +436,7 @@ WHERE
 			</textField>
 			<textField>
 				<reportElement x="572" y="1" width="148" height="20" uuid="9aa936cc-485e-4658-899d-9c8227fd5481"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detallediag_Ptotal}]]></textFieldExpression>
@@ -464,7 +464,7 @@ WHERE
 			</line>
 			<textField>
 				<reportElement x="721" y="0" width="173" height="20" uuid="f002b3b6-3761-4800-b88d-8446f8167085"/>
-				<textElement textAlignment="Justified">
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detallediag_Estado}]]></textFieldExpression>
@@ -481,7 +481,7 @@ WHERE
 			</textField>
 			<textField>
 				<reportElement x="377" y="0" width="129" height="19" uuid="0c0c5bf5-4cc3-4d19-b584-23b00fcfd098"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detallediag_PrecioDesp}]]></textFieldExpression>
@@ -499,7 +499,7 @@ WHERE
 			</staticText>
 			<textField>
 				<reportElement x="721" y="2" width="174" height="20" uuid="cd965bce-24d6-4924-acfc-4d79786d627c"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{controldiag_Total}]]></textFieldExpression>
@@ -559,7 +559,7 @@ WHERE
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="609" y="33" width="143" height="21" uuid="0c9bfd48-2596-4cb5-9726-705eec49992c"/>
+				<reportElement x="607" y="33" width="143" height="21" uuid="0c9bfd48-2596-4cb5-9726-705eec49992c"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="14"/>
 				</textElement>
