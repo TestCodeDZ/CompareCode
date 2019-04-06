@@ -46,7 +46,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
      */
     public AceptacionReparaciones() {
         initComponents();
-        this.setTitle("Ingreso de reparación");
+        this.setTitle("Aceptación de Diagnóstico");
         this.setLocation(280, 15);
         mostrardatos();
         anchocolumnas();
@@ -62,6 +62,8 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         txtnom.setVisible(false);
         txtmail.setVisible(false);
         txtpatente.setVisible(false);
+        txtnumdiag.setVisible(false);
+        txtcd.setVisible(false);
     }
     public static String Username = "";
     public static String PassWord = "";
@@ -231,7 +233,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
             //Crear Consulta
             Statement st = conexion.createStatement();
-            String sql = "SELECT Estado FROM estadodiag WHERE Estado <> 'Ingresado' AND Estado <> 'Reparado'";
+            String sql = "SELECT Estado FROM estadodiag WHERE Estado <> 'Ingresado' AND Estado <> 'Reparado' AND Estado <> 'Finalizado'";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
             //Limpiamos el Combo
@@ -448,6 +450,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         cbcambioestauto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btcev.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btcev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
         btcev.setText("Cambio Estado del Auto");
         btcev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -469,7 +472,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
                 .addComponent(cbcambioestauto, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btcev)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTranslucido1Layout.setVerticalGroup(
             panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -581,7 +584,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
                         .addComponent(txtmail, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtpatente, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(253, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelTranslucido2Layout.setVerticalGroup(
             panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -597,8 +600,8 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
                     .addComponent(txtconteorep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtconteototal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
-                .addComponent(jsp2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                .addGap(38, 38, 38))
+                .addComponent(jsp2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
@@ -619,7 +622,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
                 .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -630,7 +633,7 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelImage1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -682,32 +685,35 @@ public class AceptacionReparaciones extends javax.swing.JInternalFrame {
         String error = validaestrepauto();
         if (error.equals("")) {
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
-                        + cbcambioestauto.getSelectedItem() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
-                pst.executeUpdate();
-                //UPDATE `detallediag` SET `Estado`= 'En Reparación' WHERE ID_Diag= 00000001 AND Cod_Desp = 'CD0001'
-                JOptionPane.showMessageDialog(this, "Estado de Reparación Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
-                //Se recoge la información y se envía el email
-                Integer i2 = cbcambioestauto.getSelectedIndex();
-                if (i2.equals(0)) {
-                    Mensage = "Estimado (a): " + txtnom.getText() + "\nUsted ha " + cbcambioestauto.getSelectedItem() + " la reparación de su vehículo con patente " + txtpatente.getText() + ", \npor favor manténgase en contacto con nosotros para tenerlo al tanto sobre la reparación de su vehículo.\nAtentamente. \nTaller mecánico Techo Rojo.";
-                } else {
-                    Mensage = "Estimado (a): " + txtnom.getText() + "\nUsted ha " + cbcambioestauto.getSelectedItem() + " la reparación de su vehículo con patente " + txtpatente.getText() + ", por favor venga a nuestro taller a retirar su vehículo.\nAtentamente. \nTaller mecánico Techo Rojo.";
+                int opc = JOptionPane.showConfirmDialog(this, "¿Desea continuar con el proceso?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opc == JOptionPane.YES_OPTION) {
+                    conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                    PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
+                            + cbcambioestauto.getSelectedItem() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
+                    pst.executeUpdate();
+                    //UPDATE `detallediag` SET `Estado`= 'En Reparación' WHERE ID_Diag= 00000001 AND Cod_Desp = 'CD0001'
+                    JOptionPane.showMessageDialog(this, "Estado de Reparación Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
+                    //Se recoge la información y se envía el email
+                    Integer i2 = cbcambioestauto.getSelectedIndex();
+                    if (i2.equals(0)) {
+                        Mensage = "Estimado (a): " + txtnom.getText() + "\nUsted ha " + cbcambioestauto.getSelectedItem() + " la reparación de su vehículo con patente " + txtpatente.getText() + ", \npor favor manténgase en contacto con nosotros para tenerlo al tanto sobre la reparación de su vehículo.\nAtentamente. \nTaller mecánico Techo Rojo.";
+                    } else {
+                        Mensage = "Estimado (a): " + txtnom.getText() + "\nUsted ha " + cbcambioestauto.getSelectedItem() + " la reparación de su vehículo con patente " + txtpatente.getText() + ", por favor venga a nuestro taller a retirar su vehículo.\nAtentamente. \nTaller mecánico Techo Rojo.";
+                    }
+
+                    To = txtmail.getText();
+                    Subject = "Proceso de Reparación.";
+
+                    SendMail();
+                    txtnum.setText("");
+                    txtnom.setText("");
+                    txtmail.setText("");
+                    txtpatente.setText("");
+                    cbcambioestauto.setSelectedIndex(0);
+                    mostrardatos();
+                    anchocolumnas();
+                    LimpiaTabla();
                 }
-
-                To = txtmail.getText();
-                Subject = "Proceso de Reparación.";
-
-                SendMail();
-                txtnum.setText("");
-                txtnom.setText("");
-                txtmail.setText("");
-                txtpatente.setText("");
-                cbcambioestauto.setSelectedIndex(0);
-                mostrardatos();
-                anchocolumnas();
-                LimpiaTabla();
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             } finally {

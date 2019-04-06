@@ -772,6 +772,8 @@ public class reparacion extends javax.swing.JInternalFrame {
         String errores = validartxtrep();
         if (errores.equals("")) {
             try {
+                int opc = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere cambiar \n el estado de la reparación del desperfecto?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opc == JOptionPane.YES_OPTION) {
                 conexion = claseConectar.ConexionConBaseDatos.getConexion();
                 PreparedStatement pst = conexion.prepareStatement("UPDATE detallediag SET Estado='"
                         + cbestadorep.getSelectedItem() + "' WHERE ID_Diag='" + txtnumdiag.getText() + "' AND Cod_Desp='" + txtcd.getText() + "'");
@@ -780,6 +782,7 @@ public class reparacion extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Estado Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
                 mostrardatos();
                 anchocolumnas();
+                }
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             } finally {
@@ -802,27 +805,30 @@ public class reparacion extends javax.swing.JInternalFrame {
         String error = validaestrepauto();
         if (error.equals("")) {
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
-                        + cbcambioestauto.getSelectedItem() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
-                pst.executeUpdate();
-                //UPDATE `detallediag` SET `Estado`= 'En Reparación' WHERE ID_Diag= 00000001 AND Cod_Desp = 'CD0001'
-                JOptionPane.showMessageDialog(this, "Estado de Reparación Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
-                //Se recoge la información y se envía el email
-                        Mensage = "Estimado (a): " + txtnom.getText() + "\nSe ha modificado el estado de la reparación número " + txtnum.getText() + ".\nPor favor acérquese a nuestro local para el retiro de su vehículo con patente " + txtpatente.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
-                        To = txtmail.getText();
-                        Subject = "Vehículo Reparado.";
-                        
-                        SendMail();
-                        txtnom.setText("");
-                        txtmail.setText("");
-                        txtpatente.setText("");
-                        cbcambioestauto.setVisible(false);
-                        btcev.setVisible(false);
-                        cbcambioestauto.setSelectedIndex(0);
-                mostrardatos();
-                anchocolumnas();
-                LimpiaTabla();
+                int opc = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere cambiar \n el estado de la reparación del vehículo?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opc == JOptionPane.YES_OPTION) {
+                    conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                    PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
+                            + cbcambioestauto.getSelectedItem() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
+                    pst.executeUpdate();
+                    //UPDATE `detallediag` SET `Estado`= 'En Reparación' WHERE ID_Diag= 00000001 AND Cod_Desp = 'CD0001'
+                    JOptionPane.showMessageDialog(this, "Estado de Reparación Actualizado", "Actualizado", JOptionPane.INFORMATION_MESSAGE);
+                    //Se recoge la información y se envía el email
+                    Mensage = "Estimado (a): " + txtnom.getText() + "\nSe ha modificado el estado de la reparación número " + txtnum.getText() + ".\nPor favor acérquese a nuestro local para el retiro de su vehículo con patente " + txtpatente.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
+                    To = txtmail.getText();
+                    Subject = "Vehículo Reparado.";
+
+                    SendMail();
+                    txtnom.setText("");
+                    txtmail.setText("");
+                    txtpatente.setText("");
+                    cbcambioestauto.setVisible(false);
+                    btcev.setVisible(false);
+                    cbcambioestauto.setSelectedIndex(0);
+                    mostrardatos();
+                    anchocolumnas();
+                    LimpiaTabla();
+                }
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(rootPane, "El insumo ya existe en el sistema", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             } finally {

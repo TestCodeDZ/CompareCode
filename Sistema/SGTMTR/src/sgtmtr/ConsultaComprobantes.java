@@ -47,12 +47,20 @@ DateFormat df = DateFormat.getDateInstance();
         txtrutcte.setDisabledTextColor(Color.blue);
         txtfecha.setDisabledTextColor(Color.blue);
         txthora.setDisabledTextColor(Color.blue);
-        txtsucursal.setDisabledTextColor(Color.blue);
+        txtvendedor.setDisabledTextColor(Color.blue);
         txttotal.setDisabledTextColor(Color.red);
         mniVerDetalle.setVisible(false);
         bfecha.getDateEditor().setEnabled(false);
     }
-
+    
+    private void LimpiaTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        tbdetvtains.setModel(new DefaultTableModel());
+        for (int i = 0; i < tbdetvtains.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i -= 1;
+        }
+    }
     void mostrardatos() {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Número");
@@ -63,11 +71,10 @@ DateFormat df = DateFormat.getDateInstance();
         modelo.addColumn("Fecha");
         modelo.addColumn("Hora");
         modelo.addColumn("Vendedor");
-        modelo.addColumn("Sucursal");
         tbbusqins.setModel(modelo);
         String sql = "";
-        sql = "SELECT * FROM comprobante";
-        String[] datos = new String[9];
+        sql = "SELECT Numero,Cliente,Total,PagadoCon,Vuelto,Fecha,Hora,Vendedor FROM comprobante";
+        String[] datos = new String[8];
         String primerId = "";
         try {
             conexion = claseConectar.ConexionConBaseDatos.getConexion();
@@ -82,7 +89,6 @@ DateFormat df = DateFormat.getDateInstance();
                 datos[5] = rs.getString(6);
                 datos[6] = rs.getString(7);
                 datos[7] = rs.getString(8);
-                datos[8] = rs.getString(9);
                 modelo.addRow(datos);
                 if (primerId.isEmpty()) {
                     primerId = rs.getString(1);
@@ -118,14 +124,14 @@ DateFormat df = DateFormat.getDateInstance();
             String vuelto = tbbusqins.getValueAt(filaseleccionada, 4).toString();
             String fecha = tbbusqins.getValueAt(filaseleccionada, 5).toString();
             String hora = tbbusqins.getValueAt(filaseleccionada, 6).toString();
-            String sucursal = tbbusqins.getValueAt(filaseleccionada, 7).toString();
+            String vendedor = tbbusqins.getValueAt(filaseleccionada, 7).toString();
             txtcomp.setText(numcomp);
             txtrutcte.setText(rut);
             txttotal.setText(total);
             txtfecha.setText(fecha);
             txthora.setText(hora);
-            txtsucursal.setText(sucursal);
             txtfecha.setText(fecha);
+            txtvendedor.setText(vendedor);
             tbdetvtains.setModel(modelo2);
             String sql1 = "";
             sql1 = "SELECT * "
@@ -196,6 +202,14 @@ DateFormat df = DateFormat.getDateInstance();
         }
         return errores;       
     }
+      void limpiarcampos() {
+        txtcomp.setText("");
+        txtfecha.setText("");
+        txtrutcte.setText("");
+        txthora.setText("");
+        txtvendedor.setText("");
+        txttotal.setText("");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -230,7 +244,7 @@ DateFormat df = DateFormat.getDateInstance();
         btnimprimir = new javax.swing.JButton();
         txtcomp = new javax.swing.JTextField();
         txtrutcte = new javax.swing.JTextField();
-        txtsucursal = new javax.swing.JTextField();
+        txtvendedor = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -280,7 +294,7 @@ DateFormat df = DateFormat.getDateInstance();
         jsp.setViewportView(tbbusqins);
 
         buttonGroup1.add(rbtbxn);
-        rbtbxn.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        rbtbxn.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         rbtbxn.setForeground(new java.awt.Color(255, 255, 255));
         rbtbxn.setSelected(true);
         rbtbxn.setText("Buscar Por Número");
@@ -313,7 +327,7 @@ DateFormat df = DateFormat.getDateInstance();
         });
 
         buttonGroup1.add(rbtbxf);
-        rbtbxf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        rbtbxf.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         rbtbxf.setForeground(new java.awt.Color(255, 255, 255));
         rbtbxf.setText("Buscar Por Fecha");
         rbtbxf.addActionListener(new java.awt.event.ActionListener() {
@@ -323,7 +337,7 @@ DateFormat df = DateFormat.getDateInstance();
         });
 
         buttonGroup1.add(rbtmt);
-        rbtmt.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        rbtmt.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         rbtmt.setForeground(new java.awt.Color(255, 255, 255));
         rbtmt.setText("Mostrar Todos");
         rbtmt.addActionListener(new java.awt.event.ActionListener() {
@@ -381,7 +395,7 @@ DateFormat df = DateFormat.getDateInstance();
         txttotal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txttotal.setEnabled(false);
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Total");
 
@@ -416,11 +430,11 @@ DateFormat df = DateFormat.getDateInstance();
         txthora.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txthora.setEnabled(false);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Hora");
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Fecha");
 
@@ -441,18 +455,18 @@ DateFormat df = DateFormat.getDateInstance();
         txtrutcte.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtrutcte.setEnabled(false);
 
-        txtsucursal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtsucursal.setEnabled(false);
+        txtvendedor.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtvendedor.setEnabled(false);
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Vendedor");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("RUT Cliente");
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Comprobante N°");
 
@@ -469,20 +483,22 @@ DateFormat df = DateFormat.getDateInstance();
                             .addComponent(jLabel2)
                             .addComponent(jLabel5))
                         .addGap(41, 41, 41)
-                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtcomp)
-                            .addComponent(txtrutcte)
-                            .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnimprimir)
-                        .addGap(18, 18, 18)
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txthora, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelTranslucido2Layout.createSequentialGroup()
+                                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtcomp, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                    .addComponent(txtrutcte))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnimprimir)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txthora, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtvendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jsp1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -511,7 +527,7 @@ DateFormat df = DateFormat.getDateInstance();
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtvendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jsp1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -636,15 +652,21 @@ DateFormat df = DateFormat.getDateInstance();
         if (rbtbxn.isSelected() == true) {
             consulta = "SELECT * FROM comprobante WHERE Numero LIKE '%"+num+"%'";
             anchocolumnas();
+            LimpiaTabla();
+            limpiarcampos();
         }
         if (rbtbxf.isSelected() == true) {
             String fecha = df.format(bfecha.getDate());
             //vefecha.setText(fecha);
             consulta = "SELECT * FROM comprobante WHERE Fecha='"+fecha+"'";
             anchocolumnas();
+            LimpiaTabla();
+            limpiarcampos();
         }
         if (rbtmt.isSelected() == true) {
             consulta = "SELECT * FROM comprobante ";
+            LimpiaTabla();
+            limpiarcampos();
         }
         DefaultTableModel tabla = new DefaultTableModel();
         String[] titulos = {"Número", "Cliente", "Total", "Pagado", "Vuelto", "Fecha", "Hora", "Vendedor", "Sucursal"};
@@ -668,6 +690,7 @@ DateFormat df = DateFormat.getDateInstance();
                 Datos[8] = rs.getString("Sucursal");
                 tabla.addRow(Datos);
                 anchocolumnas();
+                //LimpiaTabla();
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
@@ -752,7 +775,7 @@ DateFormat df = DateFormat.getDateInstance();
     public static javax.swing.JTextField txthora;
     private javax.swing.JTextField txtnumcomp;
     public static javax.swing.JTextField txtrutcte;
-    public static javax.swing.JTextField txtsucursal;
     public static javax.swing.JTextField txttotal;
+    public static javax.swing.JTextField txtvendedor;
     // End of variables declaration//GEN-END:variables
 }

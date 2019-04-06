@@ -48,6 +48,7 @@ import static sgtmtr.Principal.jdpescritorio;
  * @author ZuluCorp
  */
 public class diagnostico extends javax.swing.JInternalFrame {
+
     ValidarCaracteres validarLetras = new ValidarCaracteres();
     CalculaPrecioTB calcula = new CalculaPrecioTB();
 
@@ -62,14 +63,13 @@ public class diagnostico extends javax.swing.JInternalFrame {
     private int MesY;
     private int YearY;
 
-    
     private int Dia;
     private int Mes;
     private int Year;
     private int Dia2;
     private int Mes2;
     private int Year2;
-    
+
     public diagnostico() {
         initComponents();
         setTitle("Ingreso de Diagnóstico");
@@ -85,12 +85,11 @@ public class diagnostico extends javax.swing.JInternalFrame {
         /*Deshabilitar txt del jcalendar*/
         //fing.getDateEditor().setEnabled(false);
         //fent.getDateEditor().setEnabled(false);
-        
+
         //jdatechooser vacio
         /*if(jdcfed.getDate()==null){
          }*/
         //fechaingreso.setEnabled(false);
-
         // hasta 255 caracteres o cta regresiva conteo = txtrepuestos.getText()).length();
         lbconteo.setText("0");
         //fing.setDateFormat(Calendar.getInstance().getTime());
@@ -103,20 +102,20 @@ public class diagnostico extends javax.swing.JInternalFrame {
         Mes2 = (y.getMonth() + 1);
         Year2 = 2000 + (y.getYear() - 100);
         //Date fing = Calendar.getInstance().getTime();
-       //Date fent = Calendar.getInstance().getTime();
+        //Date fent = Calendar.getInstance().getTime();
         Username = "tallertechorojo@gmail.com";
         PassWord = new String("techrojo");
         txtrepuestos.setLineWrap(true); //Se logra que haya salto de línea en el TextArea
         txtrepuestos.setWrapStyleWord(true); //Se impide la división de palabras en el TestArea
     }
-    
+
     public static String Username = "";
     public static String PassWord = "";
     String Mensage = "";
     String To = "";
     String Subject = "";
     bv bv = new bv(); //crear el nuevo formulario
-     
+
     public void SendMail() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -147,7 +146,7 @@ public class diagnostico extends javax.swing.JInternalFrame {
             throw new RuntimeException(e);
         }
     }
-    
+
     private void CargarComboED() {
         //Carga de Combo
         try {
@@ -207,15 +206,15 @@ public class diagnostico extends javax.swing.JInternalFrame {
         String patente = txtpatentediag.getText();
         String RC = txtrutcliente.getText();
         String mecanico = txtmecanico.getText();
-                
+
         /*fecha original para insert
-        Date fc1 = fing.getDate();
-        DateFormat fecha1 = new SimpleDateFormat("dd-MM-yyyy");
-        String convertido1 = fecha1.format(fc1);
-        Date fc2 = fing.getDate();
-        DateFormat fecha2 = new SimpleDateFormat("dd-MM-yyyy");
-        String convertido2 = fecha2.format(fc2);
-        */
+         Date fc1 = fing.getDate();
+         DateFormat fecha1 = new SimpleDateFormat("dd-MM-yyyy");
+         String convertido1 = fecha1.format(fc1);
+         Date fc2 = fing.getDate();
+         DateFormat fecha2 = new SimpleDateFormat("dd-MM-yyyy");
+         String convertido2 = fecha2.format(fc2);
+         */
         String rep = txtrepuestos.getText();
         String total = txtve.getText();
         String ediag = cmbed.getSelectedItem().toString();
@@ -226,8 +225,8 @@ public class diagnostico extends javax.swing.JInternalFrame {
             pst.setString(2, patente);
             pst.setString(3, RC);
             pst.setString(4, mecanico);
-            pst.setString(5, completarFecha(Dia)+"-"+completarFecha(Mes)+"-"+Year);
-            pst.setString(6, completarFecha2(Dia2)+"-"+completarFecha2(Mes2)+"-"+Year2);
+            pst.setString(5, completarFecha(Dia) + "-" + completarFecha(Mes) + "-" + Year);
+            pst.setString(6, completarFecha2(Dia2) + "-" + completarFecha2(Mes2) + "-" + Year2);
             pst.setString(7, rep);
             pst.setString(8, total);
             pst.setString(9, ediag);
@@ -906,40 +905,44 @@ public class diagnostico extends javax.swing.JInternalFrame {
                 if (IsFechaCorrecta()) {
                     //diagnostico diaag = new diagnostico(null, true, (YearX + completarFecha(MesX) + completarFecha(DiaX)), (YearY + completarFecha(MesY) + completarFecha(DiaY)), select);
                     System.out.println((YearX + completarFecha(MesX) + completarFecha(DiaX)) + "-" + (YearY + completarFecha(MesY) + completarFecha(DiaY)));
-                    this.dispose();
+
                     //diaag.setVisible(true);
                     try {
-                        controldiag();
-                        detallediag();
-                        
-                        //Se recoge la información y se envía el email
-                        Mensage = "Estimado (a): " + txtnombre.getText() + "\nSe ha ingresado el diagnóstico número " + txtnumdiag.getText() + ".\nPor favor acérquese a nuestro local para confirmación de la reparación de su vehículo con patente " + txtpatentediag.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
-                        To = txtmail.getText();
-                        Subject = "Ingreso de diagnóstico.";
-                        
-                        SendMail();
-                        generapdf();
-                        
-                        txtpatentediag.setText("");
-                        txtmarca.setText("");
-                        txtmodelo.setText("");
-                        txtaño.setText("");
-                        txtcolor.setText("");
-                        txtrutcliente.setText("");
-                        txtnombre.setText("");
-                        txtfono.setText("");
-                        txtmail.setText("");
-                        cmbed.setSelectedIndex(0);
-                        //dejar jcalendar con la fecha de hoy.
-                        txtrepuestos.setText("");
-                        txtve.setText("");
-                        DefaultTableModel modelo = (DefaultTableModel) tbdiag.getModel();
-                        int a = tbdiag.getRowCount() - 1;
-                        int i;
-                        for (i = a; i >= 0; i--) {
-                            modelo.removeRow(i);
+                        int opc = JOptionPane.showConfirmDialog(this, "¿Desea ingresar el diagnóstico?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (opc == JOptionPane.YES_OPTION) {
+                            controldiag();
+                            detallediag();
+
+                            //Se recoge la información y se envía el email
+                            Mensage = "Estimado (a): " + txtnombre.getText() + "\nSe ha ingresado el diagnóstico número " + txtnumdiag.getText() + ".\nPor favor acérquese a nuestro local para confirmación de la reparación de su vehículo con patente " + txtpatentediag.getText() + ".\nAtentamente. \nTaller mecánico Techo Rojo.";
+                            To = txtmail.getText();
+                            Subject = "Ingreso de diagnóstico.";
+
+                            SendMail();
+                            generapdf();
+
+                            txtpatentediag.setText("");
+                            txtmarca.setText("");
+                            txtmodelo.setText("");
+                            txtaño.setText("");
+                            txtcolor.setText("");
+                            txtrutcliente.setText("");
+                            txtnombre.setText("");
+                            txtfono.setText("");
+                            txtmail.setText("");
+                            cmbed.setSelectedIndex(0);
+                            //dejar jcalendar con la fecha de hoy.
+                            txtrepuestos.setText("");
+                            txtve.setText("");
+                            DefaultTableModel modelo = (DefaultTableModel) tbdiag.getModel();
+                            int a = tbdiag.getRowCount() - 1;
+                            int i;
+                            for (i = a; i >= 0; i--) {
+                                modelo.removeRow(i);
+                            }
+                            numeros();
                         }
-                        numeros();
+                        //this.dispose();
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
                     }
@@ -961,13 +964,16 @@ public class diagnostico extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btbuscadesperfectoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tbdiag.getModel();
-        int fila = tbdiag.getSelectedRow();
-        if (fila >= 0) {
-            model.removeRow(fila);
-            calcula.calcularRep();
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna fila para eliminar");
+        int opc = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere eliminar \n el desperfecto seleccionado?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opc == JOptionPane.YES_OPTION) {
+            DefaultTableModel model = (DefaultTableModel) tbdiag.getModel();
+            int fila = tbdiag.getSelectedRow();
+            if (fila >= 0) {
+                model.removeRow(fila);
+                calcula.calcularRep();
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna fila para eliminar");
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

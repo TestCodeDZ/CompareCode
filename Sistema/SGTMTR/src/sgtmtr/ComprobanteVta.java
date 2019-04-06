@@ -307,32 +307,35 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
 
         panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Comprobante N°");
 
         txtnumcomp.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtnumcomp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtnumcomp.setEnabled(false);
 
-        jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Fecha");
 
         txtfecha.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtfecha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtfecha.setEnabled(false);
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Vendedor");
 
         txtvendedor.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtvendedor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtvendedor.setEnabled(false);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Hora");
 
-        LbHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        LbHora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         LbHora.setForeground(new java.awt.Color(255, 255, 255));
         LbHora.setText("Relojito");
 
@@ -378,7 +381,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         panelTranslucido2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
         panelTranslucido2.setForeground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("RUT");
 
@@ -388,7 +391,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         txtfono.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtfono.setEnabled(false);
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Fono");
 
@@ -399,7 +402,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Sr (a)");
 
@@ -414,11 +417,11 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Dirección");
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Productos");
 
@@ -430,7 +433,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("E-Mail");
 
@@ -448,35 +451,33 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                        .addComponent(txtfono)
-                        .addGap(110, 110, 110))
-                    .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                        .addComponent(txtrut)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btejecuta, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)))
+                    .addComponent(txtrut, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(txtfono))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btejecuta, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTranslucido2Layout.createSequentialGroup()
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelTranslucido2Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
-                                .addComponent(btbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 262, Short.MAX_VALUE))
                             .addGroup(panelTranslucido2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(22, 22, 22)
-                                .addComponent(txtdireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtdireccion)
+                                .addGap(36, 36, 36)))
                         .addComponent(jLabel7)
-                        .addGap(27, 27, 27)
-                        .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(panelTranslucido2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(44, 44, 44)
                         .addComponent(txtnombrecomp, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(211, 211, 211)))
-                .addGap(38, 38, 38))
+                        .addGap(249, 249, 249))))
         );
         panelTranslucido2Layout.setVerticalGroup(
             panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -555,14 +556,14 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             tbvprod.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Sucursal");
 
         txtsucursal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtsucursal.setEnabled(false);
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Forma de Pago");
 
@@ -574,7 +575,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Monto Total $");
 
@@ -595,11 +596,11 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         });
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Pagado con $");
 
-        jLabel14.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Vuelto $");
 
@@ -630,9 +631,9 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         panelTranslucido3Layout.setHorizontalGroup(
             panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(5, 5, 5)
+                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
                             .addComponent(jLabel12))
@@ -655,10 +656,8 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                                         .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtvuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtpagado, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(101, 101, 101))))
-                    .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btanular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -771,13 +770,16 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btanularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btanularActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tbvprod.getModel();
-        int fila = tbvprod.getSelectedRow();
-        if (fila >= 0) {
-            model.removeRow(fila);
-            calcula.calcular();
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna fila para eliminar");
+        int opc = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere eliminar \n el producto de la venta actual?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opc == JOptionPane.YES_OPTION) {
+            DefaultTableModel model = (DefaultTableModel) tbvprod.getModel();
+            int fila = tbvprod.getSelectedRow();
+            if (fila >= 0) {
+                model.removeRow(fila);
+                calcula.calcular();
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna fila para eliminar");
+            }
         }
     }//GEN-LAST:event_btanularActionPerformed
     public void generapdf() {
@@ -824,31 +826,34 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         String errores = validarVacios();
         if (errores.equals("")) {
             try {
-                String capcod = "", capcan = "";
-                for (int i = 0; i < ComprobanteVta.tbvprod.getRowCount(); i++) {
-                    capcod = ComprobanteVta.tbvprod.getValueAt(i, 0).toString();
-                    capcan = ComprobanteVta.tbvprod.getValueAt(i, 2).toString();
-                    descuentastock(capcod, capcan);
+                int opc = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere \n realizar esta venta?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opc == JOptionPane.YES_OPTION) {
+                    String capcod = "", capcan = "";
+                    for (int i = 0; i < ComprobanteVta.tbvprod.getRowCount(); i++) {
+                        capcod = ComprobanteVta.tbvprod.getValueAt(i, 0).toString();
+                        capcan = ComprobanteVta.tbvprod.getValueAt(i, 2).toString();
+                        descuentastock(capcod, capcan);
+                    }
+                    comprobantevta();
+                    detallecomprobante();
+                    generapdf();
+                    txtrut.setText("");
+                    txtnombrecomp.setText("");
+                    txtfono.setText("");
+                    txtdireccion.setText("");
+                    txtemail.setText("");
+                    txtmtotal.setText("");
+                    txtpagado.setText("");
+                    txtvuelto.setText("");
+                    cbmp.setSelectedIndex(0);
+                    DefaultTableModel modelo = (DefaultTableModel) tbvprod.getModel();
+                    int a = tbvprod.getRowCount() - 1;
+                    int i;
+                    for (i = a; i >= 0; i--) {
+                        modelo.removeRow(i);
+                    }
+                    numeros();
                 }
-                comprobantevta();
-                detallecomprobante();
-                generapdf();
-                txtrut.setText("");
-                txtnombrecomp.setText("");
-                txtfono.setText("");
-                txtdireccion.setText("");
-                txtemail.setText("");
-                txtmtotal.setText("");
-                txtpagado.setText("");
-                txtvuelto.setText("");
-                cbmp.setSelectedIndex(0);
-                DefaultTableModel modelo = (DefaultTableModel) tbvprod.getModel();
-                int a = tbvprod.getRowCount() - 1;
-                int i;
-                for (i = a; i >= 0; i--) {
-                    modelo.removeRow(i);
-                }
-                numeros();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
             }
@@ -858,7 +863,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     }//GEN-LAST:event_btvenderActionPerformed
 
     private void calculavuelto() {
-       
+       try {
             int vs = Integer.parseInt(txtmtotal.getText());
             int pagado = Integer.parseInt(txtpagado.getText());
             int diferencia = pagado - vs;
@@ -870,6 +875,9 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             } else {
                 txtvuelto.setText(vuelto);
             }
+        } catch (Exception e) {
+            
+        }
 //             try {
 //        } catch (NumberFormatException ex) {
 //            //JOptionPane.showMessageDialog(null, ex);
@@ -878,6 +886,9 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     }
     
     private void txtpagadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpagadoFocusLost
+        if (txtpagado.equals("")) {
+            txtpagado.setText("0");
+        }
         calculavuelto();
     }//GEN-LAST:event_txtpagadoFocusLost
 

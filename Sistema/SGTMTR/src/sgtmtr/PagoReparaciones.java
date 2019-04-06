@@ -40,6 +40,7 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
     /**
      * Creates new form reparacion
      */
+    
     String hora, minutos, segundos, ampm;
     Thread h1;
 
@@ -66,12 +67,22 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         txtfin.setVisible(false);
         txtsucursal.setText("Casa Matriz");
         txtsucursal.setDisabledTextColor(Color.blue);
+        fpago.setDisabledTextColor(Color.blue);
         txtuser.setText("" + Login.Nombres + " " + Login.Apellidos);
         txtuser.setDisabledTextColor(Color.blue);
         h1 = new Thread(this);
         h1.start();
+        fpago.setText(fechaactual());
+        txtnumdiag.setVisible(false);
+        txtcd.setVisible(false);
     }
 
+    public static String fechaactual() {
+        Date fecha = new Date();
+        SimpleDateFormat formatofecha = new SimpleDateFormat("dd-MM-YYYY");
+        return formatofecha.format(fecha);
+    }
+    
     public void run() {
         Thread ct = Thread.currentThread();
         while (ct == h1) {
@@ -84,11 +95,6 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         }
     }
 
-    public static String fechaactual() {
-        Date fecha = new Date();
-        SimpleDateFormat formatofecha = new SimpleDateFormat("dd/MM/YYYY");
-        return formatofecha.format(fecha);
-    }
 
     public void calcula() {
         Calendar calendario = new GregorianCalendar();
@@ -414,11 +420,14 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         txtvuelto = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtsucursal = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        txtuser = new javax.swing.JTextField();
-        fpago = new datechooser.beans.DateChooserCombo();
+        panelTranslucido3 = new elaprendiz.gui.panel.PanelTranslucido();
+        jLabel4 = new javax.swing.JLabel();
+        fpago = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
         LbHora = new javax.swing.JLabel();
         txtfin = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtuser = new javax.swing.JTextField();
 
         setClosable(true);
 
@@ -474,6 +483,8 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
             }
         });
 
+        btnpagar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnpagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money_dollar.png"))); // NOI18N
         btnpagar.setText("Pagar");
         btnpagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -485,7 +496,7 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         panelTranslucido1.setLayout(panelTranslucido1Layout);
         panelTranslucido1Layout.setHorizontalGroup(
             panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+            .addComponent(jsp1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido1Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addComponent(txtnum, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -581,7 +592,7 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         txtpatente.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtpatente.setEnabled(false);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Medio de Pago");
 
@@ -592,15 +603,15 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Monto Total $");
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Pagado con $");
 
-        jLabel14.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Vuelto $");
 
@@ -621,19 +632,12 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         txtvuelto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtvuelto.setEnabled(false);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Sucursal");
 
         txtsucursal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         txtsucursal.setEnabled(false);
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Usuario Conectado");
-
-        txtuser.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtuser.setEnabled(false);
 
         javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
         panelTranslucido2.setLayout(panelTranslucido2Layout);
@@ -658,29 +662,22 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
                         .addComponent(txtmail, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtpatente, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(253, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(36, 36, 36)
-                                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbmpago, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtuser)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(36, 36, 36)
+                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbmpago, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 232, Short.MAX_VALUE)
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
                                 .addComponent(txtvuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
                                 .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel11)
                                     .addComponent(jLabel13))
@@ -715,11 +712,7 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtuser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                        .addGap(50, 50, 50))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido2Layout.createSequentialGroup()
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
@@ -728,22 +721,78 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
                             .addComponent(txtpagadocon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
                             .addComponent(txtvuelto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8))))
         );
 
-        fpago.setFormat(2);
-        fpago.setEnabled(false);
-        fpago.setFieldFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+        panelTranslucido3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        LbHora.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Fecha");
+
+        fpago.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        fpago.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        fpago.setEnabled(false);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Hora");
+
+        LbHora.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         LbHora.setForeground(new java.awt.Color(255, 255, 255));
         LbHora.setText("Relojito");
 
         txtfin.setEnabled(false);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Usuario Conectado");
+
+        txtuser.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        txtuser.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtuser.setEnabled(false);
+
+        javax.swing.GroupLayout panelTranslucido3Layout = new javax.swing.GroupLayout(panelTranslucido3);
+        panelTranslucido3.setLayout(panelTranslucido3Layout);
+        panelTranslucido3Layout.setHorizontalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(fpago, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(LbHora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtfin, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtuser, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelTranslucido3Layout.setVerticalGroup(
+            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido3Layout.createSequentialGroup()
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(txtuser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(LbHora)
+                        .addComponent(txtfin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(fpago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel5)))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
         panelImage1.setLayout(panelImage1Layout);
@@ -754,28 +803,19 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
                 .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelTranslucido2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panelImage1Layout.createSequentialGroup()
-                        .addComponent(fpago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(173, 173, 173)
-                        .addComponent(LbHora)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtfin, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68)))
+                    .addComponent(panelTranslucido3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelImage1Layout.setVerticalGroup(
             panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelImage1Layout.createSequentialGroup()
-                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(fpago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(LbHora)
-                        .addComponent(txtfin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(panelTranslucido1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -836,16 +876,20 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
 
     }//GEN-LAST:event_txtnumFocusLost
     private void calculavuelto() {
-        int vs = Integer.parseInt(txtmtotal.getText());
-        int pagado = Integer.parseInt(txtpagadocon.getText());
-        int diferencia = pagado - vs;
-        String vuelto = Integer.toString(diferencia);
-        if (vs > pagado) {
-            JOptionPane.showMessageDialog(this, "El vuelto no puede ser valor negativo" + JOptionPane.INFORMATION_MESSAGE);
-            txtvuelto.setText("");
-            txtpagadocon.setText("");
-        } else {
-            txtvuelto.setText(vuelto);
+        try {
+            int vs = Integer.parseInt(txtmtotal.getText());
+            int pagado = Integer.parseInt(txtpagadocon.getText());
+            int diferencia = pagado - vs;
+            String vuelto = Integer.toString(diferencia);
+            if (vs > pagado) {
+                JOptionPane.showMessageDialog(this, "El vuelto no puede ser valor negativo" + JOptionPane.INFORMATION_MESSAGE);
+                txtvuelto.setText("");
+                txtpagadocon.setText("");
+            } else {
+                txtvuelto.setText(vuelto);
+            }
+        } catch (Exception e) {
+
         }
     }
     private void cbmpagoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbmpagoItemStateChanged
@@ -866,6 +910,9 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
     }//GEN-LAST:event_cbmpagoItemStateChanged
 
     private void txtpagadoconFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpagadoconFocusLost
+        if (txtpagadocon.equals("")) {
+            txtpagadocon.setText("0");
+        }
         calculavuelto();
     }//GEN-LAST:event_txtpagadoconFocusLost
     private String validacampos() {
@@ -906,28 +953,32 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         String error = validacampos();
         if (error.equals("")) {
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = "INSERT INTO pagoreparaciones (NumDiag,ModoPago,TotalReparacion,PagadoCon,Vuelto,FechaPago,HoraPago,RecibidoPor,Sucursal)"
-                        + "VALUES('" + txtnum.getText() + "','" + cbmpago.getSelectedItem() + "','" + txtmtotal.getText() + "',"
-                        + "'" + txtpagadocon.getText() + "','" + txtvuelto.getText() + "','" + fpago.getText() + "',"
-                        + "'" + LbHora.getText() + "','" + txtuser.getText() + "','" + txtsucursal.getText() + "')";
-                PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
-                        + txtfin.getText() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
-                pst.executeUpdate();
-                //Ejecutar la consulta
-                st.executeUpdate(sql);
-                if (String.valueOf(txtuser.getText()).compareTo("") == 0
-                        && String.valueOf(txtsucursal.getText()).compareTo("") == 0) {
-                    validacampos();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Pago Ingresado y estado actualizado", "Ingreso de Pago de Reparación", JOptionPane.INFORMATION_MESSAGE);
-                    //Limpiar
-                    limpiar();
-                    mostrardatos();
-                    anchocolumnas();
-                    LimpiaTabla();
+                int opc = JOptionPane.showConfirmDialog(this, "¿Desea proceder al \n pago de la reparación?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opc == JOptionPane.YES_OPTION) {
+                    conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                    //Crear consulta
+                    Statement st = conexion.createStatement();
+                    String sql = "INSERT INTO pagoreparaciones (NumDiag,ModoPago,TotalReparacion,PagadoCon,Vuelto,FechaPago,HoraPago,RecibidoPor,Sucursal)"
+                            + "VALUES('" + txtnum.getText() + "','" + cbmpago.getSelectedItem() + "','" + txtmtotal.getText() + "',"
+                            + "'" + txtpagadocon.getText() + "','" + txtvuelto.getText() + "','" + fpago.getText() + "',"
+                            + "'" + LbHora.getText() + "','" + txtuser.getText() + "','" + txtsucursal.getText() + "')";
+                    PreparedStatement pst = conexion.prepareStatement("UPDATE controldiag SET Estado_Diag='"
+                            + txtfin.getText() + "' WHERE ID_Diagnostico='" + txtnum.getText() + "'");
+                    pst.executeUpdate();
+                    //Ejecutar la consulta
+                    st.executeUpdate(sql);
+                    if (String.valueOf(txtuser.getText()).compareTo("") == 0
+                            && String.valueOf(txtsucursal.getText()).compareTo("") == 0) {
+                        validacampos();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Pago Ingresado y estado actualizado", "Ingreso de Pago de Reparación", JOptionPane.INFORMATION_MESSAGE);
+                        //Limpiar
+                        limpiar();
+                        mostrardatos();
+                        anchocolumnas();
+                        LimpiaTabla();
+                        //reporte pago reparacion
+                    }
                 }
 
             } catch (Exception e) {
@@ -941,23 +992,30 @@ public class PagoReparaciones extends javax.swing.JInternalFrame implements Runn
         }
     }//GEN-LAST:event_btnpagarActionPerformed
 
+    public String completarFecha(int d) {
+        return d < 10 ? "0" + d : d + "";
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LbHora;
     private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnpagar;
     private javax.swing.JComboBox cbmpago;
-    private datechooser.beans.DateChooserCombo fpago;
+    private javax.swing.JTextField fpago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jsp1;
     private javax.swing.JScrollPane jsp2;
     private elaprendiz.gui.panel.PanelImage panelImage1;
     private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
     private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
+    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido3;
     private javax.swing.JTable tbdiag;
     public static javax.swing.JTable tbrep;
     private javax.swing.JTextField txtcd;
