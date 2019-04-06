@@ -5,9 +5,15 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,13 +23,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import static sgtmtr.Principal.jdpescritorio;
 
@@ -31,10 +42,9 @@ import static sgtmtr.Principal.jdpescritorio;
  *
  * @author ZuluCorp
  */
-public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnable {
-
-    ValidarCaracteres validarLetras = new ValidarCaracteres();
-    CalculaPrecioTB calcula = new CalculaPrecioTB();
+public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnable{
+ValidarCaracteres validarLetras = new ValidarCaracteres();
+CalculaPrecioTB calcula = new CalculaPrecioTB();
     /**
      * Creates new form ComprobanteVta
      */
@@ -45,7 +55,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     public ComprobanteVta() {
         initComponents();
         setTitle("Venta de Insumos");
-        this.setLocation(280, 15);
+        this.setLocation(280,15);
         txtsucursal.setText("Casa Matriz");
         txtsucursal.setDisabledTextColor(Color.blue);
         txtnumcomp.setDisabledTextColor(Color.red);
@@ -56,13 +66,13 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         txtemail.setDisabledTextColor(Color.blue);
         txtfecha.setText(fechaactual());
         txtfecha.setDisabledTextColor(Color.blue);
+        txtvendedor.setText("" + Login.nomUsuario);
+        txtvendedor.setDisabledTextColor(Color.blue);
         txtmtotal.setDisabledTextColor(Color.red);
         txtvuelto.setDisabledTextColor(Color.red);
-        CargarComboMP();
         numeros();
         h1 = new Thread(this);
         h1.start();
-        txtmtotal.setText("0");
     }
 
     public void run() {
@@ -93,37 +103,12 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         minutos = calendario.get(Calendar.MINUTE) > 9 ? "" + calendario.get(Calendar.MINUTE) : "0" + calendario.get(Calendar.MINUTE);
         segundos = calendario.get(Calendar.SECOND) > 9 ? "" + calendario.get(Calendar.SECOND) : "0" + calendario.get(Calendar.SECOND);
     }
-    
-    private void CargarComboMP() {
-        //Carga de Combo
-        try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            //Crear Consulta
-            Statement st = conexion.createStatement();
-            String sql = "SELECT Desc_MP FROM modopago";
-            //Ejecutar consulta
-            ResultSet rs = st.executeQuery(sql);
-            //Limpiamos el Combo
-            cbmp.setModel(new DefaultComboBoxModel());
-            cbmp.addItem("Seleccione Medio de Pago");
-            //Recorremos los registros traidos
-            while (rs.next()) {
-                //Agregamos elemento al combo
-                cbmp.addItem(rs.getObject(1));
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-        }
-    }
 
     void numeros() {
         String c = "";
         String SQL = "select max(NumComp) from detallecomprobante";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
             if (rs.next()) {
                 c = rs.getString(1);
@@ -138,94 +123,67 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             }
         } catch (SQLException ex) {
             Logger.getLogger(diagnostico.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
     public static String fechaactual() {
         Date fecha = new Date();
         SimpleDateFormat formatofecha = new SimpleDateFormat("dd-MM-YYYY");
         return formatofecha.format(fecha);
-    }
-
+    } 
     void descuentastock(String codi, String can) {
         int des = Integer.parseInt(can);
         String cap = "";
         int desfinal;
         String consul = "SELECT * FROM insumos WHERE  Codigo='" + codi + "'";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(consul);
             while (rs.next()) {
                 cap = rs.getString(4);
             }
 
         } catch (Exception e) {
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
         desfinal = Integer.parseInt(cap) - des;
         String modi = "UPDATE insumos SET Stock='" + desfinal + "' WHERE Codigo = '" + codi + "'";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            PreparedStatement pst = conexion.prepareStatement(modi);
+            PreparedStatement pst = cn.prepareStatement(modi);
             pst.executeUpdate();
         } catch (Exception e) {
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
     void comprobantevta() {
-        /*String InsertarSQL = "INSERT INTO comprobante(Numero,Cliente,Total,PagadoCon,Vuelto,Fecha,Hora,Vendedor,Sucursal) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String InsertarSQL = "INSERT INTO comprobante(Numero,Cliente,Total,PagadoCon,Vuelto,Fecha,Hora,Vendedor,Sucursal) VALUES (?,?,?,?,?,?,?,?,?)";
         String numcomp = txtnumcomp.getText();
         String rutcli = txtrut.getText();
-        Object mp = cbmp.getSelectedItem();
         String total = txtmtotal.getText();
         String pc = txtpagado.getText();
         String dev = txtvuelto.getText();
         String fecha = txtfecha.getText();
         String hora = LbHora.getText();
         String vendedor = txtvendedor.getText();
-        String sucursal = txtsucursal.getText();*/
+        String sucursal = txtsucursal.getText();
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            //Crear consulta
-            Statement st = conexion.createStatement();
-            String sql = "INSERT INTO comprobante (Numero,Cliente,ModoPago,Total,PagadoCon,Vuelto,Fecha,Hora,Vendedor,Sucursal)"
-                    + "VALUES('" + txtnumcomp.getText() + "','" + txtrut.getText() + "','" + cbmp.getSelectedItem() + "',"
-                    + "'" + txtmtotal.getText() + "','" + txtpagado.getText() + "',"
-                    + "'" + txtvuelto.getText() + "','" + txtfecha.getText() + "',"
-                    + "'" + LbHora.getText() + "','" + txtvendedor.getText() + "',"
-                    + "'" + txtsucursal.getText() + "')";
-            //Ejecutar la consulta
-            st.executeUpdate(sql);
-            JOptionPane.showMessageDialog(null, "Se ha generado el comprobante de venta número " + txtnumcomp.getText());
-            /*PreparedStatement pst = conexion.prepareStatement(InsertarSQL);
+            PreparedStatement pst = cn.prepareStatement(InsertarSQL);
             pst.setString(1, numcomp);
             pst.setString(2, rutcli);
-            pst.setString(3, (String) mp);
-            pst.setString(4, total);
-            pst.setString(5, pc);
-            pst.setString(6, dev);
-            pst.setString(7, fecha);
-            pst.setString(8, hora);
-            pst.setString(9, vendedor);
-            pst.setString(10, sucursal);
+            pst.setString(3, total);
+            pst.setString(4, pc);
+            pst.setString(5, dev);
+            pst.setString(6, fecha);
+            pst.setString(7, hora);
+            pst.setString(8, vendedor);
+            pst.setString(9, sucursal);
             int n = pst.executeUpdate();
             if (n > 0) {
-                JOptionPane.showMessageDialog(null, "Se ha generado el comprobante de venta número " + numcomp);
-            }*/
+                JOptionPane.showMessageDialog(null, "Se ha generado el comprobante de venta número "+numcomp);
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(ComprobanteVta.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
+    
     void detallecomprobante() {
         //ver columnas vacias al momento de intentar vender mas de 1 producto para que el sistema lo valide que esta vacio asi impide ingresarlo
         for (int i = 0; i < tbvprod.getRowCount(); i++) {
@@ -237,8 +195,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             String preunit = tbvprod.getValueAt(i, 3).toString();
             String pretotal = tbvprod.getValueAt(i, 4).toString();
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = conexion.prepareStatement(Inserta);
+                PreparedStatement pst = cn.prepareStatement(Inserta);
                 pst.setString(1, numcomp);
                 pst.setString(2, codpro);
                 pst.setString(3, descprod);
@@ -248,12 +205,9 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                 pst.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(ComprobanteVta.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -292,8 +246,6 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         txtpagado = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtvuelto = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        cbmp = new javax.swing.JComboBox();
         btanular = new javax.swing.JButton();
         btvender = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
@@ -415,8 +367,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                             .addComponent(jLabel5)
                             .addComponent(txtfono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel7)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -480,7 +431,6 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                 return canEdit [columnIndex];
             }
         });
-        tbvprod.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbvprod.getTableHeader().setResizingAllowed(false);
         tbvprod.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbvprod);
@@ -528,57 +478,40 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
         txtvuelto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtvuelto.setEnabled(false);
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel15.setText("Forma de Pago");
-
-        cbmp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cbmp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbmp.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbmpItemStateChanged(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel12))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbmp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(123, 123, 123)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtmtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtvuelto)
-                                            .addComponent(txtpagado, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtmtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(101, 101, 101)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtpagado)
+                                    .addComponent(txtvuelto))))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -590,19 +523,15 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
                                 .addComponent(jLabel12)
                                 .addComponent(txtsucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel11))))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel13)
                     .addComponent(txtpagado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel15)
-                        .addComponent(cbmp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel14)
-                        .addComponent(txtvuelto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(txtvuelto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         btanular.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -702,9 +631,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     }// </editor-fold>//GEN-END:initComponents
 
     private void btejecutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btejecutaActionPerformed
-        busquedaclientevtains bcvi = new busquedaclientevtains(null, true);
-        bcvi.setVisible(true);
-        /*bcliente2 cli = new bcliente2(); //crear el nuevo formulario
+        bcliente2 cli = new bcliente2(); //crear el nuevo formulario
         boolean mostrar = true;
         for (int a = 0; a < jdpescritorio.getComponentCount(); a++) { // verificar si es instancia de algun componente que ya este en el jdesktoppane
             if (cli.getClass().isInstance(jdpescritorio.getComponent(a))) {
@@ -718,7 +645,7 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             jdpescritorio.add(cli);
         }
         cli.show();
-        cli.toFront();*/
+        cli.toFront();
     }//GEN-LAST:event_btejecutaActionPerformed
 
     private void txtdireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdireccionActionPerformed
@@ -740,85 +667,78 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna fila para eliminar");
         }
     }//GEN-LAST:event_btanularActionPerformed
-    public void generapdf() {
+     public void generapdf() {
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+            conectar cc = new conectar();
             Map parametro = new HashMap();
             JasperReport reportes = JasperCompileManager.compileReport("reporteevtains.jrxml");
             parametro.put("num", txtnumcomp.getText());
-            //se carga el reporte
+                //se carga el reporte
             //se procesa el archivo jasper
-            JasperPrint print = JasperFillManager.fillReport(reportes, parametro, conexion);
+            JasperPrint print = JasperFillManager.fillReport(reportes, parametro, cc.conexion());
             JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el comprobante de venta", JOptionPane.WARNING_MESSAGE);
             JasperViewer.viewReport(print, false);
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
     }
-
-    private String validarVacios() {
-        String errores = "";
-        if (txtrut.getText().equals("")) {
-            errores += "Por favor busque los datos del cliente\n";
+   private String validarVacios() {
+        String errores="";
+        if(txtrut.getText().equals("")){
+            errores+="Por favor busque los datos del cliente\n";
         }
-        if (txtmtotal.getText().equals("")) {
-            errores += "Calcule el monto total \n";
+        if(txtmtotal.getText().equals("")){
+            errores+="Calcule el monto total \n";
         }
-        if (txtmtotal.getText().equals("0")) {
-            errores += "Revise el detalle de la venta \n";
+        if(txtmtotal.getText().equals("0")){
+            errores+="Revise el detalle de la venta \n";
         }
-        if (txtpagado.getText().trim().isEmpty()) {
-            errores += "Ingrese el valor que el cliente pagó\n";
+        if(txtpagado.getText().trim().isEmpty()){
+            errores+="Ingrese el valor que el cliente pagó\n";
         }
-        if (txtvuelto.getText().trim().isEmpty()) {
-            errores += "Por favor calcule el vuelto \n";
+        if(txtvuelto.getText().trim().isEmpty()){
+            errores+="Por favor calcule el vuelto \n";
         }
-        Integer indice = cbmp.getSelectedIndex();
-        if (indice.equals(0))
-        {
-            errores += "Seleccione un modo de pago \n";
-        }
-        return errores;
+        return errores;       
     }
     private void btvenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btvenderActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            try {
-                String capcod = "", capcan = "";
+        String errores=validarVacios();
+        if(errores.equals("")){
+            try{
+            String capcod = "", capcan = "";
                 for (int i = 0; i < ComprobanteVta.tbvprod.getRowCount(); i++) {
                     capcod = ComprobanteVta.tbvprod.getValueAt(i, 0).toString();
                     capcan = ComprobanteVta.tbvprod.getValueAt(i, 2).toString();
                     descuentastock(capcod, capcan);
                 }
-                comprobantevta();
-                detallecomprobante();
-                generapdf();
-                txtrut.setText("");
-                txtnombrecomp.setText("");
-                txtfono.setText("");
-                txtdireccion.setText("");
-                txtemail.setText("");
-                txtmtotal.setText("");
-                txtpagado.setText("");
-                txtvuelto.setText("");
-                cbmp.setSelectedIndex(0);
-                DefaultTableModel modelo = (DefaultTableModel) tbvprod.getModel();
-                int a = tbvprod.getRowCount() - 1;
-                int i;
-                for (i = a; i >= 0; i--) {
-                    modelo.removeRow(i);
-                }
-                numeros();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
+            comprobantevta();
+            detallecomprobante();
+            generapdf();
+            txtrut.setText("");
+            txtnombrecomp.setText("");
+            txtfono.setText("");
+            txtdireccion.setText("");
+            txtemail.setText("");
+            txtmtotal.setText("");
+            txtpagado.setText("");
+            txtvuelto.setText("");
+            DefaultTableModel modelo = (DefaultTableModel) tbvprod.getModel();
+            int a = tbvprod.getRowCount() - 1;
+            int i;
+            for (i = a; i >= 0; i--) {
+                modelo.removeRow(i);
             }
-        } else {
+            numeros();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
+            }  
+        }else{
             JOptionPane.showMessageDialog(null, errores);
-        }
+        }    
     }//GEN-LAST:event_btvenderActionPerformed
 
-    private void calculavuelto() {
-       
+    private void txtpagadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpagadoFocusLost
+        try {
             int vs = Integer.parseInt(txtmtotal.getText());
             int pagado = Integer.parseInt(txtpagado.getText());
             int diferencia = pagado - vs;
@@ -830,15 +750,10 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             } else {
                 txtvuelto.setText(vuelto);
             }
-//             try {
-//        } catch (NumberFormatException ex) {
-//            //JOptionPane.showMessageDialog(null, ex);
-//            Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
-    
-    private void txtpagadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpagadoFocusLost
-        calculavuelto();
+        } catch (NumberFormatException ex) {
+            //JOptionPane.showMessageDialog(null, ex);
+            Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_txtpagadoFocusLost
 
     private void txtpagadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpagadoKeyTyped
@@ -849,39 +764,20 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
             Toolkit.getDefaultToolkit().beep();
         }
     }//GEN-LAST:event_txtpagadoKeyTyped
-
-    private void cbmpItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbmpItemStateChanged
-         Integer indice = cbmp.getSelectedIndex();
-        if (indice.equals(1)) {
-            txtpagado.setEnabled(false);
-            txtpagado.setText(txtmtotal.getText());
-            calculavuelto();
-        } else if (indice.equals(2)) {
-            txtpagado.setEnabled(true);
-            txtpagado.requestFocus();
-            txtpagado.setText("0");
-        } else if (indice.equals(3)) {
-            txtpagado.setEnabled(false);
-            txtpagado.setText(txtmtotal.getText());
-            calculavuelto();
-        }
-    }//GEN-LAST:event_cbmpItemStateChanged
-
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LbHora;
     private javax.swing.JButton btanular;
     private javax.swing.JButton btbuscar;
     private javax.swing.JButton btejecuta;
     private javax.swing.JButton btvender;
-    private javax.swing.JComboBox cbmp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -904,7 +800,9 @@ public class ComprobanteVta extends javax.swing.JInternalFrame implements Runnab
     private javax.swing.JTextField txtpagado;
     public static javax.swing.JTextField txtrut;
     private javax.swing.JTextField txtsucursal;
-    public static javax.swing.JTextField txtvendedor;
+    private javax.swing.JTextField txtvendedor;
     private javax.swing.JTextField txtvuelto;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }

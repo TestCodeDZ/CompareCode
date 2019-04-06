@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteevtains" language="groovy" pageWidth="612" pageHeight="935" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="02686f05-051f-46d5-b331-d32d23a76594">
 	<property name="ireport.zoom" value="3.797498335832425"/>
-	<property name="ireport.x" value="688"/>
-	<property name="ireport.y" value="1077"/>
+	<property name="ireport.x" value="559"/>
+	<property name="ireport.y" value="570"/>
 	<parameter name="num" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -10,7 +10,6 @@
 		<![CDATA[SELECT
      comprobante.`Numero` AS comprobante_Numero,
      comprobante.`Cliente` AS comprobante_Cliente,
-     comprobante.`ModoPago` AS comprobante_MP,
      comprobante.`Total` AS comprobante_Total,
      comprobante.`Fecha` AS comprobante_Fecha,
      comprobante.`Hora` AS comprobante_Hora,
@@ -38,7 +37,6 @@ WHERE
 	</queryString>
 	<field name="comprobante_Numero" class="java.lang.String"/>
 	<field name="comprobante_Cliente" class="java.lang.String"/>
-	<field name="comprobante_MP" class="java.lang.String"/>
 	<field name="comprobante_Total" class="java.lang.Integer"/>
 	<field name="comprobante_Fecha" class="java.lang.String"/>
 	<field name="comprobante_Hora" class="java.lang.String"/>
@@ -427,7 +425,7 @@ WHERE
 			<textField>
 				<reportElement x="177" y="40" width="121" height="20" uuid="af08d053-6586-436b-aa9b-a0b5cf23c138"/>
 				<textElement>
-					<font fontName="Arial" size="14"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comprobante_Vendedor}]]></textFieldExpression>
 			</textField>
@@ -452,20 +450,6 @@ WHERE
 			<line>
 				<reportElement x="571" y="1" width="1" height="59" uuid="0eb80ea1-8ce8-4a8b-abf8-87147481b2b7"/>
 			</line>
-			<staticText>
-				<reportElement x="0" y="22" width="177" height="20" uuid="82fe74b9-0106-421d-8d75-ca2e819660d6"/>
-				<textElement>
-					<font fontName="Arial" size="14"/>
-				</textElement>
-				<text><![CDATA[Modo de Pago:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="177" y="22" width="121" height="20" uuid="a3444463-b359-4c21-8795-234b8aa7a881"/>
-				<textElement>
-					<font fontName="Arial" size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{comprobante_MP}]]></textFieldExpression>
-			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>

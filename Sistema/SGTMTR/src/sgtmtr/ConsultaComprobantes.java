@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -50,6 +50,7 @@ DateFormat df = DateFormat.getDateInstance();
         txtsucursal.setDisabledTextColor(Color.blue);
         txttotal.setDisabledTextColor(Color.red);
         mniVerDetalle.setVisible(false);
+        vefecha.setVisible(false);
         bfecha.getDateEditor().setEnabled(false);
     }
 
@@ -70,8 +71,8 @@ DateFormat df = DateFormat.getDateInstance();
         String[] datos = new String[9];
         String primerId = "";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -92,8 +93,6 @@ DateFormat df = DateFormat.getDateInstance();
             //tbdesp.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
         mostrarDetalle(primerId);
         anchocolumnas();
@@ -133,8 +132,8 @@ DateFormat df = DateFormat.getDateInstance();
                     + "WHERE NumComp =" + iddetalle;
             String[] datos2 = new String[6];
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                Statement st = conexion.createStatement();
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+                Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery(sql1);
                 while (rs.next()) {
                     datos2[0] = rs.getString(1);
@@ -148,8 +147,6 @@ DateFormat df = DateFormat.getDateInstance();
                 tbdetvtains.setModel(modelo2);
             } catch (SQLException ex) {
                 Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
         }
     }
@@ -216,6 +213,7 @@ DateFormat df = DateFormat.getDateInstance();
         btnbuscardetalle = new javax.swing.JButton();
         jsp = new javax.swing.JScrollPane();
         tbbusqins = new javax.swing.JTable();
+        vefecha = new javax.swing.JTextField();
         bfecha = new com.toedter.calendar.JDateChooser();
         jPanel3 = new javax.swing.JPanel();
         txtcomp = new javax.swing.JTextField();
@@ -302,14 +300,16 @@ DateFormat df = DateFormat.getDateInstance();
         tbbusqins.setSelectionForeground(Color.blue);
         tbbusqins.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
 
             }
         ));
         tbbusqins.setComponentPopupMenu(jPopupMenu1);
-        tbbusqins.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbbusqins.getTableHeader().setResizingAllowed(false);
         tbbusqins.getTableHeader().setReorderingAllowed(false);
         tbbusqins.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -318,6 +318,8 @@ DateFormat df = DateFormat.getDateInstance();
             }
         });
         jsp.setViewportView(tbbusqins);
+
+        vefecha.setEnabled(false);
 
         bfecha.setDate(Calendar.getInstance().getTime());
         bfecha.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -331,46 +333,50 @@ DateFormat df = DateFormat.getDateInstance();
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbtmt)
+                            .addComponent(rbtbxf)
+                            .addComponent(rbtmt))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(vefecha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbtbxf)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(rbtbxn)
-                                        .addGap(27, 27, 27)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(35, 35, 35)
+                                .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)
                                 .addComponent(btnbuscardetalle))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                        .addComponent(rbtbxn)
+                        .addGap(6, 6, 6)
+                        .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(rbtbxn)
                             .addComponent(txtnumcomp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rbtbxf)))
-                    .addComponent(btnbuscardetalle))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rbtmt)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(rbtbxf)
+                            .addComponent(bfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(32, Short.MAX_VALUE)
+                        .addComponent(btnbuscardetalle)
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rbtmt)
+                            .addComponent(vefecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)))
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle del Comprobante", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
@@ -427,7 +433,6 @@ DateFormat df = DateFormat.getDateInstance();
 
             }
         ));
-        tbdetvtains.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbdetvtains.getTableHeader().setResizingAllowed(false);
         tbdetvtains.getTableHeader().setReorderingAllowed(false);
         tbdetvtains.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -532,14 +537,14 @@ DateFormat df = DateFormat.getDateInstance();
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mniVerDetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniVerDetalleActionPerformed
-        /*int filaseleccionada = tbbusqins.getSelectedRow();
+        int filaseleccionada = tbbusqins.getSelectedRow();
         if (filaseleccionada == -1) {
             JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
         } else {
@@ -579,7 +584,7 @@ DateFormat df = DateFormat.getDateInstance();
             } catch (SQLException ex) {
                 Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }*/
+        }
     }//GEN-LAST:event_mniVerDetalleActionPerformed
 
     private void rbtbxnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtbxnActionPerformed
@@ -633,8 +638,7 @@ DateFormat df = DateFormat.getDateInstance();
 
         String[] Datos = new String[9];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(consulta);
             while (rs.next()) {
                 Datos[0] = rs.getString("Numero");
@@ -651,8 +655,6 @@ DateFormat df = DateFormat.getDateInstance();
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConsultaComprobantes.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }//GEN-LAST:event_btnbuscardetalleActionPerformed
 
@@ -673,13 +675,13 @@ DateFormat df = DateFormat.getDateInstance();
         String errores = validartxtimprimeVacio();
         if (errores.equals("")) {
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                conectar cc = new conectar();
                 Map parametro = new HashMap();
                 JasperReport reportes = JasperCompileManager.compileReport("reporteevtains.jrxml");
                 parametro.put("num", txtcomp.getText());
                 //se carga el reporte
                 //se procesa el archivo jasper
-                JasperPrint print = JasperFillManager.fillReport(reportes, parametro, conexion);
+                JasperPrint print = JasperFillManager.fillReport(reportes, parametro, cc.conexion());
                 JOptionPane.showMessageDialog(null, "Esto puede tardar unos segundos, espere porfavor", "El sistema está generando el comprobante de venta", JOptionPane.WARNING_MESSAGE);
                 JasperViewer.viewReport(print, false);
             } catch (Exception e) {
@@ -691,8 +693,8 @@ DateFormat df = DateFormat.getDateInstance();
     }//GEN-LAST:event_btnimprimirActionPerformed
 
     private void bfechaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bfechaMousePressed
-//        String fecha = df.format(bfecha.getDate());
-//        vefecha.setText(fecha);        
+        String fecha = df.format(bfecha.getDate());
+        vefecha.setText(fecha);        
     }//GEN-LAST:event_bfechaMousePressed
 
     private void txtnumcompKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnumcompKeyTyped
@@ -733,5 +735,8 @@ DateFormat df = DateFormat.getDateInstance();
     public static javax.swing.JTextField txtrutcte;
     public static javax.swing.JTextField txtsucursal;
     public static javax.swing.JTextField txttotal;
+    private javax.swing.JTextField vefecha;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }

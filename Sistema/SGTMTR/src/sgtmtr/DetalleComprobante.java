@@ -52,7 +52,6 @@ public class DetalleComprobante extends javax.swing.JInternalFrame {
         tbdetvtains = new javax.swing.JTable();
 
         setClosable(true);
-        setIconifiable(true);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Comprobante N°");

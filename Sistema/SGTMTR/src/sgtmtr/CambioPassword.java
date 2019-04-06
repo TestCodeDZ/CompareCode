@@ -5,7 +5,6 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -14,16 +13,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
  * @author ZuluCorp
  */
 public class CambioPassword extends javax.swing.JDialog {
-
     ValidarCaracteres validarLetras = new ValidarCaracteres();
-
     /**
      * Creates new form CambioPassword
      */
@@ -38,8 +34,8 @@ public class CambioPassword extends javax.swing.JDialog {
     private String getValorClaveUsuario(int usuario) {
         String salida = "";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             String sql = "SELECT * FROM usuarios WHERE IDTB=" + usuario;
             //Ejecutar la consulta
             ResultSet rs = st.executeQuery(sql);
@@ -48,19 +44,17 @@ public class CambioPassword extends javax.swing.JDialog {
                 salida = rs.getString("Password").toLowerCase();
                 rs.close();
             }
+            con.close();
         } catch (Exception e) {
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
-
         return salida;
     }
 
     Boolean actualizarClave(int usuario, String nuevaClave) {
         Boolean salida = false;
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             //query de actualización de password
             String sql = "UPDATE usuarios SET Password='" + nuevaClave + "' "
                     + "WHERE IDTB = " + usuario;
@@ -73,14 +67,13 @@ public class CambioPassword extends javax.swing.JDialog {
             } else {
                 salida = false;
             }
+            con.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
         return salida;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -188,14 +181,14 @@ public class CambioPassword extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pfcn)
+                            .addComponent(pfca)
+                            .addComponent(pfccn, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btcambiarpass)
-                        .addContainerGap(46, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pfcn, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pfca, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pfccn))
-                        .addGap(25, 25, 25))))
+                        .addContainerGap(46, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +212,7 @@ public class CambioPassword extends javax.swing.JDialog {
                             .addComponent(pfccn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btcambiarpass)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -243,27 +236,27 @@ public class CambioPassword extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pfcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfcaActionPerformed
-
+        
     }//GEN-LAST:event_pfcaActionPerformed
 
     private void pfcnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfcnActionPerformed
-
+        
     }//GEN-LAST:event_pfcnActionPerformed
 
     private void pfccnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfccnActionPerformed
-
+        
     }//GEN-LAST:event_pfccnActionPerformed
 
     private void pfcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcaKeyPressed
-
+        
     }//GEN-LAST:event_pfcaKeyPressed
 
     private void pfcnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcnKeyPressed
-
+        
     }//GEN-LAST:event_pfcnKeyPressed
 
     private void pfccnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfccnKeyPressed
-
+        
     }//GEN-LAST:event_pfccnKeyPressed
 
     private void pfcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfcaKeyTyped
@@ -294,55 +287,33 @@ public class CambioPassword extends javax.swing.JDialog {
     }//GEN-LAST:event_pfccnKeyTyped
 
     private void btcambiarpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcambiarpassActionPerformed
-        /*Para encriptar password*/
-        /*Orden MD5-SHA256-SHA512*/
-        String encca1, encca2, encca3, enccn1, enccn2, enccn3, encccn1, encccn2, encccn3;
-
-        /*Password Actual*/
-        encca1 = DigestUtils.md5Hex(pfca.getText());
-        encca2 = DigestUtils.sha256Hex(encca1);
-        encca3 = DigestUtils.sha512Hex(encca2);
-        /*Password Nueva*/
-        enccn1 = DigestUtils.md5Hex(pfcn.getText());
-        enccn2 = DigestUtils.sha256Hex(enccn1);
-        enccn3 = DigestUtils.sha512Hex(enccn2);
-        /*Confirma Password*/
-        encccn1 = DigestUtils.md5Hex(pfccn.getText());
-        encccn2 = DigestUtils.sha256Hex(encccn1);
-        encccn3 = DigestUtils.sha512Hex(encccn2);
-
         // revisar que los campos tengan datos en el formulario
-        String cn = pfcn.getText();
-        String ccn = pfccn.getText();
-        if (encca3.trim().isEmpty()) {
+        String cn=pfcn.getText();
+        String ccn=pfccn.getText();
+        if (pfca.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe ingresar contraseña antigua!");
             return;
         }
-        if (enccn3.trim().isEmpty()) {
+        if (pfcn.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe ingresar contraseña nueva!");
             return;
         }
-        if (encccn3.trim().isEmpty()) {
+        if (pfccn.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "¡Debe confirmar la contraseña nueva!");
             return;
         }
         // revisar que el valor de la clave existe para el usuario conectado
         if (this.getValorClaveUsuario(ClassUtils.USUARIO_CONECTADO).compareToIgnoreCase(
-                encca3.trim()) != 0) {
+                pfca.getText().trim()) != 0) {
             JOptionPane.showMessageDialog(this, "¡Contraseña antigua no corresponde!");
             return;
         }
         //no logro hacer funcionar esta parte del codigo
-        if (!enccn3.equalsIgnoreCase(encccn3)) {
-            JOptionPane.showMessageDialog(this, "¡Confirmación de contraseña nueva no corresponde!");
+        if(!cn.equalsIgnoreCase(ccn)){
+        JOptionPane.showMessageDialog(this, "¡Confirmación de contraseña nueva no corresponde!");
             return;
         }
-        //JOptionPane.showMessageDialog(this, App.pwd);
-        if (enccn3.equals(Login.pwd)) {
-            JOptionPane.showMessageDialog(this, "¡Ud. no puede volver a poner la misma contraseña que tiene actualmente!");
-            return;
-        }
-        if (actualizarClave(ClassUtils.USUARIO_CONECTADO, enccn3.trim())) {
+        if (actualizarClave(ClassUtils.USUARIO_CONECTADO, pfcn.getText().trim())) {
             //se actualizó la clave
             JOptionPane.showMessageDialog(this, "¡Contraseña actualizada con éxito!");
             //Limpiar passwordfields

@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -24,26 +24,22 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class MarcaVehiculo extends javax.swing.JInternalFrame {
-
     ValidarCaracteres validarLetras = new ValidarCaracteres();
-
     /**
      * Creates new form MarcaVehiculo
      */
     public MarcaVehiculo() {
         initComponents();
         this.setTitle("Mantenedor de Marcas");
-        this.setLocation(280, 15);
+        this.setLocation(280,15);
         mostrardatos("");
         anchocolumnas();
         bloquear();
-        codigomarcas();
-        txtidmarca.setDisabledTextColor(Color.blue);
     }
-
+    
     void mostrardatos(String valor) {
-        String id = txtidmarca.getText();
-        String NM = txtmn.getText();
+        String id=txtidmarca.getText();
+        String NM=txtmn.getText();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Nombre de la Marca");
@@ -57,8 +53,8 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
 
         String[] datos = new String[2];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -66,27 +62,26 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 modelo.addRow(datos);
             }
             tbmarcas.setModel(modelo);
-            //tbmarcas.setEnabled(false);
+           //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
+    
     void anchocolumnas() {
         tbmarcas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
         tbmarcas.getColumnModel().getColumn(0).setWidth(100);
         tbmarcas.getColumnModel().getColumn(0).setMaxWidth(100);
         tbmarcas.getColumnModel().getColumn(0).setMinWidth(100);
-
+        
         tbmarcas.getColumnModel().getColumn(1).setWidth(300);
         tbmarcas.getColumnModel().getColumn(1).setMaxWidth(300);
         tbmarcas.getColumnModel().getColumn(1).setMinWidth(300);
     }
-
-    void bloquear() {
+    
+    void bloquear(){
+        txtidmarca.setEnabled(false);
         txtmn.setEnabled(false);
         btbuscar.setEnabled(false);
         btingresar.setEnabled(false);
@@ -94,13 +89,11 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btborrar.setEnabled(false);
         btlimpiar.setEnabled(false);
     }
-
-    void limpiar() {
+    void limpiar(){
+        txtidmarca.setText("");
         txtmn.setText("");
-        codigomarcas();
     }
-
-    void desbloquear() {
+    void desbloquear(){
         txtmn.setEnabled(true);
         //ver combos index
         btbuscar.setEnabled(true);
@@ -110,40 +103,38 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btlimpiar.setEnabled(true);
     }
 
-    void codigomarcas() {
-        int j;
-        int cont = 1;
-        String num = "";
-        String c = "";
-        String SQL = "select max(ID) from marcas";
+     void codigomarcas(){
+     int j;
+        int cont=1;
+        String num="";
+        String c="";
+         String SQL="select max(ID) from marcas";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(SQL);
-            if (rs.next()) {
-                c = rs.getString(1);
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(SQL);
+            if(rs.next())
+            {              
+                 c=rs.getString(1);
+            }    
+            if(c==null){
+                txtidmarca.setText("M001");
             }
-            if (c == null) {
-                txtidmarca.setText("MV0001");
-            } else {
-                char r1 = c.charAt(2);
-                char r2 = c.charAt(3);
-                char r3 = c.charAt(4);
-                char r4 = c.charAt(5);
-                String r = "";
-                r = "" + r1 + r2 + r3 + r4;
-                j = Integer.parseInt(r);
-                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
-                gen.generar(j);
-                txtidmarca.setText("MV" + gen.serie());
+            else{
+            char r1=c.charAt(2);
+            char r2=c.charAt(3);
+            
+            String r="";
+            r=""+r1+r2;
+            
+                 j=Integer.parseInt(r);
+                 sgtmtr.GenerarCodigos gen= new sgtmtr.GenerarCodigos();
+                 gen.generar(j);
+                 txtidmarca.setText("M"+gen.serie());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+           Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,6 +144,8 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnmod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -170,6 +163,14 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         btbuscar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
 
+        mnmod.setText("Modificar");
+        mnmod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnmodActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnmod);
+
         setClosable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Marcas de Vehículos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
@@ -180,8 +181,7 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nombre");
 
-        txtidmarca.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtidmarca.setEnabled(false);
+        txtidmarca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtidmarca.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtidmarcaKeyTyped(evt);
@@ -206,10 +206,10 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtmn)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(txtidmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtmn))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -249,14 +249,9 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbmarcas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbmarcas.setComponentPopupMenu(jPopupMenu1);
         tbmarcas.getTableHeader().setResizingAllowed(false);
         tbmarcas.getTableHeader().setReorderingAllowed(false);
-        tbmarcas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbmarcasMousePressed(evt);
-            }
-        });
         jsp.setViewportView(tbmarcas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -414,18 +409,18 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private String validarVacios() {
-
-        String errores = "";
-
-        if (txtidmarca.getText().equals("")) {
-            errores += "Por favor genere el código de marca \n";
+        
+        String errores="";
+        
+        if(txtidmarca.getText().equals("")){
+            errores+="Por favor genere el código de marca \n";
         }
-        if (txtmn.getText().equals("")) {
-            errores += "Por favor ingrese el nombre de la marca \n";
+        if(txtmn.getText().equals("")){
+            errores+="Por favor ingrese el nombre de la marca \n";
         }
-        return errores;
+        return errores;       
     }
-
+    
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
         codigomarcas();
@@ -445,159 +440,147 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            // Insertar registro en la base de datos
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = "INSERT INTO marcas (ID,NombreMarca)"
-                        + "VALUES('" + txtidmarca.getText() + "','" + txtmn.getText() + "')";
-                //Ejecutar la consulta
-                st.executeUpdate(sql);
+        String errores=validarVacios();
+        if(errores.equals("")){
+        // Insertar registro en la base de datos
+        try {
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = "INSERT INTO marcas (ID,NombreMarca)"
+                    + "VALUES('" + txtidmarca.getText()+"','"+txtmn.getText() + "')";
+            //Ejecutar la consulta
+            st.executeUpdate(sql);
+            //Cerrar conexion
+            con.close();               
                 if (String.valueOf(txtmn.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Marca Ingresada","Ingresado", JOptionPane.INFORMATION_MESSAGE);
-                    txtmn.requestFocus();
-                    mostrardatos("");
-                    anchocolumnas();
-                    //Limpiar
-                    limpiar();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "La marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, errores);
+                validarVacios();
+            } else{
+                JOptionPane.showMessageDialog(this, "Marca Ingresada");
+                mostrardatos("");
+                anchocolumnas();
+                //Limpiar
+                limpiar(); 
+            }  
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
         }
+        }else{
+            JOptionPane.showMessageDialog(null, errores);
+        }   
     }//GEN-LAST:event_btingresarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            String ID = txtidmarca.getText();
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE marcas SET NombreMarca='" + txtmn.getText() + "' WHERE ID='" + ID + "'");
-                pst.executeUpdate();
-
-                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Marca Actualizada","Datos Actualizados", JOptionPane.INFORMATION_MESSAGE);
-                    btingresar.setEnabled(true);
-                    //limpiar textfields
-                    limpiar();
-                    mostrardatos("");
-                    anchocolumnas();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "La Marca ya existe","Marca existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String errores=validarVacios();
+        if(errores.equals("")){
+            String ID=txtidmarca.getText();
+        try {
+            if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+            
+            }else{
+            JOptionPane.showMessageDialog(this, "Marca Actualizada");
             }
-
-        } else {
-            JOptionPane.showMessageDialog(null, errores);
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE marcas SET NombreMarca='" + txtmn.getText() + "' WHERE ID='" + ID + "'");
+            pst.executeUpdate();
+            //cerrar conexion
+            con.close();
+            btingresar.setEnabled(true);
+            //limpiar textfields
+            limpiar();
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
         }
+            anchocolumnas();
+        }else{
+            JOptionPane.showMessageDialog(null, errores);
+        }    
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtidmarcas() {
-        String error = "";
-        if (txtidmarca.getText().equals("")) {
-            error += "Por favor ingrese el ID de la marca a buscar o eliminar\n";
+        String error="";
+        if(txtidmarca.getText().equals("")){
+            error+="Por favor ingrese el ID de la marca a buscar o eliminar\n";
         }
         return error;
     }
-
+    
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
-        String error = validartxtidmarcas();
-        if (error.equals("")) {
+        String error=validartxtidmarcas();
+        if(error.equals("")){
         //unir RUT
-            // Buscar registro en la base de datos
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = "SELECT * FROM marcas WHERE ID='" + txtidmarca.getText() + "'";
-                //Ejecutar la consulta
-                ResultSet rs = st.executeQuery(sql);
-                mostrardatos(txtidmarca.getText());
-
-                if (rs.next()) {
-                    //existe
-                    txtidmarca.setText(rs.getObject("ID").toString());
-                    txtmn.setText(rs.getObject("NombreMarca").toString());
-                    btborrar.setEnabled(true);
-                    btmodificar.setEnabled(true);
-                } else {
-                    //no existe
-                    if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-                        validartxtidmarcas();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "La marca no existe","Marca inexistente", JOptionPane.ERROR_MESSAGE);
-                        mostrardatos("");
-                        anchocolumnas();
-                        btborrar.setEnabled(false);
-                        btmodificar.setEnabled(false);
-                        limpiar();
-                        anchocolumnas();
-                    }
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        // Buscar registro en la base de datos
+        try {
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = "SELECT * FROM marcas WHERE ID='" + txtidmarca.getText() + "'";
+            //Ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql);
+            mostrardatos(txtidmarca.getText());
+            
+            if (rs.next()) {
+                //existe
+                txtidmarca.setText(rs.getObject("ID").toString());
+                txtmn.setText(rs.getObject("NombreMarca").toString());
+                btborrar.setEnabled(true);
+                btmodificar.setEnabled(true);
+            } else {
+                //no existe
+                if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
+                    validartxtidmarcas();
+                }else {
+                JOptionPane.showMessageDialog(this, "La marca no existe");
+                btborrar.setEnabled(false);
+                btmodificar.setEnabled(false);
+                limpiar();
             }
-        } else {
+            }
+            //Cerrar conexion
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
+        anchocolumnas();
+        }else{
             JOptionPane.showMessageDialog(null, error);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-        String error = validartxtidmarcas();
-        if (error.equals("")) {
+         String error=validartxtidmarcas();
+        if(error.equals("")){
             try {
-                String ID = txtidmarca.getText();
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM marcas WHERE ID='" + ID + "'");
-                pst.executeUpdate();
+                String ID=txtidmarca.getText();
                 if (String.valueOf(txtidmarca.getText()).compareTo("") == 0) {
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Marca Eliminada","Eliminado", JOptionPane.INFORMATION_MESSAGE);
-                    limpiar();
-                    mostrardatos("");
-                    bloquear();
-                    anchocolumnas();
-                    btingresar.setEnabled(true);
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Marca Eliminada");
                 }
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+                PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM marcas WHERE ID='" + ID + "'");
+                pst.executeUpdate();
+                limpiar();
+                con.close();
+                mostrardatos("");
+                bloquear();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
-        } else {
+            anchocolumnas();
+            btingresar.setEnabled(true);
+        }else{
             JOptionPane.showMessageDialog(null, error);
         }
     }//GEN-LAST:event_btborrarActionPerformed
 
-    private void txtmnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmnKeyTyped
-        validarLetras.soloLetras(evt);
-    }//GEN-LAST:event_txtmnKeyTyped
-
-    private void txtidmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidmarcaKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
-        if (txtidmarca.getText().length() == 4) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }//GEN-LAST:event_txtidmarcaKeyTyped
-
-    private void tbmarcasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbmarcasMousePressed
+    private void mnmodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnmodActionPerformed
         //al momento de hacer click derecho aparecerá el menu modificar
         //que se irá directamente con los valores de la BD a sus respectivos 
         //textfields para hacer las respectivas modificaciones
@@ -610,11 +593,22 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
             txtmn.setText(tbmarcas.getValueAt(fila, 1).toString());
             btmodificar.setEnabled(true);
             btborrar.setEnabled(true);
-            txtmn.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
         }
-    }//GEN-LAST:event_tbmarcasMousePressed
+    }//GEN-LAST:event_mnmodActionPerformed
+
+    private void txtmnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmnKeyTyped
+        validarLetras.soloLetras(evt);
+    }//GEN-LAST:event_txtmnKeyTyped
+
+    private void txtidmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidmarcaKeyTyped
+        validarLetras.soloLetrasyNumeros(evt);
+        if (txtidmarca.getText().length() == 4) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }//GEN-LAST:event_txtidmarcaKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -630,9 +624,13 @@ public class MarcaVehiculo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
+    private javax.swing.JMenuItem mnmod;
     private javax.swing.JTable tbmarcas;
     private javax.swing.JTextField txtidmarca;
     private javax.swing.JTextField txtmn;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn= cc.conexion();
 }

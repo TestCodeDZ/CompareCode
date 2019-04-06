@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -26,29 +26,22 @@ import javax.swing.table.DefaultTableModel;
  * @author ZuluCorp
  */
 public class Desperfectos extends javax.swing.JInternalFrame {
-
-    Connection connection = null;
-    ResultSet rs = null;
-    Statement s = null;
     ValidarCaracteres validarLetras = new ValidarCaracteres();
-
     /**
      * Creates new form MarcaVehiculo
      */
     public Desperfectos() {
         initComponents();
         this.setTitle("Mantenedor de Desperfectos");
-        this.setLocation(280, 15);
+        this.setLocation(280,15);
         mostrardatos("");
         anchocolumnas();
         bloquear();
-        codigodesp();
-        txtiddesp.setDisabledTextColor(Color.blue);
     }
-
+    
     void mostrardatos(String valor) {
-        String id = txtiddesp.getText();
-        String NM = txtnd.getText();
+        String id=txtiddesp.getText();
+        String NM=txtnd.getText();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Descripción del Desperfecto");
@@ -57,13 +50,13 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         String sql = "";
         if (valor.equals("")) {
             sql = "SELECT * FROM desperfectos";
-        } else {
+        }else{
             sql = "SELECT * FROM desperfectos WHERE ID='" + id + "'";
         }
         String[] datos = new String[3];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -75,28 +68,26 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             //tbdesp.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
-
+    
     void anchocolumnas() {
         tbdesp.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
         tbdesp.getColumnModel().getColumn(0).setWidth(100);
         tbdesp.getColumnModel().getColumn(0).setMaxWidth(100);
         tbdesp.getColumnModel().getColumn(0).setMinWidth(100);
-
+        
         tbdesp.getColumnModel().getColumn(1).setWidth(250);
         tbdesp.getColumnModel().getColumn(1).setMaxWidth(250);
         tbdesp.getColumnModel().getColumn(1).setMinWidth(250);
-
+        
         tbdesp.getColumnModel().getColumn(2).setWidth(130);
         tbdesp.getColumnModel().getColumn(2).setMaxWidth(130);
         tbdesp.getColumnModel().getColumn(2).setMinWidth(130);
     }
-
-    void bloquear() {
+    
+    void bloquear(){
         txtiddesp.setEnabled(false);
         txtnd.setEnabled(false);
         txtcd.setEnabled(false);
@@ -106,56 +97,53 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         btborrar.setEnabled(false);
         btlimpiar.setEnabled(false);
     }
-
-    void limpiar() {
-        codigodesp();
+    void limpiar(){
+        txtiddesp.setText("");
         txtnd.setText("");
         txtcd.setText("");
     }
-
-    void desbloquear() {
+    void desbloquear(){
         txtnd.setEnabled(true);
         txtcd.setEnabled(true);
         btbuscar.setEnabled(true);
         btingresar.setEnabled(true);
+        btmodificar.setEnabled(true);
+        btborrar.setEnabled(true);
         btlimpiar.setEnabled(true);
     }
 
-    void codigodesp() {
-        int j;
-        int cont = 1;
-        String num = "";
-        String c = "";
-        String SQL = "select max(ID) from desperfectos";
+     void codigomarcas(){
+     int j;
+        int cont=1;
+        String num="";
+        String c="";
+         String SQL="select max(ID) from desperfectos";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(SQL);
-            if (rs.next()) {
-                c = rs.getString(1);
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(SQL);
+            if(rs.next())
+            {              
+                 c=rs.getString(1);
+            }    
+            if(c==null){
+                txtiddesp.setText("D001");
             }
-            if (c == null) {
-                txtiddesp.setText("CD0001");
-            } else {
-                char r1 = c.charAt(2);
-                char r2 = c.charAt(3);
-                char r3 = c.charAt(4);
-                char r4 = c.charAt(5);
-                String r = "";
-                r = "" + r1 + r2 + r3 + r4;
-
-                j = Integer.parseInt(r);
-                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
-                gen.generar(j);
-                txtiddesp.setText("CD" + gen.serie());
+            else{
+            char r1=c.charAt(2);
+            char r2=c.charAt(3);
+            
+            String r="";
+            r=""+r1+r2;
+            
+                 j=Integer.parseInt(r);
+                 sgtmtr.GenerarCodigos gen= new sgtmtr.GenerarCodigos();
+                 gen.generar(j);
+                 txtiddesp.setText("D"+gen.serie());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+           Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -165,39 +153,48 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelImage1 = new elaprendiz.gui.panel.PanelImage();
-        panelTranslucido1 = new elaprendiz.gui.panel.PanelTranslucido();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnimod = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         txtiddesp = new javax.swing.JTextField();
         txtnd = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtcd = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        panelTranslucido2 = new elaprendiz.gui.panel.PanelTranslucido();
-        btnuevo = new javax.swing.JButton();
-        btlimpiar = new javax.swing.JButton();
-        btbuscar = new javax.swing.JButton();
-        panelTranslucido3 = new elaprendiz.gui.panel.PanelTranslucido();
-        btingresar = new javax.swing.JButton();
-        btmodificar = new javax.swing.JButton();
-        btborrar = new javax.swing.JButton();
-        panelTranslucido4 = new elaprendiz.gui.panel.PanelTranslucido();
+        jPanel2 = new javax.swing.JPanel();
         jsp = new javax.swing.JScrollPane();
         tbdesp = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        btingresar = new javax.swing.JButton();
+        btborrar = new javax.swing.JButton();
+        btmodificar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        btnuevo = new javax.swing.JButton();
+        btbuscar = new javax.swing.JButton();
+        btlimpiar = new javax.swing.JButton();
+
+        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnimod.setText("Modificar");
+        mnimod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnimodActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnimod);
 
         setClosable(true);
 
-        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoazulceleste.jpg"))); // NOI18N
-
-        panelTranslucido1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), java.awt.Color.white)); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenedor de Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Código");
 
-        txtiddesp.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtiddesp.setEnabled(false);
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setText("Nombre");
+
+        txtiddesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtiddesp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtiddespKeyTyped(evt);
@@ -211,12 +208,7 @@ public class Desperfectos extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Nombre");
-
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Costo");
 
         txtcd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -230,151 +222,54 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("$");
 
-        javax.swing.GroupLayout panelTranslucido1Layout = new javax.swing.GroupLayout(panelTranslucido1);
-        panelTranslucido1.setLayout(panelTranslucido1Layout);
-        panelTranslucido1Layout.setHorizontalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(panelTranslucido1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(21, 21, 21))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)))
-                .addGap(7, 7, 7)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtiddesp, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtnd, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(2, 2, 2)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtnd)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtiddesp, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        panelTranslucido1Layout.setVerticalGroup(
-            panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido1Layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtiddesp, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTranslucido1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4))
+                    .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
-        btnuevo.setText("Nuevo");
-        btnuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnuevoActionPerformed(evt);
-            }
-        });
-
-        btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
-        btlimpiar.setText("Limpiar");
-        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btlimpiarActionPerformed(evt);
-            }
-        });
-
-        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512(2).png"))); // NOI18N
-        btbuscar.setText("Buscar");
-        btbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btbuscarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelTranslucido2Layout = new javax.swing.GroupLayout(panelTranslucido2);
-        panelTranslucido2.setLayout(panelTranslucido2Layout);
-        panelTranslucido2Layout.setHorizontalGroup(
-            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelTranslucido2Layout.setVerticalGroup(
-            panelTranslucido2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnuevo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btbuscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btlimpiar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        btingresar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
-        btingresar.setText("Ingresar");
-        btingresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btingresarActionPerformed(evt);
-            }
-        });
-
-        btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
-        btmodificar.setText("Modificar");
-        btmodificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmodificarActionPerformed(evt);
-            }
-        });
-
-        btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        btborrar.setText("Borrar");
-        btborrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btborrarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelTranslucido3Layout = new javax.swing.GroupLayout(panelTranslucido3);
-        panelTranslucido3.setLayout(panelTranslucido3Layout);
-        panelTranslucido3Layout.setHorizontalGroup(
-            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btingresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btmodificar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btborrar)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-        panelTranslucido3Layout.setVerticalGroup(
-            panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTranslucido3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btingresar)
-                    .addComponent(btborrar)
-                    .addComponent(btmodificar))
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
-
-        panelTranslucido4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14), java.awt.Color.white)); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegación Tabla Desperfectos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 14))); // NOI18N
 
         tbdesp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         //Deshabilitar edicion de tabla
@@ -397,62 +292,127 @@ public class Desperfectos extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbdesp.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbdesp.setComponentPopupMenu(jPopupMenu1);
         tbdesp.getTableHeader().setResizingAllowed(false);
         tbdesp.getTableHeader().setReorderingAllowed(false);
-        tbdesp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbdespMouseClicked(evt);
-            }
-        });
-        tbdesp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tbdespKeyPressed(evt);
-            }
-        });
         jsp.setViewportView(tbdesp);
 
-        javax.swing.GroupLayout panelTranslucido4Layout = new javax.swing.GroupLayout(panelTranslucido4);
-        panelTranslucido4.setLayout(panelTranslucido4Layout);
-        panelTranslucido4Layout.setHorizontalGroup(
-            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTranslucido4Layout.createSequentialGroup()
-                .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jsp, javax.swing.GroupLayout.Alignment.TRAILING)
         );
-        panelTranslucido4Layout.setVerticalGroup(
-            panelTranslucido4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTranslucido4Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jsp, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
-        panelImage1.setLayout(panelImage1Layout);
-        panelImage1Layout.setHorizontalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        btingresar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept.png"))); // NOI18N
+        btingresar.setText("Ingresar");
+        btingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btingresarActionPerformed(evt);
+            }
+        });
+
+        btborrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btborrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btborrar.setText("Borrar");
+        btborrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btborrarActionPerformed(evt);
+            }
+        });
+
+        btmodificar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btmodificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page_edit.png"))); // NOI18N
+        btmodificar.setText("Modificar");
+        btmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmodificarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelImage1Layout.createSequentialGroup()
-                        .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelTranslucido4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btingresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btmodificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btborrar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panelImage1Layout.setVerticalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImage1Layout.createSequentialGroup()
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelTranslucido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelTranslucido2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTranslucido3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btingresar)
+                    .addComponent(btborrar)
+                    .addComponent(btmodificar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        btnuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
+        btnuevo.setText("Nuevo");
+        btnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnuevoActionPerformed(evt);
+            }
+        });
+
+        btbuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/92125_find_user-512(2).png"))); // NOI18N
+        btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbuscarActionPerformed(evt);
+            }
+        });
+
+        btlimpiar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btlimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/limpiar.png"))); // NOI18N
+        btlimpiar.setText("Limpiar");
+        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimpiarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btlimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelTranslucido4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btbuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btlimpiar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -461,37 +421,55 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private String validarVacios() {
-
-        String errores = "";
-
-        if (txtiddesp.getText().equals("")) {
-            errores += "Por favor genere el código del desperfecto \n";
+        
+        String errores="";
+        
+        if(txtiddesp.getText().equals("")){
+            errores+="Por favor genere el código del desperfecto \n";
         }
-        if (txtnd.getText().equals("")) {
-            errores += "Por favor ingrese el nombre del desperfecto \n";
+        if(txtnd.getText().equals("")){
+            errores+="Por favor ingrese el nombre del desperfecto \n";
         }
-        if (txtcd.getText().equals("")) {
-            errores += "Por favor ingrese el costo \n";
+        if(txtcd.getText().equals("")){
+            errores+="Por favor ingrese el costo \n";
         }
-        return errores;
+        return errores;       
     }
-
+    
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
-        codigodesp();
+        codigomarcas();
         txtiddesp.setEnabled(false);
         btborrar.setEnabled(false);
         txtnd.requestFocus();
@@ -511,149 +489,172 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            // Insertar registro en la base de datos
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = "INSERT INTO desperfectos (ID,descripcion,costo)"
-                        + "VALUES('" + txtiddesp.getText() + "','" + txtnd.getText() + "','" + txtcd.getText() + "')";
-                //Ejecutar la consulta
-                st.executeUpdate(sql);
+        String errores=validarVacios();
+        if(errores.equals("")){
+        // Insertar registro en la base de datos
+        try {
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = "INSERT INTO desperfectos (ID,descripcion,costo)"
+                    + "VALUES('" + txtiddesp.getText()+"','"+txtnd.getText() + "','"+txtcd.getText() + "')";
+            //Ejecutar la consulta
+            st.executeUpdate(sql);
+            //Cerrar conexion
+            con.close();               
                 if (String.valueOf(txtnd.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Desperfecto Ingresado","Ingresado", JOptionPane.INFORMATION_MESSAGE);
-                    txtnd.requestFocus();
-                    mostrardatos("");
-                    anchocolumnas();
-                    //Limpiar
-                    limpiar();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El desperfecto ya existe","Desperfecto existente", JOptionPane.ERROR_MESSAGE /*+ e.getMessage().toString()*/);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                validarVacios();
+            } else{
+                JOptionPane.showMessageDialog(this, "Desperfecto Ingresado");
+                mostrardatos("");
+                anchocolumnas();
+                //Limpiar
+                limpiar(); 
+            }  
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
         }
+        }else{
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }   
     }//GEN-LAST:event_btingresarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            String ID = txtiddesp.getText();
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE desperfectos SET Descripcion='" + txtnd.getText() + "',Costo='" + txtcd.getText()
-                        + "' WHERE ID='" + txtiddesp.getText() + "'");
-                pst.executeUpdate();
-                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Desperfecto Actualizado","Modificado", JOptionPane.INFORMATION_MESSAGE);
-                    //limpiar textfields
-                    limpiar();
-                    mostrardatos("");
-                    anchocolumnas();
-                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El desperfecto ya existe","Desperfecto existente", JOptionPane.ERROR_MESSAGE/* + e.getMessage().toString()*/);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String errores=validarVacios();
+        if(errores.equals("")){
+            String ID=txtiddesp.getText();
+        try {
+            if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
+            
+            }else{
+            JOptionPane.showMessageDialog(this, "Desperfecto Actualizado");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE desperfectos SET Descripcion='" + txtnd.getText() + "',Costo='" + txtcd.getText()
+                    + "' WHERE ID='" + txtiddesp.getText() + "'");
+            pst.executeUpdate();
+            //cerrar conexion
+            con.close();
+            btingresar.setEnabled(true);
+            //limpiar textfields
+            limpiar();
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
         }
+            anchocolumnas();
+        }else{
+            JOptionPane.showMessageDialog(null, errores, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+        }    
     }//GEN-LAST:event_btmodificarActionPerformed
     private String validartxtiddesp() {
-        String error = "";
-        if (txtiddesp.getText().equals("")) {
-            error += "Por favor ingrese el ID del desperfecto a buscar o eliminar\n";
+        String error="";
+        if(txtiddesp.getText().equals("")){
+            error+="Por favor ingrese el ID del desperfecto a buscar o eliminar\n";
         }
         return error;
     }
-
+    
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
-        String error = validartxtiddesp();
-        if (error.equals("")) {
-            // Buscar registro en la base de datos
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                //Crear consulta
-                Statement st = conexion.createStatement();
-                String sql = "SELECT * FROM desperfectos WHERE ID='" + txtiddesp.getText() + "'";
-                //Ejecutar la consulta
-                ResultSet rs = st.executeQuery(sql);
-                mostrardatos(txtiddesp.getText());
-
-                if (rs.next()) {
-                    //existe
-                    txtiddesp.setText(rs.getObject("ID").toString());
-                    txtnd.setText(rs.getObject("Descripcion").toString());
-                    txtcd.setText(rs.getObject("Costo").toString());
-                    txtnd.setEnabled(true);
-                    txtcd.setEnabled(true);
-                    btborrar.setEnabled(true);
-                    btmodificar.setEnabled(true);
-                } else {
-                    //no existe
-                    if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-                        validartxtiddesp();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "El desperfecto no existe","Datos Inexistentes", JOptionPane.ERROR_MESSAGE);
-                        mostrardatos("");
-                        btborrar.setEnabled(false);
-                        btmodificar.setEnabled(false);
-                        limpiar();
-                    }
-                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String error=validartxtiddesp();
+        if(error.equals("")){
+        // Buscar registro en la base de datos
+        try {
+            //Cargar driver de conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear conexión
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            //Crear consulta
+            Statement st = con.createStatement();
+            String sql = "SELECT * FROM desperfectos WHERE ID='" + txtiddesp.getText() + "'";
+            //Ejecutar la consulta
+            ResultSet rs = st.executeQuery(sql);
+            mostrardatos(txtiddesp.getText());
+            
+            if (rs.next()) {
+                //existe
+                txtiddesp.setText(rs.getObject("ID").toString());
+                txtnd.setText(rs.getObject("Descripcion").toString());
+                txtcd.setText(rs.getObject("Costo").toString());
+                txtnd.setEnabled(true);
+                txtcd.setEnabled(true);
+                btborrar.setEnabled(true);
+                btmodificar.setEnabled(true);
+            } else {
+                //no existe
+                if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
+                    validartxtiddesp();
+                }else {
+                JOptionPane.showMessageDialog(this, "El desperfecto no existe");
+                btborrar.setEnabled(false);
+                btmodificar.setEnabled(false);
+                limpiar();
             }
-            anchocolumnas();
-        } else {
+            }
+            //Cerrar conexion
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
+        }
+        anchocolumnas();
+        }else{
             JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-        String error = validartxtiddesp();
-        if (error.equals("")) {
+         String error=validartxtiddesp();
+        if(error.equals("")){
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                String ID = txtiddesp.getText();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM desperfectos WHERE ID='" + ID + "'");
-                pst.executeUpdate();
+                String ID=txtiddesp.getText();
                 if (String.valueOf(txtiddesp.getText()).compareTo("") == 0) {
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Desperdecto Eliminado","Eliminado", JOptionPane.INFORMATION_MESSAGE);
-                    limpiar();
-                    mostrardatos("");
-                    bloquear();
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Desperdecto Eliminado");
                 }
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+                PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM desperfectos WHERE ID='" + ID + "'");
+                pst.executeUpdate();
+                limpiar();
+                con.close();
+                mostrardatos("");
+                bloquear();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "No se pudo borrar el desperfecto", "Mensaje de Error", JOptionPane.ERROR_MESSAGE/*+ e.getMessage().toString()*/);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
             }
             anchocolumnas();
             btingresar.setEnabled(true);
-        } else {
+        }else{
             JOptionPane.showMessageDialog(null, error, "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btborrarActionPerformed
 
-    private void txtcdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyPressed
+    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
+        //al momento de hacer click derecho aparecerá el menu modificar
+        //que se irá directamente con los valores de la BD a sus respectivos 
+        //textfields para hacer las respectivas modificaciones
+        int fila = tbdesp.getSelectedRow();
+        txtiddesp.setEnabled(false);
+        btingresar.setEnabled(false);
 
+        if (fila >= 0) {
+            txtiddesp.setText(tbdesp.getValueAt(fila, 0).toString());
+            txtnd.setText(tbdesp.getValueAt(fila, 1).toString());
+            txtcd.setText(tbdesp.getValueAt(fila, 2).toString()); 
+            txtnd.setEnabled(true);
+            txtcd.setEnabled(true);
+            btmodificar.setEnabled(true);
+            btborrar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
+        }
+    }//GEN-LAST:event_mnimodActionPerformed
+
+    private void txtcdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyPressed
+        
     }//GEN-LAST:event_txtcdKeyPressed
 
     private void txtcdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyTyped
@@ -683,30 +684,6 @@ public class Desperfectos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtndKeyTyped
 
-    private void tbdespKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbdespKeyPressed
-        
-    }//GEN-LAST:event_tbdespKeyPressed
-
-    private void tbdespMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdespMouseClicked
-        //al momento de hacer click derecho aparecerá el menu modificar
-        //que se irá directamente con los valores de la BD a sus respectivos 
-        //textfields para hacer las respectivas modificaciones
-        int fila = tbdesp.getSelectedRow();
-        btingresar.setEnabled(false);
-
-        if (fila >= 0) {
-            txtiddesp.setText(tbdesp.getValueAt(fila, 0).toString());
-            txtnd.setText(tbdesp.getValueAt(fila, 1).toString());
-            txtcd.setText(tbdesp.getValueAt(fila, 2).toString());
-            txtnd.setEnabled(true);
-            txtcd.setEnabled(true);
-            btmodificar.setEnabled(true);
-            btborrar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
-        }
-    }//GEN-LAST:event_tbdespMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
@@ -719,15 +696,18 @@ public class Desperfectos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jsp;
-    private elaprendiz.gui.panel.PanelImage panelImage1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido1;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido2;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido3;
-    private elaprendiz.gui.panel.PanelTranslucido panelTranslucido4;
+    private javax.swing.JMenuItem mnimod;
     private javax.swing.JTable tbdesp;
     private javax.swing.JTextField txtcd;
     private javax.swing.JTextField txtiddesp;
     private javax.swing.JTextField txtnd;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn= cc.conexion();
 }

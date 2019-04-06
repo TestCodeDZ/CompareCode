@@ -9,7 +9,7 @@ package sgtmtr;
  *
  * @author ZuluCorp
  */
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -23,39 +23,31 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.codec.digest.DigestUtils;
 
 public class UsuariosSistema extends javax.swing.JInternalFrame {
-
     ValidarCaracteres validarLetras = new ValidarCaracteres();
     /**
      * Creates new form UsuariosSistema
      */
     public static String base = "0123456789";//abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-
     public UsuariosSistema() {
         initComponents();
         setTitle("Mantenedor de Datos de Usuarios del Sistema");
-        this.setLocation(280, 15);
+        this.setLocation(280,15);
         inicio();
         bloquear();
-        codigosusuarios();
+        CargarComboTipoUsers();
         generapassword();
         mostrardatos("");
         anchocolumnas();
-        CargarComboTipoUsers();
-        CargarCBNTU();
-        //txttu.setVisible(false);
-        txtid.setDisabledTextColor(Color.blue);
-        txttu.setVisible(false);
     }
-
-    void inicio() {
+    void inicio(){
+        txtid.setEnabled(false);
         txtusuario.setEnabled(false);
         txtpass.setEnabled(false);
     }
-
-    void bloquear() {
+    void bloquear(){
+        txtid.setEnabled(false);
         txtnombres.setEnabled(false);
         txtapellidos.setEnabled(false);
         //ver combos index
@@ -66,24 +58,24 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         btlimpiar.setEnabled(false);
         btgenerar.setEnabled(false);
     }
-
-    void limpiar() {
-        codigosusuarios();
+    void limpiar(){
+        txtid.setText("");
         txtnombres.setText("");
         txtapellidos.setText("");
         txtusuario.setText("");
         cbtu.setSelectedIndex(0);
     }
-
-    void desbloquear() {
+    void desbloquear(){
         txtnombres.setEnabled(true);
         //txtapellidos.setEnabled(true);
         //ver combos index
         btbuscar.setEnabled(true);
         btingresar.setEnabled(true);
+        btmodificar.setEnabled(true);
+        btborrar.setEnabled(true);
         btlimpiar.setEnabled(true);
     }
-
+    
     void mostrardatos(String valor) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
@@ -94,15 +86,15 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         tbusuarios.setModel(modelo);
         String sql = "";
         if (valor.equals("")) {
-            sql = "SELECT ID,Nombres,Apellidos,TipoUser,Usuario FROM usuarios u, TipoUsuario tu WHERE u.TipoUsuario = tu.IDTU ORDER BY ID asc";
+            sql = "SELECT ID,Nombres,Apellidos,TipoUsuario,Usuario FROM usuarios";
         } else {
             sql = "SELECT * FROM usuarios WHERE ID='" + txtid.getText() + "'";
         }
 
         String[] datos = new String[5];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -115,18 +107,16 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             tbusuarios.setModel(modelo);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
 
     void anchocolumnas() {
         tbusuarios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
 
-        tbusuarios.getColumnModel().getColumn(0).setWidth(60);
-        tbusuarios.getColumnModel().getColumn(0).setMaxWidth(60);
-        tbusuarios.getColumnModel().getColumn(0).setMinWidth(60);
-
+        tbusuarios.getColumnModel().getColumn(0).setWidth(40);
+        tbusuarios.getColumnModel().getColumn(0).setMaxWidth(40);
+        tbusuarios.getColumnModel().getColumn(0).setMinWidth(40);
+        
         tbusuarios.getColumnModel().getColumn(1).setWidth(100);
         tbusuarios.getColumnModel().getColumn(1).setMaxWidth(100);
         tbusuarios.getColumnModel().getColumn(1).setMinWidth(100);
@@ -135,107 +125,84 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         tbusuarios.getColumnModel().getColumn(2).setMaxWidth(100);
         tbusuarios.getColumnModel().getColumn(2).setMinWidth(100);
 
-        tbusuarios.getColumnModel().getColumn(3).setWidth(100);
-        tbusuarios.getColumnModel().getColumn(3).setMaxWidth(100);
-        tbusuarios.getColumnModel().getColumn(3).setMinWidth(100);
+        tbusuarios.getColumnModel().getColumn(3).setWidth(120);
+        tbusuarios.getColumnModel().getColumn(3).setMaxWidth(120);
+        tbusuarios.getColumnModel().getColumn(3).setMinWidth(120);
 
         tbusuarios.getColumnModel().getColumn(4).setWidth(90);
         tbusuarios.getColumnModel().getColumn(4).setMaxWidth(90);
         tbusuarios.getColumnModel().getColumn(4).setMinWidth(90);
     }
-
-    private void CargarCBNTU() {
-        //Carga de Combo
-        try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            //Crear Consulta
-            Statement st1 = conexion.createStatement();
-            String sql1 = "SELECT IDTU FROM tipousuario WHERE TipoUser='" + cbtu.getSelectedItem() + "'";
-            //Ejecutar consulta
-            ResultSet rs1 = st1.executeQuery(sql1);
-            //Recorremos los registros traidos
-            while (rs1.next()) {
-                //Agregamos elemento al text
-                txttu.setText(rs1.getObject("IDTU").toString());
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-        }
-    }
     
-    void codigosusuarios() {
-        int j;
-        int cont = 1;
-        String num = "";
-        String c = "";
-        String SQL = "select max(ID) from usuarios";
+    void codigosusuarios(){
+     int j;
+        int cont=1;
+        String num="";
+        String c="";
+        String SQL="select max(ID) from usuarios";
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(SQL);
-            if (rs.next()) {
-                c = rs.getString(1);
+            Statement st = cn.createStatement();
+            ResultSet rs=st.executeQuery(SQL);
+            if(rs.next())
+            {              
+                 c=rs.getString(1);
+            }    
+            if(c==null){
+                txtid.setText("U001");
             }
-            if (c == null) {
-                txtid.setText("US0001");
-            } else {
-                char r1 = c.charAt(2);
-                char r2 = c.charAt(3);
-                char r3 = c.charAt(4);
-                char r4 = c.charAt(5);
-                String r = "";
-                r = "" + r1 + r2 + r3 + r4;
-
-                j = Integer.parseInt(r);
-                sgtmtr.GenerarCodigos gen = new sgtmtr.GenerarCodigos();
-                gen.generar(j);
-                txtid.setText("US" + gen.serie());
+            else{
+            char r1=c.charAt(2);
+            char r2=c.charAt(3);
+            String r="";
+            r=""+r1+r2;
+            
+                 j=Integer.parseInt(r);
+                 sgtmtr.GenerarCodigos gen= new sgtmtr.GenerarCodigos();
+                 gen.generar(j);
+                 txtid.setText("U"+gen.serie());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+           Logger.getLogger(UsuariosSistema.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private void CargarComboTipoUsers() {
+    private void CargarComboTipoUsers(){
         //Carga de Combo
-        try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
+        try{
+            //Cargar Driver
+            Class.forName("com.mysql.jdbc.Driver");
+            //Crear Conexion
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo","root","");
             //Crear Consulta
-            Statement st = conexion.createStatement();
+            Statement st = con.createStatement();
             String sql = "SELECT TipoUser FROM tipousuario";
             //Ejecutar consulta
             ResultSet rs = st.executeQuery(sql);
             //Limpiamos el Combo
             cbtu.setModel(new DefaultComboBoxModel());
-            cbtu.addItem("Seleccione Tipo de Usuario");
+                      
             //Recorremos los registros traidos
-            while (rs.next()) {
+            while(rs.next()){
                 //Agregamos elemento al combo
                 cbtu.addItem(rs.getObject(1));
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+            //Cerramos conexión
+            con.close();
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "Error " + e.getMessage().toString());
         }
     }
-
-    private void generapassword() {
-        int LargoContrasena = 4;
-        String contrasena = "";
+    
+    private void generapassword(){
+        int LargoContrasena=4;
+        String contrasena="";
         int longitud = base.length();
-        for (int i = 0; i < LargoContrasena; i++) {
-            int numero = (int) (Math.random() * (longitud));
-            String caracter = base.substring(numero, numero + 1);
-            contrasena = contrasena + caracter;
-        }
-        txtpass.setText(contrasena);
+        for(int i=0; i<LargoContrasena;i++){ 
+        int numero = (int)(Math.random()*(longitud)); 
+        String caracter=base.substring(numero, numero+1);
+        contrasena=contrasena+caracter; 
+      }
+          txtpass.setText(contrasena);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -245,6 +212,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        mnimod = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -259,7 +228,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         txtusuario = new javax.swing.JTextField();
         txtpass = new javax.swing.JTextField();
         btgenerar = new javax.swing.JButton();
-        txttu = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnuevo = new javax.swing.JButton();
         btingresar = new javax.swing.JButton();
@@ -271,6 +239,15 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jsp = new java.awt.ScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbusuarios = new javax.swing.JTable();
+
+        mnimod.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        mnimod.setText("Modificar");
+        mnimod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnimodActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(mnimod);
 
         setClosable(true);
 
@@ -307,8 +284,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         jPanel1.add(jLabel6);
         jLabel6.setBounds(20, 240, 74, 20);
 
-        txtid.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        txtid.setEnabled(false);
+        txtid.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtid.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtidKeyTyped(evt);
@@ -362,7 +338,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(cbtu);
-        cbtu.setBounds(160, 150, 190, 30);
+        cbtu.setBounds(160, 150, 170, 30);
 
         txtusuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtusuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -385,15 +361,6 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btgenerar);
         btgenerar.setBounds(290, 200, 40, 40);
-
-        txttu.setEnabled(false);
-        txttu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttuActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txttu);
-        txttu.setBounds(250, 30, 70, 30);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -508,14 +475,9 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbusuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbusuarios.setComponentPopupMenu(jPopupMenu1);
         tbusuarios.getTableHeader().setResizingAllowed(false);
         tbusuarios.getTableHeader().setReorderingAllowed(false);
-        tbusuarios.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbusuariosMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tbusuarios);
 
         jsp.add(jScrollPane1);
@@ -564,8 +526,9 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
 
     private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
         desbloquear();
-        codigosusuarios();
         limpiar();
+        codigosusuarios();
+        txtid.setEnabled(false);
         txtnombres.requestFocus();
         btborrar.setEnabled(false);
         btmodificar.setEnabled(false);
@@ -573,18 +536,7 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnuevoActionPerformed
 
     private void cbtuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbtuItemStateChanged
-        Integer indice = cbtu.getSelectedIndex();
-        if (indice.equals(0)) {
-           txttu.setText("");
-        } else if (indice.equals(1)) {
-            CargarCBNTU();
-        } else if (indice.equals(2)) {
-            CargarCBNTU();
-        } else if (indice.equals(3)) {
-            CargarCBNTU();
-        } else if (indice.equals(4)) {
-            CargarCBNTU();
-        }
+        
     }//GEN-LAST:event_cbtuItemStateChanged
 
     private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
@@ -592,42 +544,44 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         txtid.setEnabled(true);
         btingresar.setVisible(false);
     }//GEN-LAST:event_btlimpiarActionPerformed
-
+    
     private void cortecaracteres() {
         String nombreRecortado = txtnombres.getText().substring(0, 3);
         String apellidoRecortado = txtapellidos.getText().substring(0, 4);
         String union = nombreRecortado + "." + apellidoRecortado;
         txtusuario.setText(union);
     }
-
+    
     private void txtusuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtusuarioKeyTyped
-
+       
     }//GEN-LAST:event_txtusuarioKeyTyped
-
-
+    
+    
     private void txtapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusLost
-        if (txtapellidos.getText().length() < 3) {
-            btgenerar.setEnabled(false);
-            JOptionPane.showMessageDialog(this, "¡El Apellido debe contener al menos 3 caracteres para generar nick!");
-            txtapellidos.requestFocus();
-        } else {
+       if(txtapellidos.getText().length() < 3) {
+           btgenerar.setEnabled(false);
+           JOptionPane.showMessageDialog(this, "¡El Apellido debe contener al menos 3 caracteres para generar nick!");
+           txtapellidos.requestFocus();
+       }
+       else
+       {
             btgenerar.setEnabled(true);
-        }
+       }
     }//GEN-LAST:event_txtapellidosFocusLost
 
     private void btgenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btgenerarActionPerformed
-        cortecaracteres();
+       cortecaracteres();
     }//GEN-LAST:event_btgenerarActionPerformed
 
     private void txtnombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombresKeyTyped
         validarLetras.soloLetras(evt);
-        if (txtnombres.getText().length() < 4) {
+        if (txtnombres.getText().length() < 4){
             txtapellidos.setEnabled(false);
-
-        } else {
+                   
+        }else{
             txtapellidos.setEnabled(true);
         }
-
+        
         if (txtnombres.getText().length() == 50) {
             evt.consume();
             Toolkit.getDefaultToolkit().beep();
@@ -643,87 +597,75 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtapellidosKeyTyped
 
     private void txtnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnombresFocusLost
-        if (txtnombres.getText().length() < 4) {
-            btgenerar.setEnabled(false);
-            JOptionPane.showMessageDialog(this, "¡El Nombre debe contener al menos 4 caracteres para generar nick!");
-            txtnombres.requestFocus();
+        if(txtnombres.getText().length() < 4) {
+           btgenerar.setEnabled(false);
+           JOptionPane.showMessageDialog(this, "¡El Nombre debe contener al menos 4 caracteres para generar nick!");
+           txtnombres.requestFocus();
         }
     }//GEN-LAST:event_txtnombresFocusLost
-
+     
     private String validarVacios() {
-
-        String errores = "";
-
-        if (txtid.getText().equals("")) {
-            errores += "Por favor genere el ID de Usuario \n";
+        
+        String errores="";
+        
+        if(txtid.getText().equals("")){
+            errores+="Por favor genere el ID de Usuario \n";
         }
-        if (txtnombres.getText().equals("")) {
-            errores += "Por favor ingrese el Nombre de la persona \n";
+        if(txtnombres.getText().equals("")){
+            errores+="Por favor ingrese el Nombre de la persona \n";
         }
-        if (txtapellidos.getText().trim().isEmpty()) {
-            errores += "El campo nombre está vacio \n";
+        if(txtapellidos.getText().trim().isEmpty()){
+            errores+="El campo nombre está vacio \n";
         }
-        if (txtusuario.getText().trim().isEmpty()) {
-            errores += "Por favor genere el nombre de usuario \n";
+        if(txtusuario.getText().trim().isEmpty()){
+            errores+="Por favor genere el nombre de usuario \n";
         }
-        if (txtpass.getText().trim().isEmpty()) {
-            errores += "Por favor genere la conraseña \n";
+        if(txtpass.getText().trim().isEmpty()){
+            errores+="Por favor genere la conraseña \n";
         }
-        Integer indice = cbtu.getSelectedIndex();
-        if (indice.equals(0))
-        {
-            errores += "Seleccione Tipo de Usuario \n";
-        }
-        return errores;
+        return errores;       
     }
-
-    private String validarIDVacio() {
-        String errores = "";
-        if (txtid.getText().equals("")) {
-            errores += "Por favor ingrese el ID a buscar o eliminar\n";
+      private String validarIDVacio() {
+        String errores="";
+        if(txtid.getText().equals("")){
+            errores+="Por favor ingrese el ID a buscar o eliminar\n";
         }
-        return errores;
+        return errores;       
     }
     private void btingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btingresarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+        String errores=validarVacios();
+        if(errores.equals("")){
+             try {
+            //Cargar driver de conexión
+                Class.forName("com.mysql.jdbc.Driver");
+                //Crear conexión
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
                 //Crear consulta
-                Statement st = conexion.createStatement();
-
-                /*Para encriptar password*/
-                /*Orden MD5-SHA256-SHA512*/
-                String enc1, enc2, enc3;
-                enc1 = DigestUtils.md5Hex(txtpass.getText());
-                enc2 = DigestUtils.sha256Hex(enc1);
-                enc3 = DigestUtils.sha512Hex(enc2);
-
+                Statement st = con.createStatement();
                 String sql = "INSERT INTO usuarios (ID,Nombres,Apellidos,TipoUsuario,Usuario,Password)"
                         + "VALUES('" + txtid.getText() + "','" + txtnombres.getText() + "','" + txtapellidos.getText() + "',"
-                        + "'" + txttu.getText() + "','" + txtusuario.getText() + "',"
-                        + "'" + enc3 + "')";
+                        + "'" + cbtu.getSelectedItem() + "','" + txtusuario.getText() + "',"
+                        + "'" + txtpass.getText() + "')";
                 //Ejecutar la consulta
                 st.executeUpdate(sql);
-                if (String.valueOf(txtid.getText()).compareTo("") == 0
-                        && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
+                //Cerrar conexion
+                con.close();
+                    if (String.valueOf(txtid.getText()).compareTo("") == 0
+                    && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
+                    validarVacios(); 
+                    }else{
                     JOptionPane.showMessageDialog(this, "Usuario Ingresado");
-                    txtnombres.requestFocus();
                     mostrardatos("");
                     //Limpiar
-                    limpiar();
+                    limpiar(); 
                     anchocolumnas();
-                }
+                    }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "El usuario ya existe", "Usuario existente", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
-            }
-        } else {
+                JOptionPane.showMessageDialog(this, "Error"+ e.getMessage().toString());
+            }  
+        }else{
             JOptionPane.showMessageDialog(null, errores);
-        }
+        }    
     }//GEN-LAST:event_btingresarActionPerformed
 
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
@@ -731,9 +673,12 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         if (error.equals("")) {
             // Buscar registro en la base de datos
             try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
+                //Cargar driver de conexión
+                Class.forName("com.mysql.jdbc.Driver");
+                //Crear conexión
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
                 //Crear consulta
-                Statement st = conexion.createStatement();
+                Statement st = con.createStatement();
                 String sql = sql = "SELECT * FROM usuarios WHERE ID='" + txtid.getText() + "'";
                 //Ejecutar la consulta
                 ResultSet rs = st.executeQuery(sql);
@@ -742,8 +687,8 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                     //existe
                     txtnombres.setText(rs.getObject("Nombres").toString());
                     txtapellidos.setText(rs.getObject("Apellidos").toString());
+                    cbtu.setSelectedItem(rs.getObject("TipoUsuario"));
                     txtusuario.setText(rs.getObject("Usuario").toString());
-                    cbtu.setSelectedItem(rs.getObject("TipoUsuario").toString());
                     btborrar.setEnabled(true);
                     btmodificar.setEnabled(true);
                 } else {
@@ -751,17 +696,16 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
                     if (String.valueOf(txtid.getText()).compareTo("") == 0) {
                         validarVacios();
                     } else {
-                        JOptionPane.showMessageDialog(this, "El usuario no existe","Datos Inexistentes", JOptionPane.ERROR_MESSAGE);
-                        mostrardatos("");
+                        JOptionPane.showMessageDialog(this, "El usuario no existe");
                         btborrar.setEnabled(false);
                         btmodificar.setEnabled(false);
                         limpiar();
                     }
                 }
+                //Cerrar conexion
+                con.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
             }
             anchocolumnas();
         } else {
@@ -770,62 +714,62 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btborrarActionPerformed
-        String error = validarIDVacio();
-        if (error.equals("")) {
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("DELETE FROM usuarios WHERE ID='" + txtid.getText() + "'");
-                pst.executeUpdate();
-                if (String.valueOf(txtid.getText()).compareTo("") == 0
-                        && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Usuario Eliminado","Datos Eliminados", JOptionPane.INFORMATION_MESSAGE);
-                    btmodificar.setEnabled(false);
-                    btborrar.setEnabled(false);
-                    limpiar();
-                    mostrardatos("");
-                    anchocolumnas();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String error=validarIDVacio();
+        if(error.equals("")){
+        try {
+            if (String.valueOf(txtid.getText()).compareTo("") == 0
+            && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Usuario Eliminado");
+            btmodificar.setEnabled(false);
+            btborrar.setEnabled(false);
             }
-
-            btingresar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, error);
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("DELETE FROM usuarios WHERE ID='" + txtid.getText() + "'");
+            pst.executeUpdate();
+            limpiar();
+            con.close();
+            
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
         }
+        anchocolumnas();
+        btingresar.setEnabled(true);
+        }else{
+            JOptionPane.showMessageDialog(null, error);
+        }     
     }//GEN-LAST:event_btborrarActionPerformed
 
     private void btmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmodificarActionPerformed
-        String errores = validarVacios();
-        if (errores.equals("")) {
-            try {
-                conexion = claseConectar.ConexionConBaseDatos.getConexion();
-                PreparedStatement pst = (PreparedStatement) conexion.prepareStatement("UPDATE usuarios SET Nombres='" + txtnombres.getText() + "',Apellidos='" + txtapellidos.getText()
-                        + "',TipoUsuario='" + txttu.getText() + "',Usuario='" + txtusuario.getText()
-                        + "',Password='" + txtpass.getText()
-                        + "' WHERE ID='" + txtid.getText() + "'");
-                pst.executeUpdate();
-                if (String.valueOf(txtid.getText()).compareTo("") == 0
-                        && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
-                    validarVacios();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Datos del usuario Actualizados","Datos Actualizados", JOptionPane.ERROR_MESSAGE);
-                    btingresar.setEnabled(true);
-                    //limpiar textfields
-                    limpiar();
-                    mostrardatos("");
-                    anchocolumnas();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane,"El usuario ya existe","Usuario existente", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
+        String errores=validarVacios();
+        if(errores.equals("")){
+        try {
+            if (String.valueOf(txtid.getText()).compareTo("") == 0
+                    && String.valueOf(txtusuario.getText()).compareTo("") == 0) {
+            validarVacios();
+            }else{
+            JOptionPane.showMessageDialog(this, "Usuario Actualizado");
             }
-        } else {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("UPDATE usuarios SET Nombres='" + txtnombres.getText() + "',Apellidos='" + txtapellidos.getText()
+                    + "',TipoUsuario='" + cbtu.getSelectedItem() + "',Usuario='" + txtusuario.getText()
+                    + "',Password='" + txtpass.getText()
+                    + "' WHERE ID='" + txtid.getText() + "'");
+            
+            pst.executeUpdate();
+            //cerrar conexion
+            con.close();
+            btingresar.setEnabled(true);
+            //limpiar textfields
+            limpiar();
+            mostrardatos("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error" + e.getMessage().toString());
+        }
+            anchocolumnas();
+        }else{
             JOptionPane.showMessageDialog(null, errores);
         }
     }//GEN-LAST:event_btmodificarActionPerformed
@@ -836,22 +780,13 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
 
     private void txtapellidosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapellidosFocusGained
         // TODO add your handling code here:
-        if (txtnombres.getText().length() < 4) {
-            btgenerar.setEnabled(false);
-            txtnombres.requestFocus();
-        }
+        if(txtnombres.getText().length() < 4) {
+           btgenerar.setEnabled(false);
+           txtnombres.requestFocus();
+        }   
     }//GEN-LAST:event_txtapellidosFocusGained
 
-    private void txtidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyTyped
-        validarLetras.soloLetrasyNumeros(evt);
-        //limite de caracteres
-        if (txtid.getText().length() == 4) {
-            evt.consume();
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }//GEN-LAST:event_txtidKeyTyped
-
-    private void tbusuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbusuariosMouseClicked
+    private void mnimodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnimodActionPerformed
         //al momento de hacer click derecho aparecerá el menu modificar
         //que se irá directamente con los valores de la BD a sus respectivos 
         //textfields para hacer las respectivas modificaciones
@@ -862,36 +797,26 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
         if (fila >= 0) {
             txtid.setText(tbusuarios.getValueAt(fila, 0).toString());
             txtnombres.setText(tbusuarios.getValueAt(fila, 1).toString());
-            txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());
-            String tipo = tbusuarios.getValueAt(fila, 3).toString();
-            cbtu.setSelectedItem(tipo);    
+            txtapellidos.setText(tbusuarios.getValueAt(fila, 2).toString());     
+            //cbtu.getSelectedItem(tbusuarios.getCellEditor(fila,3));    
             txtusuario.setText(tbusuarios.getValueAt(fila, 4).toString());
-            //txttu.setText(tbusuarios.getValueAt(fila, 3).toString());
+            //txtpass.setText(tbusuarios.getValueAt(fila, 5).toString());
             //cbidsucursal.getSelectedItem(tbusuarios.getValueAt(fila,6).toString());
-            //CargarCBNTU();
             btmodificar.setEnabled(true);
             btborrar.setEnabled(true);
-            txtnombres.setEnabled(true);
-            txtapellidos.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "No ha seleccionado fila");
         }
-    }//GEN-LAST:event_tbusuariosMouseClicked
+    }//GEN-LAST:event_mnimodActionPerformed
 
-    private void txttuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttuActionPerformed
-        if (txttu.equals("1")) {
-            CargarComboTipoUsers();
+    private void txtidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyTyped
+        validarLetras.soloLetrasyNumeros(evt);
+        //limite de caracteres
+        if (txtid.getText().length() == 4) {
+            evt.consume();
+            Toolkit.getDefaultToolkit().beep();
         }
-        if (txttu.equals("2")) {
-            CargarComboTipoUsers();
-        }
-        if (txttu.equals("3")) {
-            CargarComboTipoUsers();
-        }
-        if (txttu.equals("4")) {
-            CargarComboTipoUsers();
-        }
-    }//GEN-LAST:event_txttuActionPerformed
+    }//GEN-LAST:event_txtidKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btborrar;
@@ -911,14 +836,17 @@ public class UsuariosSistema extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.ScrollPane jsp;
+    private javax.swing.JMenuItem mnimod;
     public static javax.swing.JTable tbusuarios;
     private javax.swing.JTextField txtapellidos;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnombres;
     private javax.swing.JTextField txtpass;
-    private javax.swing.JTextField txttu;
     private javax.swing.JTextField txtusuario;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn= cc.conexion();
 }

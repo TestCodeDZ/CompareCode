@@ -75,7 +75,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbclienntes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbclienntes.getTableHeader().setResizingAllowed(false);
         tbclienntes.getTableHeader().setReorderingAllowed(false);
         jsp.setViewportView(tbclienntes);

@@ -5,7 +5,7 @@
  */
 package sgtmtr;
 
-import static claseConectar.ConexionConBaseDatos.conexion;
+import claseConectar.conectar;
 import java.awt.Color;
 import java.sql.*;
 import java.util.logging.Level;
@@ -50,8 +50,8 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
 
         String[] datos = new String[3];
         try {
-            conexion = claseConectar.ConexionConBaseDatos.getConexion();
-            Statement st = conexion.createStatement();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/techorojo", "root", "");
+            Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 datos[0] = rs.getString(1);
@@ -63,8 +63,6 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
            //tbmarcas.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error " + e.getMessage().toString());
-        } finally {
-            claseConectar.ConexionConBaseDatos.metodoCerrarConexiones(conexion);
         }
     }
     
@@ -129,7 +127,6 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbdesp.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbdesp.getTableHeader().setResizingAllowed(false);
         tbdesp.getTableHeader().setReorderingAllowed(false);
         tbdesp.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -177,7 +174,7 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     
     private void tbdespMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdespMousePressed
-        SpinnerNumberModel numerito = new SpinnerNumberModel(1, 0, 10, 1);
+        SpinnerNumberModel numerito = new SpinnerNumberModel(1, 0, 1, 1);
         JSpinner spinner = new JSpinner(numerito);
         int option = JOptionPane.showOptionDialog(null, spinner, "Seleccione o Ingrese Cantidad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (option == JOptionPane.CANCEL_OPTION) {
@@ -286,4 +283,6 @@ public class SeleccionDesperfecto extends javax.swing.JDialog {
     private javax.swing.JScrollPane jsp;
     public static javax.swing.JTable tbdesp;
     // End of variables declaration//GEN-END:variables
+    conectar cc= new conectar();
+    Connection cn = cc.conexion();
 }
