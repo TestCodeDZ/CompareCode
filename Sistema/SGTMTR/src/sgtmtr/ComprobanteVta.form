@@ -295,9 +295,9 @@
                           <Component id="txtdireccion" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btbuscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btbuscar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
