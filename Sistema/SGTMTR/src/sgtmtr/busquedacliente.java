@@ -98,11 +98,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
 
         btnuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add-icon.png"))); // NOI18N
         btnuevo.setText("Nuevo");
-        btnuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnuevoActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,10 +170,6 @@ public class busquedacliente extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnuevoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnuevoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

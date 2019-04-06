@@ -118,11 +118,6 @@ public class bcliente2 extends javax.swing.JInternalFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("RUT");
 
-        txtrut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtrutActionPerformed(evt);
-            }
-        });
         txtrut.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtrutKeyReleased(evt);
@@ -256,10 +251,6 @@ public class bcliente2 extends javax.swing.JInternalFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_tbclienteMousePressed
-
-    private void txtrutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtrutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtrutActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
